@@ -1,5 +1,5 @@
-import { ErrorComponent } from '#/components/ErrorComponent';
-import { LoadingComponent } from '#/components/LoadingComponent';
+import { ErrorComponent } from '#/components/layout/ErrorComponent';
+import { LoadingComponent } from '#/components/layout/LoadingComponent';
 import { PokemonCard } from '#/components/PokemonCard';
 import { usePokemon } from '#/hooks/usePokemon';
 import { createFileRoute } from '@tanstack/react-router';

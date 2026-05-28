@@ -1,5 +1,5 @@
 import { fetchPokemonList } from '#/api/api';
-import { type SearchPokemonInput } from '#/utils/searchPokemonSchema';
+import { type SearchPokemonInput } from '#/lib/schemas/searchPokemonSchema';
 import { useQuery } from '@tanstack/react-query';
 
 export const usePokemonList = (input: SearchPokemonInput) => {

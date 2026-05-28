@@ -1,20 +1,23 @@
-import type { ELEMENTAL_TYPE_NAMES, STAT_NAMES } from '#/constants';
+import type { ELEMENTAL_TYPES, STATS } from '#/constants';
+import type { Icon } from '@phosphor-icons/react';
 
-export type ElementalTypeName = (typeof ELEMENTAL_TYPE_NAMES)[number];
-export type StatName = (typeof STAT_NAMES)[number];
+export type ElementalTypeName = keyof typeof ELEMENTAL_TYPES;
+export type StatName = keyof typeof STATS;
 
 export type PokemonElementalType = {
     slot: number;
     name: ElementalTypeName;
-    icon?: string;
-    url: string;
+    color: string;
+    icons: {
+        name: string;
+        symbol: string;
+    };
 };
 
 export type PokemonStat = {
     value: number;
     name: StatName;
-    icon?: string;
-    url: string;
+    icon: Icon;
 };
 
 export type PokemonSprites = {

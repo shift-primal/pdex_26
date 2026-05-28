@@ -13,3 +13,28 @@ body,
 body {
     margin: 0;
 }
+
+.custom-bg-clip {
+    clip-path: circle(50% at 50% 0);
+}
+
+/* @theme { */
+/*     --color-type-normal: #9098a0; */
+/*     --color-type-fighting: #cd4069; */
+/*     --color-type-flying: #8fa7dc; */
+/*     --color-type-poison: #aa6ac7; */
+/*     --color-type-ground: #d87746; */
+/*     --color-type-rock: #c0b187; */
+/*     --color-type-bug: #90c02d; */
+/*     --color-type-ghost: #5269ab; */
+/*     --color-type-steel: #5a8ea0; */
+/*     --color-type-fire: #fd9b54; */
+/*     --color-type-water: #4d90d4; */
+/*     --color-type-grass: #63ba5b; */
+/*     --color-type-electric: #f2d13b; */
+/*     --color-type-psychic: #f87176; */
+/*     --color-type-ice: #74ccbe; */
+/*     --color-type-dragon: #0b6dc3; */
+/*     --color-type-dark: #5a5366; */
+/*     --color-type-fairy: #eb8fe5; */
+/* } */

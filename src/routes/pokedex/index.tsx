@@ -1,7 +1,7 @@
-import { ErrorComponent } from '#/components/ErrorComponent';
-import { LoadingComponent } from '#/components/LoadingComponent';
+import { ErrorComponent } from '#/components/layout/ErrorComponent';
+import { LoadingComponent } from '#/components/layout/LoadingComponent';
 import { usePokemonList } from '#/hooks/usePokemonList';
-import { searchPokemonSchema } from '#/utils/searchPokemonSchema';
+import { searchPokemonSchema } from '#/lib/schemas/searchPokemonSchema';
 import { createFileRoute } from '@tanstack/react-router';
 
 const PokedexPage = () => {

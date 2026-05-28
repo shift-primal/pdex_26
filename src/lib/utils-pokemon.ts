@@ -1,3 +1,4 @@
+import { ELEMENTAL_TYPES, STATS } from '#/constants';
 import type {
     ElementalTypeName,
     Pokemon,
@@ -12,14 +13,15 @@ const parseTypes = (types: RawElementalTypes[]): PokemonElementalType[] =>
     types.map((t) => ({
         slot: t.slot,
         name: t.type.name as ElementalTypeName,
-        url: t.type.url
+        color: ELEMENTAL_TYPES[t.type.name as ElementalTypeName].color,
+        icons: ELEMENTAL_TYPES[t.type.name as ElementalTypeName].icons
     }));
 
 const parseStats = (stats: RawStats[]): PokemonStat[] =>
     stats.map((s) => ({
         value: s.base_stat,
         name: s.stat.name as StatName,
-        url: s.stat.url
+        icon: STATS[s.stat.name as StatName]
     }));
 
 const parseSprites = (sprites: RawSprites): PokemonSprites => ({

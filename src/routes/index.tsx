@@ -1,6 +1,5 @@
-import { PokemonCard } from '#/components/PokemonCard';
 import { usePokemon } from '#/hooks/usePokemon';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 const Home = () => {
     const { data: pokemon, isLoading, isError } = usePokemon('4');
@@ -10,7 +9,9 @@ const Home = () => {
 
     return (
         <div className="p-8">
-            <PokemonCard pokemon={pokemon} />
+            <Link to="/pokedex" className="border border-pink-400">
+                Pokedex
+            </Link>
         </div>
     );
 };

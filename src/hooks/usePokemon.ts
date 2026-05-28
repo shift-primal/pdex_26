@@ -1,5 +1,5 @@
 import { fetchPokemon } from '#/api/api';
-import { toPokemon } from '#/utils/pokemon';
+import { toPokemon } from '#/lib/utils-pokemon';
 import { useQuery } from '@tanstack/react-query';
 
 export const usePokemon = (nameOrId: string) =>
