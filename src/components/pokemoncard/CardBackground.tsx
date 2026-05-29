@@ -4,9 +4,9 @@ export const CardBackground = ({ type }: { type: PokemonElementalType }) => {
     return (
         <div
             style={{ backgroundColor: type.color }}
-            className="w-[140%] ml-[-20%] flex items-center justify-center pt-10 pb-16 rounded-b-[50%]"
+            className="absolute w-[140%] ml-[-20%] flex items-center justify-center pt-8 pb-12 rounded-b-full -z-50 bg-linear-to-t from-white/50 via-white/10"
         >
-            <img src={type.icons.symbol} className="w-48 mask-b-from-65%" />
+            <img src={type.icons.symbol} className="w-54 " />
         </div>
     );
 };

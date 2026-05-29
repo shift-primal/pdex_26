@@ -25,10 +25,10 @@ const parseStats = (stats: RawStats[]): PokemonStat[] =>
     }));
 
 const parseSprites = (sprites: RawSprites): PokemonSprites => ({
-    front: sprites.other.showdown.front_default ?? sprites.front_default ?? '',
-    back: sprites.other.showdown.back_default ?? sprites.back_default ?? '',
-    frontShiny: sprites.other.showdown.front_shiny ?? sprites.front_shiny ?? '',
-    backShiny: sprites.other.showdown.back_shiny ?? sprites.back_shiny ?? ''
+    front: sprites.other['official-artwork'].front_default ?? sprites.front_default ?? '',
+    back: sprites.back_default ?? '',
+    frontShiny: sprites.other['official-artwork'].front_shiny ?? sprites.front_shiny ?? '',
+    backShiny: sprites.back_shiny ?? ''
 });
 
 export function toPokemon(rp: RawPokemon): Pokemon {
@@ -42,3 +42,5 @@ export function toPokemon(rp: RawPokemon): Pokemon {
         sprites: parseSprites(rp.sprites)
     };
 }
+
+export const parseId = (id: number) => '#' + id.toString().padStart(4, '0');

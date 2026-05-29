@@ -18,6 +18,12 @@ body {
     clip-path: circle(50% at 50% 0);
 }
 
+@theme {
+    --color-fg: #1e171f;
+    --color-muted-fg: #a399a3;
+    --color-semimuted-fg: #594c5b;
+}
+
 /* @theme { */
 /*     --color-type-normal: #9098a0; */
 /*     --color-type-fighting: #cd4069; */
