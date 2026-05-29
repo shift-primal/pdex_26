@@ -1,4 +1,4 @@
-import { fetchPokemonList } from '#/api/api';
+import { fetchPokemonList } from '#/services/api';
 import { type SearchPokemonInput } from '#/lib/schemas/searchPokemonSchema';
 import { useQuery } from '@tanstack/react-query';
 

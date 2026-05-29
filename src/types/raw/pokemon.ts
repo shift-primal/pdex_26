@@ -1,11 +1,11 @@
-export type RawNamedResource = { name: string; url: string };
+import type { RawNamedResource } from '#/types/generic';
 
-export type RawElementalTypes = {
+export type RawElementalType = {
     slot: number;
     type: RawNamedResource;
 };
 
-export type RawStats = {
+export type RawStat = {
     base_stat: number;
     stat: RawNamedResource;
 };
@@ -16,7 +16,7 @@ export type RawSprites = {
     front_shiny: string;
     back_shiny: string;
     other: {
-        showdown: {
+        'showdown': {
             front_default: string;
             back_default: string;
             front_shiny: string;
@@ -27,6 +27,11 @@ export type RawSprites = {
             front_shiny: string;
         };
     };
+};
+
+export type RawCries = {
+    latest: string;
+    legacy: string;
 };
 
 export type RawListResponse = {
@@ -45,7 +50,8 @@ export interface RawPokemon {
     name: string;
     height: number;
     weight: number;
-    types: RawElementalTypes[];
-    stats: RawStats[];
+    types: RawElementalType[];
+    stats: RawStat[];
     sprites: RawSprites;
+    cries: RawCries;
 }

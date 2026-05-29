@@ -13,6 +13,19 @@ const NAME_ICON_BASE =
 const SYMBOL_ICON_BASE =
     'https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons';
 
+export const ROMAN_DICT: Record<string, number> = {
+    i: 1,
+    ii: 2,
+    iii: 3,
+    iv: 4,
+    v: 5,
+    vi: 6,
+    vii: 7,
+    viii: 8,
+    ix: 9,
+    x: 10
+} as const;
+
 export const ELEMENTAL_TYPES = {
     normal: {
         id: 1,
