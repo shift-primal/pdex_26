@@ -48,6 +48,13 @@ export type PokemonEvolutionChain = {
 export type PokemonEvolutionInfo = {
     stage: number;
     chain: PokemonEvolutionChain;
+    evolvesFrom: string | null;
+    evolvesTo: string[] | null;
+};
+
+export type PokemonVariety = {
+    isDefault: boolean;
+    name: string;
 };
 
 export interface Pokemon {
@@ -63,4 +70,6 @@ export interface Pokemon {
     cries: PokemonCries;
     status: PokemonStatus;
     evolution: PokemonEvolutionInfo | null;
+    habitat: string;
+    varieties: PokemonVariety[];
 }

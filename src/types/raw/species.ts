@@ -1,6 +1,6 @@
 import type { RawNamedResource } from '#/types/generic';
 
-type RawVariety = {
+export type RawVariety = {
     is_default: boolean;
     pokemon: RawNamedResource;
 };

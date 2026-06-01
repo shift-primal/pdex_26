@@ -11,7 +11,7 @@ import type {
 } from '#/types/pokemon';
 import type { RawEvolution, RawEvolutionChain } from '#/types/raw/evolutionchain';
 import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
-import type { RawFlavorTextEntry, RawSpecies } from '#/types/raw/species';
+import type { RawFlavorTextEntry, RawSpecies, RawVariety } from '#/types/raw/species';
 
 const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
     types.map((t) => ({
@@ -49,6 +49,26 @@ const findStage = (chain: PokemonEvolutionChain, name: string): number => {
     return -1;
 };
 
+const findPrevEvolution = (chain: PokemonEvolutionChain, name: string): string | null => {
+    for (const child of chain.evolvesTo) {
+        if (child.name === name) return chain.name;
+        const result = findPrevEvolution(child, name);
+        if (result) return result;
+    }
+    return null;
+};
+
+const findNextEvolution = (chain: PokemonEvolutionChain, name: string): string[] => {
+    if (chain.name === name) return chain.evolvesTo.map((e) => e.name);
+
+    for (const child of chain.evolvesTo) {
+        if (child.name === name) return child.evolvesTo.map((e) => e.name);
+        const result = findNextEvolution(child, name);
+        if (result.length) return result;
+    }
+    return [];
+};
+
 const parseEvolutionChain = (chain: RawEvolution, stage = 0): PokemonEvolutionChain => ({
     name: chain.species.name,
     isBaby: chain.is_baby,
@@ -58,7 +78,12 @@ const parseEvolutionChain = (chain: RawEvolution, stage = 0): PokemonEvolutionCh
 
 const parseEvolution = (evolution: RawEvolutionChain, name: string): PokemonEvolutionInfo => {
     const chain = parseEvolutionChain(evolution.chain);
-    return { chain, stage: findStage(chain, name) };
+    return {
+        chain,
+        stage: findStage(chain, name),
+        evolvesFrom: findPrevEvolution(chain, name),
+        evolvesTo: findNextEvolution(chain, name)
+    };
 };
 
 const parseFlavorText = (flavorTextEntries: RawFlavorTextEntry[]) => {
@@ -71,6 +96,12 @@ const parseFlavorText = (flavorTextEntries: RawFlavorTextEntry[]) => {
         .replace(/\s+/g, ' ')
         .trim();
 };
+
+const parseVarieties = (varieties: RawVariety[]) =>
+    varieties.map((v) => ({
+        isDefault: v.is_default,
+        name: v.pokemon.name
+    }));
 
 export function toPokemon([pokemon, species, evolution]: [
     RawPokemon,
@@ -93,6 +124,8 @@ export function toPokemon([pokemon, species, evolution]: [
             mythical: species.is_mythical
         },
         flavorText: parseFlavorText(species.flavor_text_entries),
-        evolution: evolution ? parseEvolution(evolution, pokemon.name) : null
+        evolution: evolution ? parseEvolution(evolution, pokemon.name) : null,
+        habitat: species.habitat.name,
+        varieties: parseVarieties(species.varieties ?? [])
     };
 }

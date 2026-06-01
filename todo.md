@@ -1,2 +1,2 @@
-- [ ] Habitat
+- [x] Habitat
 - [ ] Varieties
