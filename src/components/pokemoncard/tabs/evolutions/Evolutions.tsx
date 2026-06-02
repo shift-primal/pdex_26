@@ -1,4 +1,4 @@
-import { EvolutionEntry } from '#/components/pokemoncard/EvolutionEntry';
+import { EvolutionEntry } from '#/components/pokemoncard/tabs/evolutions/EvolutionEntry';
 import { ArrowDownIcon, ArrowRightIcon } from '@phosphor-icons/react';
 
 type EvolutionsProps = {
@@ -9,8 +9,8 @@ type EvolutionsProps = {
 
 export const Evolutions = ({ current, evolvesFrom, evolvesTo }: EvolutionsProps) => {
     const fanLayout = evolvesTo.length > 1;
-    const hasChild = evolvesFrom;
-    const hasParent = evolvesTo.length > 0;
+    const hasPrevEv = evolvesFrom !== null;
+    const hasNextEv = evolvesTo.length > 0;
 
     if (fanLayout) {
         return (
@@ -28,7 +28,7 @@ export const Evolutions = ({ current, evolvesFrom, evolvesTo }: EvolutionsProps)
 
     return (
         <div className="flex items-stretch justify-center gap-1">
-            {hasChild && (
+            {hasPrevEv && (
                 <div className="flex justify-center items-center">
                     <EvolutionEntry name={evolvesFrom} />
                     <ArrowRightIcon />
@@ -36,7 +36,7 @@ export const Evolutions = ({ current, evolvesFrom, evolvesTo }: EvolutionsProps)
             )}
             <EvolutionEntry name={current} isCurrent={true} />
 
-            {hasParent && (
+            {hasNextEv && (
                 <div className="flex justify-center items-center gap-1">
                     <ArrowRightIcon />
                     <EvolutionEntry name={evolvesTo[0]} />

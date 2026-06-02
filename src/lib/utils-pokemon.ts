@@ -1,4 +1,4 @@
-import { ELEMENTAL_TYPES, ROMAN_DICT, STATS } from '#/constants';
+import { ELEMENTAL_TYPES, FORM_SUFFIXES, ROMAN_DICT, STATS } from '#/constants';
 import type {
     ElementalTypeName,
     Pokemon,
@@ -12,6 +12,9 @@ import type {
 import type { RawEvolution, RawEvolutionChain } from '#/types/raw/evolutionchain';
 import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
 import type { RawFlavorTextEntry, RawSpecies, RawVariety } from '#/types/raw/species';
+
+export const getSpeciesName = (name: string) =>
+    FORM_SUFFIXES.some((s) => name.includes(s)) ? name.split('-')[0] : name;
 
 const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
     types.map((t) => ({
@@ -105,7 +108,7 @@ const parseVarieties = (varieties: RawVariety[]) =>
 
 export function toPokemon([pokemon, species, evolution]: [
     RawPokemon,
-    RawSpecies,
+    RawSpecies | null,
     RawEvolutionChain | null
 ]): Pokemon {
     return {
@@ -117,15 +120,15 @@ export function toPokemon([pokemon, species, evolution]: [
         stats: parseStats(pokemon.stats),
         sprites: parseSprites(pokemon.sprites),
         cries: pokemon.cries,
-        generation: parseGeneration(species.generation.name),
+        generation: species ? parseGeneration(species.generation.name) : 0,
         status: {
-            baby: species.is_baby,
-            legendary: species.is_legendary,
-            mythical: species.is_mythical
+            baby: species?.is_baby ?? false,
+            legendary: species?.is_legendary ?? false,
+            mythical: species?.is_mythical ?? false
         },
-        flavorText: parseFlavorText(species.flavor_text_entries),
+        flavorText: species ? parseFlavorText(species.flavor_text_entries) : '',
         evolution: evolution ? parseEvolution(evolution, pokemon.name) : null,
-        habitat: species.habitat?.name ?? '',
-        varieties: parseVarieties(species.varieties ?? [])
+        habitat: species?.habitat?.name ?? '',
+        varieties: parseVarieties(species?.varieties ?? [])
     };
 }

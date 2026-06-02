@@ -174,12 +174,14 @@ export const ELEMENTAL_TYPES = {
 } as const;
 
 export const STATS = {
-    'hp': HeartIcon,
-    'attack': SwordIcon,
-    'defense': ShieldIcon,
-    'special-attack': MagicWandIcon,
-    'special-defense': ShieldPlusIcon,
-    'speed': LightningIcon
+    'hp': { displayName: 'HP', icon: HeartIcon },
+    'attack': { displayName: 'ATK', icon: SwordIcon },
+    'defense': { displayName: 'DEF', icon: ShieldIcon },
+    'special-attack': { displayName: 'SP. ATK', icon: MagicWandIcon },
+    'special-defense': { displayName: 'SP. DEF', icon: ShieldPlusIcon },
+    'speed': { displayName: 'SPD', icon: LightningIcon }
 } as const;
 
 export const API_BASE_URL = 'https://pokeapi.co/api/v2';
+
+export const FORM_SUFFIXES = ['-mega', '-gmax', '-alola', '-galar', '-hisui', '-paldea'];

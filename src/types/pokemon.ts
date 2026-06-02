@@ -49,7 +49,7 @@ export type PokemonEvolutionInfo = {
     stage: number;
     chain: PokemonEvolutionChain;
     evolvesFrom: string | null;
-    evolvesTo: string[] | null;
+    evolvesTo: string[];
 };
 
 export type PokemonVariety = {

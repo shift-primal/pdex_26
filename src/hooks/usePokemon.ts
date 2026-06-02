@@ -1,5 +1,5 @@
 import { fetchEvolutionChain, fetchPokemon, fetchSpecies } from '#/services/api';
-import { toPokemon } from '#/lib/utils-pokemon';
+import { getSpeciesName, toPokemon } from '#/lib/utils-pokemon';
 import type { Pokemon } from '#/types/pokemon';
 import type { RawPokemon } from '#/types/raw/pokemon';
 import type { RawSpecies } from '#/types/raw/species';
@@ -10,10 +10,12 @@ export const usePokemon = (nameOrId: string) =>
     useQuery<[RawPokemon, RawSpecies, RawEvolutionChain | null], Error, Pokemon>({
         queryKey: ['pokemon', nameOrId],
         queryFn: async () => {
+            const speciesName = getSpeciesName(nameOrId);
             const [pokemon, species] = await Promise.all([
                 fetchPokemon(nameOrId),
-                fetchSpecies(nameOrId)
+                fetchSpecies(speciesName)
             ]);
+
             const evolution = species.evolution_chain
                 ? await fetchEvolutionChain(species.evolution_chain.url)
                 : null;
