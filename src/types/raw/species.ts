@@ -16,7 +16,7 @@ export interface RawSpecies {
     is_baby: boolean;
     is_legendary: boolean;
     is_mythical: boolean;
-    habitat: RawNamedResource;
+    habitat: RawNamedResource | null;
     varieties?: RawVariety[];
     evolves_from_species?: RawNamedResource;
     evolution_chain?: {

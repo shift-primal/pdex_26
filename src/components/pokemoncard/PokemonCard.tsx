@@ -1,7 +1,9 @@
 import { CardBackground } from '#/components/pokemoncard/CardBackground';
+import { Evolutions } from '#/components/pokemoncard/Evolutions';
 import { PokemonImage } from '#/components/pokemoncard/PokemonImage';
 import { PokemonTitle } from '#/components/pokemoncard/PokemonTitle';
 import { TypeBadge } from '#/components/pokemoncard/TypeBadge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '#/components/ui/collapsible';
 import type { Pokemon } from '#/types/pokemon';
 
 export const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
@@ -16,6 +18,16 @@ export const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
                     <TypeBadge key={t.name} type={t} />
                 ))}
             </div>
+            <Collapsible>
+                <CollapsibleTrigger>Evolutions</CollapsibleTrigger>
+                <CollapsibleContent>
+                    <Evolutions
+                        current={pokemon.name}
+                        evolvesFrom={pokemon.evolution?.evolvesFrom ?? null}
+                        evolvesTo={pokemon.evolution?.evolvesTo ?? []}
+                    />
+                </CollapsibleContent>
+            </Collapsible>
         </div>
     );
 };

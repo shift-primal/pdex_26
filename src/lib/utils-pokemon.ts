@@ -125,7 +125,7 @@ export function toPokemon([pokemon, species, evolution]: [
         },
         flavorText: parseFlavorText(species.flavor_text_entries),
         evolution: evolution ? parseEvolution(evolution, pokemon.name) : null,
-        habitat: species.habitat.name,
+        habitat: species.habitat?.name ?? '',
         varieties: parseVarieties(species.varieties ?? [])
     };
 }
