@@ -18,7 +18,7 @@ const PokedexPage = () => {
     return (
         <div>
             {pokemonList.results.map((p) => (
-                <Link to="/pokedex/$id" params={{ id: p.name }}>
+                <Link to="/pokedex/$id" params={{ id: p.name }} key={p.name}>
                     {p.name}
                 </Link>
             ))}

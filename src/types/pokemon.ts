@@ -1,8 +1,10 @@
-import type { ELEMENTAL_TYPES, STATS } from '#/constants';
+import type { ELEMENTAL_TYPES, FORM_CATEGORIES, GENERATIONS, STATS } from '#/constants';
 import type { Icon } from '@phosphor-icons/react';
 
 export type ElementalTypeName = keyof typeof ELEMENTAL_TYPES;
 export type StatName = keyof typeof STATS;
+export type FormCategoryName = keyof typeof FORM_CATEGORIES;
+export type PokemonGeneration = (typeof GENERATIONS)[keyof typeof GENERATIONS];
 
 export type PokemonElementalType = {
     slot: number;
@@ -52,15 +54,16 @@ export type PokemonEvolutionInfo = {
     evolvesTo: string[];
 };
 
-export type PokemonVariety = {
+export type PokemonForm = {
     isDefault: boolean;
     name: string;
+    formType: string | null;
 };
 
 export interface Pokemon {
     id: number;
     name: string;
-    generation: number;
+    generation: PokemonGeneration | null;
     flavorText: string;
     height: number;
     weight: number;
@@ -71,5 +74,6 @@ export interface Pokemon {
     status: PokemonStatus;
     evolution: PokemonEvolutionInfo | null;
     habitat: string;
-    varieties: PokemonVariety[];
+    forms: PokemonForm[];
+    isDefault: boolean;
 }

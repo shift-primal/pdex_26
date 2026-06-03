@@ -1,47 +1,61 @@
-import { PokemonInfo } from '#/components/pokemoncard/PokemonInfo';
-import { Evolutions } from '#/components/pokemoncard/tabs/evolutions/Evolutions';
-import { PokemonStats } from '#/components/pokemoncard/tabs/PokemonStats';
-import { Varieties } from '#/components/pokemoncard/tabs/variations/Varieties';
+import { PokemonEvolutions } from '#/components/pokemoncard/tabs/PokemonEvolutions';
+import { PokemonForms } from '#/components/pokemoncard/tabs/PokemonForms';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import type { Pokemon } from '#/types/pokemon';
+import { PokemonTab } from '#/components/pokemoncard/tabs/PokemonTab';
+import { PokemonAbout } from '#/components/pokemoncard/tabs/PokemonAbout';
+import { PokemonBaseStats } from '#/components/pokemoncard/tabs/PokemonBaseStats';
 
 type PokemonTabsProps = {
     pokemon: Pokemon;
     hasEvolutions: boolean;
-    hasVarieties: boolean;
+    hasForms: boolean;
 };
 
-export const PokemonTabs = ({ pokemon, hasEvolutions, hasVarieties }: PokemonTabsProps) => {
+export const PokemonTabs = ({ pokemon, hasEvolutions, hasForms }: PokemonTabsProps) => {
     return (
-        <Tabs defaultValue="info">
-            <TabsList>
-                <TabsTrigger value="info">Info</TabsTrigger>
-                <TabsTrigger value="stats">Stats</TabsTrigger>
+        <Tabs
+            defaultValue="info"
+            className=" mt-6 px-2 py-4 h-full rounded-t-4xl bg-background border-2 drop"
+        >
+            <TabsList className="w-full" variant="line">
+                <TabsTrigger value="about">About</TabsTrigger>
+                <TabsTrigger value="base-stats">Base Stats</TabsTrigger>
                 <TabsTrigger value="evolutions" disabled={!hasEvolutions}>
                     Evolutions
                 </TabsTrigger>
-                <TabsTrigger value="varieties" disabled={!hasVarieties}>
-                    Varieties
+                <TabsTrigger value="forms" disabled={!hasForms}>
+                    Forms
                 </TabsTrigger>
             </TabsList>
-            <TabsContent value="info">
-                <PokemonInfo height={pokemon.height} weight={pokemon.weight} />
+
+            <TabsContent value="about" className="">
+                <PokemonTab>
+                    <PokemonAbout
+                        generation={pokemon.generation ?? null}
+                        height={pokemon.height}
+                        weight={pokemon.weight}
+                        habitat={pokemon.habitat ?? 'Unknown'}
+                    />
+                </PokemonTab>
             </TabsContent>
 
-            <TabsContent value="stats">
-                <PokemonStats stats={pokemon.stats} />
+            <TabsContent value="base-stats">
+                <PokemonTab>
+                    <PokemonBaseStats stats={pokemon.stats} />
+                </PokemonTab>
             </TabsContent>
 
             <TabsContent value="evolutions">
-                <Evolutions
-                    current={pokemon.name}
-                    evolvesFrom={pokemon.evolution?.evolvesFrom ?? null}
-                    evolvesTo={pokemon.evolution?.evolvesTo ?? []}
-                />
+                <PokemonTab>
+                    <PokemonEvolutions current={pokemon.name} evInfo={pokemon.evolution!} />
+                </PokemonTab>
             </TabsContent>
 
-            <TabsContent value="varieties">
-                <Varieties current={pokemon.name} varieties={pokemon.varieties} />
+            <TabsContent value="forms">
+                <PokemonTab>
+                    <PokemonForms current={pokemon.name} forms={pokemon.forms} />
+                </PokemonTab>
             </TabsContent>
         </Tabs>
     );

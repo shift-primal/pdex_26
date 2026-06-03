@@ -1,4 +1,4 @@
-import { cn } from '#/lib/utils-general';
+import { cn } from '#/lib/utils';
 
 export const PokemonImage = ({
     sprite,
@@ -15,7 +15,7 @@ export const PokemonImage = ({
     };
 
     return (
-        <div className={size === 'lg' ? 'pt-30' : ''}>
+        <div className={size === 'lg' ? 'pt-15' : ''}>
             <div className={cn('flex items-center justify-center mx-auto', SIZES[size])}>
                 <img src={sprite} className="w-full h-full object-contain" />
             </div>

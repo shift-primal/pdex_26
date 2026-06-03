@@ -1,17 +1,16 @@
-import { capFirstLetter } from '#/lib/utils-general';
-import { parseId } from '#/lib/utils-pokemon';
+import { formatName, parseId } from '#/lib/utils-pokemon';
 
 type PokemonTitleProps = {
     name: string;
     id: number;
+    isDefault: boolean;
 };
 
-export const PokemonTitle = (props: PokemonTitleProps) => {
-    const { name, id } = props;
+export const PokemonTitle = ({ name, id }: PokemonTitleProps) => {
     return (
-        <div className="flex flex-col p-4">
-            <span className="text-3xl font-semibold line-clamp-2">{capFirstLetter(name)}</span>
-            <span className="text-lg font-medium text-semimuted">{parseId(id)}</span>
+        <div className="flex flex-col px-4 pb-4">
+            <span className="text-3xl font-semibold line-clamp-2">{formatName(name)}</span>
+            <span className="text-lg font-medium text-muted-foreground">{parseId(id)}</span>
         </div>
     );
 };

@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @import 'shadcn/tailwind.css';
 
-@plugin '@tailwindcss/typography';
-
 :root {
     --background: oklch(1 0 0);
     --background-lighter: oklch(0.9341 0 0);
@@ -132,10 +130,4 @@ body,
         background-color: var(--background);
         color: var(--foreground);
     }
-}
-
-@theme {
-    --color-fg: #1e171f;
-    --color-muted-fg: #a399a3;
-    --color-semimuted-fg: #594c5b;
 }

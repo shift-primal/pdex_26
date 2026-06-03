@@ -1,20 +1,24 @@
-import { ELEMENTAL_TYPES, FORM_SUFFIXES, ROMAN_DICT, STATS } from '#/constants';
+import { ELEMENTAL_TYPES, FORM_TYPES, GENERATIONS, STATS } from '#/constants';
+import { capFirstLetter } from '#/lib/utils';
 import type {
     ElementalTypeName,
     Pokemon,
     PokemonElementalType,
     PokemonEvolutionChain,
     PokemonEvolutionInfo,
+    PokemonGeneration,
     PokemonSprites,
     PokemonStat,
     StatName
 } from '#/types/pokemon';
 import type { RawEvolution, RawEvolutionChain } from '#/types/raw/evolutionchain';
 import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
-import type { RawFlavorTextEntry, RawSpecies, RawVariety } from '#/types/raw/species';
+import type { RawFlavorTextEntry, RawForm, RawSpecies } from '#/types/raw/species';
 
-export const getSpeciesName = (name: string) =>
-    FORM_SUFFIXES.some((s) => name.includes(s)) ? name.split('-')[0] : name;
+export const getSpeciesName = (name: string) => {
+    const form = FORM_TYPES.find((ft) => name.includes(ft.suffix));
+    return form ? name.split('-')[0] : name;
+};
 
 const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
     types.map((t) => ({
@@ -28,7 +32,7 @@ const parseStats = (stats: RawStat[]): PokemonStat[] =>
     stats.map((s) => ({
         value: s.base_stat,
         name: s.stat.name as StatName,
-        icon: STATS[s.stat.name as StatName]
+        icon: STATS[s.stat.name as StatName].icon
     }));
 
 const parseSprites = (sprites: RawSprites): PokemonSprites => ({
@@ -40,7 +44,10 @@ const parseSprites = (sprites: RawSprites): PokemonSprites => ({
 
 export const parseId = (id: number) => '#' + id.toString().padStart(4, '0');
 
-const parseGeneration = (genText: string) => ROMAN_DICT[genText.split('-').at(-1) ?? ''];
+const parseGeneration = (genText: string): PokemonGeneration => {
+    const genRoman = genText.split('-').at(-1) ?? '';
+    return GENERATIONS[genRoman as keyof typeof GENERATIONS];
+};
 
 const findStage = (chain: PokemonEvolutionChain, name: string): number => {
     if (chain.name === name) return chain.stage;
@@ -100,11 +107,21 @@ const parseFlavorText = (flavorTextEntries: RawFlavorTextEntry[]) => {
         .trim();
 };
 
-const parseVarieties = (varieties: RawVariety[]) =>
-    varieties.map((v) => ({
+const parseForms = (forms: RawForm[]) =>
+    forms.map((v) => ({
         isDefault: v.is_default,
-        name: v.pokemon.name
+        name: v.pokemon.name,
+        formType:
+            FORM_TYPES.find((ft) => v.pokemon.name.includes(ft.suffix))?.category.label ?? null
     }));
+
+export const formatName = (name: string) => {
+    const form = FORM_TYPES.find((ft) => name.includes(ft.suffix));
+    if (!form) return `${capFirstLetter(name)}`;
+
+    const base = name.replace(form.suffix, '');
+    return `${capFirstLetter(base)} ${capFirstLetter(form.label)}`;
+};
 
 export function toPokemon([pokemon, species, evolution]: [
     RawPokemon,
@@ -120,7 +137,7 @@ export function toPokemon([pokemon, species, evolution]: [
         stats: parseStats(pokemon.stats),
         sprites: parseSprites(pokemon.sprites),
         cries: pokemon.cries,
-        generation: species ? parseGeneration(species.generation.name) : 0,
+        generation: species ? parseGeneration(species.generation.name) : null,
         status: {
             baby: species?.is_baby ?? false,
             legendary: species?.is_legendary ?? false,
@@ -129,6 +146,7 @@ export function toPokemon([pokemon, species, evolution]: [
         flavorText: species ? parseFlavorText(species.flavor_text_entries) : '',
         evolution: evolution ? parseEvolution(evolution, pokemon.name) : null,
         habitat: species?.habitat?.name ?? '',
-        varieties: parseVarieties(species?.varieties ?? [])
+        forms: parseForms(species?.varieties ?? []),
+        isDefault: pokemon.is_default
     };
 }

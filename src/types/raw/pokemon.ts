@@ -54,4 +54,5 @@ export interface RawPokemon {
     stats: RawStat[];
     sprites: RawSprites;
     cries: RawCries;
+    is_default: boolean;
 }

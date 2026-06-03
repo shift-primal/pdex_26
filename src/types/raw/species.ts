@@ -1,6 +1,6 @@
 import type { RawNamedResource } from '#/types/generic';
 
-export type RawVariety = {
+export type RawForm = {
     is_default: boolean;
     pokemon: RawNamedResource;
 };
@@ -17,7 +17,7 @@ export interface RawSpecies {
     is_legendary: boolean;
     is_mythical: boolean;
     habitat: RawNamedResource | null;
-    varieties?: RawVariety[];
+    varieties?: RawForm[];
     evolves_from_species?: RawNamedResource;
     evolution_chain?: {
         url: string;
