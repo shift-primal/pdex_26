@@ -161,12 +161,12 @@ export const ELEMENTAL_TYPES = {
 } as const;
 
 export const STATS = {
-    'hp': { displayName: 'HP', icon: HeartIcon },
-    'attack': { displayName: 'ATK', icon: SwordIcon },
-    'defense': { displayName: 'DEF', icon: ShieldIcon },
-    'special-attack': { displayName: 'SP. ATK', icon: MagicWandIcon },
-    'special-defense': { displayName: 'SP. DEF', icon: ShieldPlusIcon },
-    'speed': { displayName: 'SPD', icon: LightningIcon }
+    'hp': { displayName: 'HP', icon: HeartIcon, color: '#e8637a' },
+    'attack': { displayName: 'ATK', icon: SwordIcon, color: '#e07d3f' },
+    'defense': { displayName: 'DEF', icon: ShieldIcon, color: '#5b8dd9' },
+    'special-attack': { displayName: 'SP. ATK', icon: MagicWandIcon, color: '#9b6ec8' },
+    'special-defense': { displayName: 'SP. DEF', icon: ShieldPlusIcon, color: '#4daa7d' },
+    'speed': { displayName: 'SPD', icon: LightningIcon, color: '#d4b83a' }
 } as const;
 
 export const API_BASE_URL = 'https://pokeapi.co/api/v2';

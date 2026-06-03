@@ -16,7 +16,7 @@ const TypeBadge = ({ type }: { type: PokemonElementalType }) => {
                     preProcessor={(code) => code.replace(/fill=".*?"/g, `fill="${type.color}"`)}
                 />
             </div>
-            <span className="font-semibold text-white text-sm">{capFirstLetter(type.name)}</span>
+            <span className="font-semibold text-white text-xs">{capFirstLetter(type.name)}</span>
         </div>
     );
 };

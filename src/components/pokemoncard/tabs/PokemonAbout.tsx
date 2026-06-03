@@ -3,9 +3,9 @@ import type { PokemonGeneration } from '#/types/pokemon';
 import { GlobeIcon, RulerIcon, ScalesIcon, TrophyIcon, type Icon } from '@phosphor-icons/react';
 
 const AboutEntry = ({ title, value, Icon }: { title: string; value: string; Icon: Icon }) => (
-    <div className="flex items-center justify-between px-8 text-sm">
+    <div className="flex items-center justify-between text-sm">
         <div className="flex gap-x-1.5 items-center">
-            <Icon size={20} className="text-muted-foreground" />
+            <Icon size={16} className="text-muted-foreground" />
             <span className="text-muted-foreground">{title}</span>
         </div>
         <span>{capFirstLetter(value)}</span>
@@ -38,7 +38,8 @@ const parseWeight = (kg: number) => {
 
 export const PokemonAbout = ({ generation, height, weight, habitat }: PokemonAboutProps) => {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-4">
+            <span className="font-semibold">General info</span>
             <AboutEntry title="Height" value={parseHeight(height)} Icon={RulerIcon} />
             <AboutEntry title="Weight" value={parseWeight(weight)} Icon={ScalesIcon} />
             <AboutEntry

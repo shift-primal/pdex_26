@@ -32,7 +32,8 @@ const parseStats = (stats: RawStat[]): PokemonStat[] =>
     stats.map((s) => ({
         value: s.base_stat,
         name: s.stat.name as StatName,
-        icon: STATS[s.stat.name as StatName].icon
+        icon: STATS[s.stat.name as StatName].icon,
+        color: STATS[s.stat.name as StatName].color
     }));
 
 const parseSprites = (sprites: RawSprites): PokemonSprites => ({

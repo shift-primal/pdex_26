@@ -20,6 +20,7 @@ export type PokemonStat = {
     value: number;
     name: StatName;
     icon: Icon;
+    color: string;
 };
 
 export type PokemonSprites = {

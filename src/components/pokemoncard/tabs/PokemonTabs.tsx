@@ -14,10 +14,7 @@ type PokemonTabsProps = {
 
 export const PokemonTabs = ({ pokemon, hasEvolutions, hasForms }: PokemonTabsProps) => {
     return (
-        <Tabs
-            defaultValue="info"
-            className=" mt-6 px-2 py-4 h-full rounded-t-4xl bg-background border-2 drop"
-        >
+        <Tabs defaultValue="about" className=" mt-6 px-2 py-4 h-full rounded-t-4xl bg-background ">
             <TabsList className="w-full" variant="line">
                 <TabsTrigger value="about">About</TabsTrigger>
                 <TabsTrigger value="base-stats">Base Stats</TabsTrigger>
