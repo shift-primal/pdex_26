@@ -122,6 +122,10 @@ body,
     min-height: 100%;
 }
 
+.element::after {
+    background: var(--after-color);
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

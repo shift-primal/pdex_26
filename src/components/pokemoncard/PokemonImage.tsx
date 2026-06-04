@@ -2,10 +2,12 @@ import { cn } from '#/lib/utils';
 
 export const PokemonImage = ({
     sprite,
-    size = 'lg'
+    size = 'lg',
+    name
 }: {
     sprite: string;
     size?: 'xs' | 'sm' | 'md' | 'lg';
+    name: string;
 }) => {
     const SIZES = {
         xs: 'w-20 h-20',
@@ -17,7 +19,7 @@ export const PokemonImage = ({
     return (
         <div className={size === 'lg' ? 'pt-15' : ''}>
             <div className={cn('flex items-center justify-center mx-auto', SIZES[size])}>
-                <img src={sprite} className="w-full h-full object-contain" />
+                <img src={sprite} className="w-full h-full object-contain" alt={name} />
             </div>
         </div>
     );

@@ -1,24 +1,23 @@
 import { ELEMENTAL_TYPES, FORM_TYPES, GENERATIONS, STATS } from '#/constants';
-import { capFirstLetter } from '#/lib/utils';
+import {
+    parseEvolutionChain,
+    findStage,
+    findPrevEvolution,
+    findNextEvolution
+} from '#/lib/pokemon/chain';
 import type {
     ElementalTypeName,
     Pokemon,
     PokemonElementalType,
-    PokemonEvolutionChain,
     PokemonEvolutionInfo,
     PokemonGeneration,
     PokemonSprites,
     PokemonStat,
     StatName
 } from '#/types/pokemon';
-import type { RawEvolution, RawEvolutionChain } from '#/types/raw/evolutionchain';
+import type { RawEvolutionChain } from '#/types/raw/evolutionchain';
 import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
 import type { RawFlavorTextEntry, RawForm, RawSpecies } from '#/types/raw/species';
-
-export const getSpeciesName = (name: string) => {
-    const form = FORM_TYPES.find((ft) => name.includes(ft.suffix));
-    return form ? name.split('-')[0] : name;
-};
 
 const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
     types.map((t) => ({
@@ -43,70 +42,18 @@ const parseSprites = (sprites: RawSprites): PokemonSprites => ({
     backShiny: sprites.back_shiny ?? ''
 });
 
-export const parseId = (id: number) => '#' + id.toString().padStart(4, '0');
-
 const parseGeneration = (genText: string): PokemonGeneration => {
     const genRoman = genText.split('-').at(-1) ?? '';
     return GENERATIONS[genRoman as keyof typeof GENERATIONS];
 };
 
-const findStage = (chain: PokemonEvolutionChain, name: string): number => {
-    if (chain.name === name) return chain.stage;
-
-    for (const child of chain.evolvesTo) {
-        const stage = findStage(child, name);
-        if (stage !== -1) return stage;
-    }
-    return -1;
-};
-
-const findPrevEvolution = (chain: PokemonEvolutionChain, name: string): string | null => {
-    for (const child of chain.evolvesTo) {
-        if (child.name === name) return chain.name;
-        const result = findPrevEvolution(child, name);
-        if (result) return result;
-    }
-    return null;
-};
-
-const findNextEvolution = (chain: PokemonEvolutionChain, name: string): string[] => {
-    if (chain.name === name) return chain.evolvesTo.map((e) => e.name);
-
-    for (const child of chain.evolvesTo) {
-        if (child.name === name) return child.evolvesTo.map((e) => e.name);
-        const result = findNextEvolution(child, name);
-        if (result.length) return result;
-    }
-    return [];
-};
-
-const parseEvolutionChain = (chain: RawEvolution, stage = 0): PokemonEvolutionChain => ({
-    name: chain.species.name,
-    isBaby: chain.is_baby,
-    stage,
-    evolvesTo: chain.evolves_to.map((e) => parseEvolutionChain(e, stage + 1))
-});
-
-const parseEvolution = (evolution: RawEvolutionChain, name: string): PokemonEvolutionInfo => {
-    const chain = parseEvolutionChain(evolution.chain);
-    return {
-        chain,
-        stage: findStage(chain, name),
-        evolvesFrom: findPrevEvolution(chain, name),
-        evolvesTo: findNextEvolution(chain, name)
-    };
-};
-
-const parseFlavorText = (flavorTextEntries: RawFlavorTextEntry[]) => {
-    const flavorText = flavorTextEntries[0].flavor_text;
-
-    return flavorText
+const parseFlavorText = (entries: RawFlavorTextEntry[]) =>
+    (entries[0].flavor_text ?? '')
         .replace(/\n/g, ' ')
         .replace(/\bPOK[ÉE]MON\b/gi, 'Pokémon')
         .replace(/\b[A-Z]{3,}\b/g, (word) => word.charAt(0) + word.slice(1).toLowerCase())
         .replace(/\s+/g, ' ')
         .trim();
-};
 
 const parseForms = (forms: RawForm[]) =>
     forms.map((v) => ({
@@ -116,12 +63,14 @@ const parseForms = (forms: RawForm[]) =>
             FORM_TYPES.find((ft) => v.pokemon.name.includes(ft.suffix))?.category.label ?? null
     }));
 
-export const formatName = (name: string) => {
-    const form = FORM_TYPES.find((ft) => name.includes(ft.suffix));
-    if (!form) return `${capFirstLetter(name)}`;
-
-    const base = name.replace(form.suffix, '');
-    return `${capFirstLetter(base)} ${capFirstLetter(form.label)}`;
+const parseEvolution = (evolution: RawEvolutionChain, name: string): PokemonEvolutionInfo => {
+    const chain = parseEvolutionChain(evolution.chain);
+    return {
+        chain,
+        stage: findStage(chain, name),
+        evolvesFrom: findPrevEvolution(chain, name),
+        evolvesTo: findNextEvolution(chain, name)
+    };
 };
 
 export function toPokemon([pokemon, species, evolution]: [

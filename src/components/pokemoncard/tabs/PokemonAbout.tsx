@@ -1,4 +1,4 @@
-import { capFirstLetter } from '#/lib/utils';
+import { capFirstLetter } from '#/lib/pokemon/format';
 import type { PokemonGeneration } from '#/types/pokemon';
 import { GlobeIcon, RulerIcon, ScalesIcon, TrophyIcon, type Icon } from '@phosphor-icons/react';
 

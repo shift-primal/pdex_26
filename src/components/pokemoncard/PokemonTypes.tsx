@@ -1,6 +1,6 @@
 import type { PokemonElementalType } from '#/types/pokemon';
 import SVG from 'react-inlinesvg';
-import { capFirstLetter } from '#/lib/utils';
+import { capFirstLetter } from '#/lib/pokemon/format';
 
 const TypeBadge = ({ type }: { type: PokemonElementalType }) => {
     return (

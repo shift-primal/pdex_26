@@ -1,9 +1,10 @@
 import { fetchEvolutionChain, fetchPokemon, fetchSpecies } from '#/services/api';
-import { getSpeciesName, toPokemon } from '#/lib/utils-pokemon';
+import { getSpeciesName } from '#/lib/pokemon/format';
+import { toPokemon } from '#/lib/pokemon/parse';
 import type { Pokemon } from '#/types/pokemon';
 import type { RawPokemon } from '#/types/raw/pokemon';
 import type { RawSpecies } from '#/types/raw/species';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { RawEvolutionChain } from '#/types/raw/evolutionchain';
 
 export const usePokemon = (nameOrId: string) =>
@@ -23,5 +24,6 @@ export const usePokemon = (nameOrId: string) =>
             return [pokemon, species, evolution] as const;
         },
         select: toPokemon,
-        enabled: !!nameOrId
+        enabled: !!nameOrId,
+        placeholderData: keepPreviousData
     });

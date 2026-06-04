@@ -10,23 +10,43 @@ type PokemonTabsProps = {
     pokemon: Pokemon;
     hasEvolutions: boolean;
     hasForms: boolean;
+    activeTab: string;
+    onTabChange: (tab: string) => void;
 };
 
-export const PokemonTabs = ({ pokemon, hasEvolutions, hasForms }: PokemonTabsProps) => {
+export const PokemonTabs = ({
+    pokemon,
+    hasEvolutions,
+    hasForms,
+    activeTab,
+    onTabChange
+}: PokemonTabsProps) => {
     return (
-        <Tabs defaultValue="about" className=" mt-6 px-2 py-4 h-full rounded-t-4xl bg-background ">
+        <Tabs
+            value={activeTab}
+            onValueChange={onTabChange}
+            className=" mt-6 px-2 py-4 h-full rounded-t-4xl bg-muted/30 border-t border-t-accent"
+        >
             <TabsList className="w-full" variant="line">
-                <TabsTrigger value="about">About</TabsTrigger>
-                <TabsTrigger value="base-stats">Base Stats</TabsTrigger>
-                <TabsTrigger value="evolutions" disabled={!hasEvolutions}>
+                <TabsTrigger value="about" color={pokemon.types[0].color}>
+                    About
+                </TabsTrigger>
+                <TabsTrigger value="base-stats" color={pokemon.types[0].color}>
+                    Base Stats
+                </TabsTrigger>
+                <TabsTrigger
+                    value="evolutions"
+                    disabled={!hasEvolutions}
+                    color={pokemon.types[0].color}
+                >
                     Evolutions
                 </TabsTrigger>
-                <TabsTrigger value="forms" disabled={!hasForms}>
+                <TabsTrigger value="forms" disabled={!hasForms} color={pokemon.types[0].color}>
                     Forms
                 </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="about" className="">
+            <TabsContent value="about">
                 <PokemonTab>
                     <PokemonAbout
                         generation={pokemon.generation ?? null}

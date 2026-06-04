@@ -1,28 +1,36 @@
 import { ArrowDownIcon, ArrowRightIcon } from '@phosphor-icons/react';
-import { PokemonImage } from '#/components/pokemoncard/PokemonImage';
-import { usePokemon } from '#/hooks/usePokemon';
-import { Link } from '@tanstack/react-router';
+import { Fragment } from 'react';
+import { useQueries } from '@tanstack/react-query';
 import type { PokemonEvolutionChain, PokemonEvolutionInfo } from '#/types/pokemon';
-import { formatName } from '#/lib/utils-pokemon';
+import { fetchPokemon } from '#/services/api';
+import { LoadingComponent } from '#/components/layout/LoadingComponent';
+import { PokemonEntry, selectBasic } from '#/components/pokemoncard/tabs/PokemonEntry';
+import { ErrorComponent } from '@tanstack/react-router';
 
-const EvolutionEntry = ({ name, isCurrent = false }: { name: string; isCurrent?: boolean }) => {
-    const { data: pokemon, isLoading, isError } = usePokemon(name);
+const findNode = (chain: PokemonEvolutionChain, name: string): PokemonEvolutionChain | null => {
+    if (chain.name === name) return chain;
+    for (const child of chain.evolvesTo) {
+        const result = findNode(child, name);
+        if (result) return result;
+    }
+    return null;
+};
 
-    if (isLoading || isError || !pokemon) return null;
-
-    return (
-        <Link
-            to="/pokedex/$id"
-            params={{ id: pokemon.name }}
-            className="flex flex-col items-center"
-        >
-            <div className="flex-1 flex items-center">
-                <PokemonImage sprite={pokemon.sprites.front} size={isCurrent ? 'sm' : 'xs'} />
-            </div>
-
-            <span className={isCurrent ? 'font-semibold' : ''}>{formatName(name)}</span>
-        </Link>
-    );
+const buildLinearChain = (chain: PokemonEvolutionChain, current: string): string[] => {
+    if (chain.name === current) {
+        const path = [chain.name];
+        let node = chain.evolvesTo[0];
+        while (node) {
+            path.push(node.name);
+            node = node.evolvesTo[0];
+        }
+        return path;
+    }
+    for (const child of chain.evolvesTo) {
+        const path = buildLinearChain(child, current);
+        if (path.length) return [chain.name, ...path];
+    }
+    return [];
 };
 
 type PokemonEvolutionsProps = {
@@ -30,24 +38,40 @@ type PokemonEvolutionsProps = {
     evInfo: PokemonEvolutionInfo;
 };
 
-const flattenChain = (chain: PokemonEvolutionChain): string[] => {
-    if (chain.evolvesTo.length === 0) return [chain.name];
-    return [chain.name, ...flattenChain(chain.evolvesTo[0])];
-};
-
 export const PokemonEvolutions = ({ current, evInfo }: PokemonEvolutionsProps) => {
-    const fanLayout = evInfo.evolvesTo.length > 1;
+    const isBrancher = evInfo.evolvesTo.length > 1;
+    const parentNode = evInfo.evolvesFrom ? findNode(evInfo.chain, evInfo.evolvesFrom) : null;
+    const isBranch = (parentNode?.evolvesTo.length ?? 0) > 1;
+    const fanLayout = isBrancher || isBranch;
 
-    const chainNames = flattenChain(evInfo.chain);
+    const fanTop = isBrancher ? current : evInfo.evolvesFrom!;
+    const fanBottom = isBrancher
+        ? evInfo.evolvesTo
+        : (parentNode?.evolvesTo.map((e) => e.name) ?? []);
+    const allNames = fanLayout ? [fanTop, ...fanBottom] : buildLinearChain(evInfo.chain, current);
+
+    const results = useQueries({
+        queries: allNames.map((name) => ({
+            queryKey: ['pokemon-basic', name],
+            queryFn: () => fetchPokemon(name),
+            staleTime: Infinity,
+            select: selectBasic
+        }))
+    });
+
+    if (results.some((r) => !r.data || r.isLoading)) return <LoadingComponent />;
+    if (results.some((r) => r.isError)) return <ErrorComponent error={'Idk'} />;
+
+    const entries = Object.fromEntries(results.map((r) => [r.data!.name, r.data!]));
 
     if (fanLayout) {
         return (
             <div className="flex flex-col items-center justify-center gap-4">
-                <EvolutionEntry name={current} isCurrent={true} />
+                <PokemonEntry {...entries[fanTop]} isCurrent={fanTop === current} />
                 <ArrowDownIcon />
                 <div className="flex flex-wrap items-center gap-2 justify-center">
-                    {evInfo.evolvesTo.map((pn) => (
-                        <EvolutionEntry name={pn} key={pn} />
+                    {fanBottom.map((pn) => (
+                        <PokemonEntry key={pn} {...entries[pn]} isCurrent={pn === current} />
                     ))}
                 </div>
             </div>
@@ -55,12 +79,12 @@ export const PokemonEvolutions = ({ current, evInfo }: PokemonEvolutionsProps) =
     }
 
     return (
-        <div className="flex items-stretch justify-center gap-4 h-full relative">
-            {chainNames.map((name, i) => (
-                <div key={name} className="flex items-center gap-4">
-                    {i > 0 && <ArrowRightIcon />}
-                    <EvolutionEntry name={name} isCurrent={name === current} />
-                </div>
+        <div className="flex items-end justify-center gap-4 py-8">
+            {allNames.map((name, i) => (
+                <Fragment key={name}>
+                    {i > 0 && <ArrowRightIcon className="mb-5 shrink-0 text-muted-foreground" />}
+                    <PokemonEntry {...entries[name]} isCurrent={name === current} />
+                </Fragment>
             ))}
         </div>
     );
