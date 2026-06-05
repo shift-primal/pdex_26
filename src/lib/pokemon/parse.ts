@@ -10,6 +10,7 @@ import type {
     Pokemon,
     PokemonElementalType,
     PokemonEvolutionInfo,
+    PokemonGender,
     PokemonGeneration,
     PokemonSprites,
     PokemonStat,
@@ -19,7 +20,7 @@ import type { RawEvolutionChain } from '#/types/raw/evolutionchain';
 import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
 import type { RawFlavorTextEntry, RawForm, RawSpecies } from '#/types/raw/species';
 
-const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
+export const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
     types.map((t) => ({
         slot: t.slot,
         name: t.type.name as ElementalTypeName,
@@ -27,19 +28,30 @@ const parseTypes = (types: RawElementalType[]): PokemonElementalType[] =>
         icons: ELEMENTAL_TYPES[t.type.name as ElementalTypeName].icons
     }));
 
-const parseStats = (stats: RawStat[]): PokemonStat[] =>
-    stats.map((s) => ({
+const parseStats = (stats: RawStat[]): PokemonStat[] => {
+    const baseStats = stats.map((s) => ({
         value: s.base_stat,
         name: s.stat.name as StatName,
         icon: STATS[s.stat.name as StatName].icon,
         color: STATS[s.stat.name as StatName].color
     }));
 
+    const total = baseStats.reduce((acc, curr) => acc + curr.value, 0);
+
+    return [
+        ...baseStats,
+        {
+            value: total,
+            name: 'total' as StatName,
+            icon: STATS['total'].icon,
+            color: STATS['total'].color
+        }
+    ];
+};
+
 const parseSprites = (sprites: RawSprites): PokemonSprites => ({
-    front: sprites.other['official-artwork'].front_default ?? sprites.front_default ?? '',
-    back: sprites.back_default ?? '',
-    frontShiny: sprites.other['official-artwork'].front_shiny ?? sprites.front_shiny ?? '',
-    backShiny: sprites.back_shiny ?? ''
+    default: sprites.other['official-artwork'].front_default,
+    shiny: sprites.other['official-artwork'].front_shiny
 });
 
 const parseGeneration = (genText: string): PokemonGeneration => {
@@ -73,6 +85,11 @@ const parseEvolution = (evolution: RawEvolutionChain, name: string): PokemonEvol
     };
 };
 
+const parseGender = (hasGenderDifferences: boolean, genderRate: number): PokemonGender => ({
+    hasGenderDifferences,
+    genderRate
+});
+
 export function toPokemon([pokemon, species, evolution]: [
     RawPokemon,
     RawSpecies | null,
@@ -97,6 +114,8 @@ export function toPokemon([pokemon, species, evolution]: [
         evolution: evolution ? parseEvolution(evolution, pokemon.name) : null,
         habitat: species?.habitat?.name ?? '',
         forms: parseForms(species?.varieties ?? []),
-        isDefault: pokemon.is_default
+        isDefault: pokemon.is_default,
+        gender: species ? parseGender(species.has_gender_differences, species.gender_rate) : null,
+        shape: species?.shape.name ?? ''
     };
 }

@@ -5,10 +5,14 @@ export const getSpeciesName = (name: string) => {
     return form ? name.replace(form.suffix, '') : name;
 };
 
-export const formatName = (name: string) => {
+export const formatName = (name: string, isFormEntry: boolean) => {
     const form = FORM_TYPES.find((ft) => name.includes(ft.suffix));
     if (!form) return capFirstLetter(name);
+
     const base = name.replace(form.suffix, '');
+
+    if (isFormEntry) return form.label;
+
     return `${capFirstLetter(base)} ${capFirstLetter(form.label)}`;
 };
 

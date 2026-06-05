@@ -13,6 +13,9 @@ export type RawFlavorTextEntry = {
 export interface RawSpecies {
     generation: RawNamedResource;
     flavor_text_entries: RawFlavorTextEntry[];
+    has_gender_differences: boolean;
+    gender_rate: number;
+    shape: RawNamedResource;
     is_baby: boolean;
     is_legendary: boolean;
     is_mythical: boolean;

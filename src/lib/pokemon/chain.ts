@@ -35,3 +35,32 @@ export const findNextEvolution = (chain: PokemonEvolutionChain, name: string): s
     }
     return [];
 };
+
+export const findNode = (
+    chain: PokemonEvolutionChain,
+    name: string
+): PokemonEvolutionChain | null => {
+    if (chain.name === name) return chain;
+    for (const child of chain.evolvesTo) {
+        const result = findNode(child, name);
+        if (result) return result;
+    }
+    return null;
+};
+
+export const buildLinearChain = (chain: PokemonEvolutionChain, current: string): string[] => {
+    if (chain.name === current) {
+        const path = [chain.name];
+        let node = chain.evolvesTo[0];
+        while (node) {
+            path.push(node.name);
+            node = node.evolvesTo[0];
+        }
+        return path;
+    }
+    for (const child of chain.evolvesTo) {
+        const path = buildLinearChain(child, current);
+        if (path.length) return [chain.name, ...path];
+    }
+    return [];
+};

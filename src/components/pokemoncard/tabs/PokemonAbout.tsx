@@ -1,6 +1,17 @@
+import { Progress } from '#/components/ui/progress';
 import { capFirstLetter } from '#/lib/pokemon/format';
-import type { PokemonGeneration } from '#/types/pokemon';
-import { GlobeIcon, RulerIcon, ScalesIcon, TrophyIcon, type Icon } from '@phosphor-icons/react';
+import type { Pokemon } from '#/types/pokemon';
+import {
+    GenderFemaleIcon,
+    GenderIntersexIcon,
+    GenderMaleIcon,
+    GlobeIcon,
+    RulerIcon,
+    ScalesIcon,
+    ShapesIcon,
+    TrophyIcon,
+    type Icon
+} from '@phosphor-icons/react';
 
 const AboutEntry = ({ title, value, Icon }: { title: string; value: string; Icon: Icon }) => (
     <div className="flex items-center justify-between text-sm">
@@ -11,13 +22,6 @@ const AboutEntry = ({ title, value, Icon }: { title: string; value: string; Icon
         <span>{capFirstLetter(value)}</span>
     </div>
 );
-
-type PokemonAboutProps = {
-    generation: PokemonGeneration | null;
-    height: number;
-    weight: number;
-    habitat: string;
-};
 
 const metersToFeet = (meters: number) => {
     const totalInches = meters * 39.37;
@@ -36,18 +40,52 @@ const parseWeight = (kg: number) => {
     return `${kg.toFixed(1)}kg (${(kg * 2.2).toFixed(1)}lbs)`;
 };
 
-export const PokemonAbout = ({ generation, height, weight, habitat }: PokemonAboutProps) => {
+const GenderBar = ({ genderRate }: { genderRate: number }) => {
     return (
-        <div className="flex flex-col gap-4 px-4">
-            <span className="font-semibold">General info</span>
-            <AboutEntry title="Height" value={parseHeight(height)} Icon={RulerIcon} />
-            <AboutEntry title="Weight" value={parseWeight(weight)} Icon={ScalesIcon} />
-            <AboutEntry
-                title="Generation"
-                value={generation ? `${generation.label} (Gen. ${generation.roman})` : 'Unknown'}
-                Icon={TrophyIcon}
-            />
-            <AboutEntry title="Habitat" value={habitat || 'Unknown'} Icon={GlobeIcon} />
+        <div className="flex items-center justify-center px-px">
+            <GenderMaleIcon size={16} className="text-muted-foreground" />
+            <div className="w-full px-4">
+                <Progress
+                    value={100 - (genderRate / 8) * 100}
+                    className="h-2 rounded-full mt-1"
+                    colorFilled="#0b6dc3"
+                    colorUnfilled="#eb8fe5"
+                />
+            </div>
+            <GenderFemaleIcon size={16} className="text-muted-foreground" />
+        </div>
+    );
+};
+
+export const PokemonAbout = ({ pokemon }: { pokemon: Pokemon }) => {
+    return (
+        <div className="flex flex-col gap-2 px-4">
+            <div className="flex flex-col gap-y-2">
+                <span className="font-semibold">General info</span>
+                <AboutEntry title="Height" value={parseHeight(pokemon.height)} Icon={RulerIcon} />
+                <AboutEntry title="Weight" value={parseWeight(pokemon.weight)} Icon={ScalesIcon} />
+                <AboutEntry
+                    title="Generation"
+                    value={
+                        pokemon.generation
+                            ? `${pokemon.generation.label} (Gen. ${pokemon.generation.roman})`
+                            : 'Unknown'
+                    }
+                    Icon={TrophyIcon}
+                />
+                <AboutEntry title="Habitat" value={pokemon.habitat || 'Unknown'} Icon={GlobeIcon} />
+                <AboutEntry title="Shape" value={pokemon.shape || 'Unknown'} Icon={ShapesIcon} />
+            </div>
+            <div className="flex flex-col gap-y-2">
+                <span className="font-semibold">Breeding info</span>
+                <AboutEntry
+                    title="Genderless"
+                    value={pokemon.gender?.hasGenderDifferences ? 'Yes' : 'No'}
+                    Icon={GenderIntersexIcon}
+                />
+                <GenderBar genderRate={pokemon.gender?.genderRate ?? 0} />
+            </div>
+            <span className="w-full line-clamp-2 text-center">{pokemon.flavorText}</span>
         </div>
     );
 };

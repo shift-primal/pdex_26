@@ -1,14 +1,6 @@
-Fikse spacing / layout på forms og evolution
+Add navigation (swipe + piltaster)
 
-Base stats (total)
-Mer contrast på base stats (unfilled)
-
-Mer info på about
-
-Turn around sprite
-Toggle shiny
-
-Spille av cry sound
+Should show fan evolutions on base (ralts -> kirlia -> gardevoir | gallade)
 
 Back button -> Pokedex
 Pokedex

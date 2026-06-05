@@ -1,42 +1,60 @@
 import { ArrowDownIcon, ArrowRightIcon } from '@phosphor-icons/react';
 import { Fragment } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import type { PokemonEvolutionChain, PokemonEvolutionInfo } from '#/types/pokemon';
+import type { PokemonEvolutionInfo } from '#/types/pokemon';
 import { fetchPokemon } from '#/services/api';
 import { LoadingComponent } from '#/components/layout/LoadingComponent';
 import { PokemonEntry, selectBasic } from '#/components/pokemoncard/tabs/PokemonEntry';
 import { ErrorComponent } from '@tanstack/react-router';
-
-const findNode = (chain: PokemonEvolutionChain, name: string): PokemonEvolutionChain | null => {
-    if (chain.name === name) return chain;
-    for (const child of chain.evolvesTo) {
-        const result = findNode(child, name);
-        if (result) return result;
-    }
-    return null;
-};
-
-const buildLinearChain = (chain: PokemonEvolutionChain, current: string): string[] => {
-    if (chain.name === current) {
-        const path = [chain.name];
-        let node = chain.evolvesTo[0];
-        while (node) {
-            path.push(node.name);
-            node = node.evolvesTo[0];
-        }
-        return path;
-    }
-    for (const child of chain.evolvesTo) {
-        const path = buildLinearChain(child, current);
-        if (path.length) return [chain.name, ...path];
-    }
-    return [];
-};
+import { buildLinearChain, findNode } from '#/lib/pokemon/chain';
 
 type PokemonEvolutionsProps = {
     current: string;
     evInfo: PokemonEvolutionInfo;
 };
+
+type BasicPokemon = ReturnType<typeof selectBasic>;
+type EntriesMap = Record<string, BasicPokemon>;
+
+type FanLayoutProps = {
+    entries: EntriesMap;
+    fanTop: string;
+    fanBottom: string[];
+    current: string;
+};
+
+type NormalLayoutProps = {
+    entries: EntriesMap;
+    allNames: string[];
+    current: string;
+};
+
+const FanLayout = ({ entries, fanTop, fanBottom, current }: FanLayoutProps) => (
+    <div className="flex flex-col items-center justify-center gap-4">
+        <PokemonEntry {...entries[fanTop]} isCurrent={fanTop === current} />
+        <ArrowDownIcon />
+        <div className="flex flex-wrap items-center gap-2 justify-center">
+            {fanBottom.map((pn) => (
+                <PokemonEntry key={pn} {...entries[pn]} isCurrent={pn === current} />
+            ))}
+        </div>
+    </div>
+);
+
+const NormalLayout = ({ entries, allNames, current }: NormalLayoutProps) => (
+    <div className="flex items-start justify-center gap-2 py-4">
+        {allNames.map((name, i) => (
+            <Fragment key={name}>
+                {i > 0 && (
+                    <div className="h-24 flex items-center shrink-0">
+                        <ArrowRightIcon size={16} className="text-muted-foreground" />
+                    </div>
+                )}
+                <PokemonEntry {...entries[name]} isCurrent={name === current} />
+            </Fragment>
+        ))}
+    </div>
+);
 
 export const PokemonEvolutions = ({ current, evInfo }: PokemonEvolutionsProps) => {
     const isBrancher = evInfo.evolvesTo.length > 1;
@@ -60,32 +78,23 @@ export const PokemonEvolutions = ({ current, evInfo }: PokemonEvolutionsProps) =
     });
 
     if (results.some((r) => !r.data || r.isLoading)) return <LoadingComponent />;
-    if (results.some((r) => r.isError)) return <ErrorComponent error={'Idk'} />;
+
+    results.find((r) => r.isError) && <ErrorComponent error={results.find((r) => r.error)} />;
 
     const entries = Object.fromEntries(results.map((r) => [r.data!.name, r.data!]));
 
-    if (fanLayout) {
-        return (
-            <div className="flex flex-col items-center justify-center gap-4">
-                <PokemonEntry {...entries[fanTop]} isCurrent={fanTop === current} />
-                <ArrowDownIcon />
-                <div className="flex flex-wrap items-center gap-2 justify-center">
-                    {fanBottom.map((pn) => (
-                        <PokemonEntry key={pn} {...entries[pn]} isCurrent={pn === current} />
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="flex items-end justify-center gap-4 py-8">
-            {allNames.map((name, i) => (
-                <Fragment key={name}>
-                    {i > 0 && <ArrowRightIcon className="mb-5 shrink-0 text-muted-foreground" />}
-                    <PokemonEntry {...entries[name]} isCurrent={name === current} />
-                </Fragment>
-            ))}
+        <div className="flex items-center justify-center h-full">
+            {fanLayout ? (
+                <FanLayout
+                    entries={entries}
+                    fanTop={fanTop}
+                    fanBottom={fanBottom}
+                    current={current}
+                />
+            ) : (
+                <NormalLayout entries={entries} allNames={allNames} current={current} />
+            )}
         </div>
     );
 };

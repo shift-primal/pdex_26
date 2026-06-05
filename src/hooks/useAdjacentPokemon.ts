@@ -5,7 +5,7 @@ import type { RawPokemon } from '#/types/raw/pokemon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-const MAX_POKEMON_ID = 1025;
+const MAX_POKEMON_ID = 102500;
 
 const selectBasic = (p: RawPokemon) => ({
     name: p.name,

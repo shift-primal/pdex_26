@@ -1,8 +1,7 @@
-import { ErrorComponent } from '#/components/layout/ErrorComponent';
 import { LoadingComponent } from '#/components/layout/LoadingComponent';
 import { PokemonCard } from '#/components/pokemoncard/PokemonCard';
 import { usePokemon } from '#/hooks/usePokemon';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, ErrorComponent, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { z } from 'zod';
 
@@ -14,7 +13,7 @@ const PokemonCardPage = () => {
     const { id } = Route.useParams();
     const { tab } = Route.useSearch();
     const navigate = useNavigate({ from: '/pokedex/$id' });
-    const { data: pokemon, isLoading, isError } = usePokemon(id);
+    const { data: pokemon, isLoading, isError, error } = usePokemon(id);
 
     const setTab = (value: string) =>
         navigate({ search: (prev) => ({ ...prev, tab: value }), replace: true });
@@ -33,7 +32,7 @@ const PokemonCardPage = () => {
         return <LoadingComponent />;
     }
     if (isError || !pokemon) {
-        return <ErrorComponent />;
+        return <ErrorComponent error={error} />;
     }
 
     return <PokemonCard pokemon={pokemon} activeTab={tab} onTabChange={setTab} />;

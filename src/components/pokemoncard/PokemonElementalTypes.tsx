@@ -2,11 +2,11 @@ import type { PokemonElementalType } from '#/types/pokemon';
 import SVG from 'react-inlinesvg';
 import { capFirstLetter } from '#/lib/pokemon/format';
 
-const TypeBadge = ({ type }: { type: PokemonElementalType }) => {
+const ElementalTypeBadge = ({ type }: { type: PokemonElementalType }) => {
     return (
         <div
             style={{ backgroundColor: type.color }}
-            className="text-center p-1 w-24 rounded-full flex justify-evenly gap-x-2 items-center"
+            className="text-center px-1.5 py-1 w-24 rounded-full flex justify-center gap-x-2 items-center"
         >
             <div className="aspect-square rounded-full bg-background p-1">
                 <SVG
@@ -16,16 +16,18 @@ const TypeBadge = ({ type }: { type: PokemonElementalType }) => {
                     preProcessor={(code) => code.replace(/fill=".*?"/g, `fill="${type.color}"`)}
                 />
             </div>
-            <span className="font-semibold text-white text-xs">{capFirstLetter(type.name)}</span>
+            <span className="font-semibold text-background text-sm">
+                {capFirstLetter(type.name)}
+            </span>
         </div>
     );
 };
 
-export const PokemonTypes = ({ types }: { types: PokemonElementalType[] }) => {
+export const PokemonElementalTypes = ({ types }: { types: PokemonElementalType[] }) => {
     return (
-        <div className="flex gap-x-2 px-2">
+        <div className="flex gap-x-2 px-4">
             {types.map((t) => (
-                <TypeBadge key={t.name} type={t} />
+                <ElementalTypeBadge key={t.name} type={t} />
             ))}
         </div>
     );

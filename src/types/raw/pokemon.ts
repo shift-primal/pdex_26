@@ -11,17 +11,7 @@ export type RawStat = {
 };
 
 export type RawSprites = {
-    front_default: string;
-    back_default: string;
-    front_shiny: string;
-    back_shiny: string;
     other: {
-        'showdown': {
-            front_default: string;
-            back_default: string;
-            front_shiny: string;
-            back_shiny: string;
-        };
         'official-artwork': {
             front_default: string;
             front_shiny: string;

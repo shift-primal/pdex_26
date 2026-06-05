@@ -24,10 +24,8 @@ export type PokemonStat = {
 };
 
 export type PokemonSprites = {
-    front: string;
-    back: string;
-    frontShiny: string;
-    backShiny: string;
+    default: string;
+    shiny: string;
 };
 
 export type PokemonCries = {
@@ -61,6 +59,11 @@ export type PokemonForm = {
     formType: string | null;
 };
 
+export type PokemonGender = {
+    hasGenderDifferences: boolean;
+    genderRate: number | null;
+};
+
 export interface Pokemon {
     id: number;
     name: string;
@@ -77,4 +80,6 @@ export interface Pokemon {
     habitat: string;
     forms: PokemonForm[];
     isDefault: boolean;
+    shape: string;
+    gender: PokemonGender | null;
 }

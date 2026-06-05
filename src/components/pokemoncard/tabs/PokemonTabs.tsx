@@ -48,12 +48,7 @@ export const PokemonTabs = ({
 
             <TabsContent value="about">
                 <PokemonTab>
-                    <PokemonAbout
-                        generation={pokemon.generation ?? null}
-                        height={pokemon.height}
-                        weight={pokemon.weight}
-                        habitat={pokemon.habitat ?? 'Unknown'}
-                    />
+                    <PokemonAbout pokemon={pokemon} />
                 </PokemonTab>
             </TabsContent>
 

@@ -4,6 +4,7 @@ import {
     MagicWandIcon,
     ShieldIcon,
     ShieldPlusIcon,
+    SigmaIcon,
     SwordIcon
 } from '@phosphor-icons/react';
 
@@ -166,7 +167,8 @@ export const STATS = {
     'defense': { displayName: 'DEF', icon: ShieldIcon, color: '#5b8dd9' },
     'special-attack': { displayName: 'SP. ATK', icon: MagicWandIcon, color: '#9b6ec8' },
     'special-defense': { displayName: 'SP. DEF', icon: ShieldPlusIcon, color: '#4daa7d' },
-    'speed': { displayName: 'SPD', icon: LightningIcon, color: '#d4b83a' }
+    'speed': { displayName: 'SPD', icon: LightningIcon, color: '#d4b83a' },
+    'total': { displayName: 'TOTAL', icon: SigmaIcon, color: '#5BC8AF' }
 } as const;
 
 export const API_BASE_URL = 'https://pokeapi.co/api/v2';
@@ -214,7 +216,9 @@ export const FORM_TYPES = [
     { label: 'Hisuian', suffix: '-hisui', category: FORM_CATEGORIES.regional },
     { label: 'Paldean', suffix: '-paldea', category: FORM_CATEGORIES.regional },
     // Formes
+    { label: 'Altered Forme', suffix: '-altered', category: FORM_CATEGORIES.forme },
     { label: 'Origin Forme', suffix: '-origin', category: FORM_CATEGORIES.forme },
+    { label: 'Land Forme', suffix: '-land', category: FORM_CATEGORIES.forme },
     { label: 'Sky Forme', suffix: '-sky', category: FORM_CATEGORIES.forme },
     { label: 'Therian Forme', suffix: '-therian', category: FORM_CATEGORIES.forme },
     { label: 'Zen Mode', suffix: '-zen', category: FORM_CATEGORIES.forme },
