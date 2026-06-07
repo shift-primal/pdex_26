@@ -1,7 +1,8 @@
 import { API_BASE_URL } from '#/constants/constants';
+import type { RawEvolutionChain } from '#/types/raw/evolution';
 import type { RawGeneration } from '#/types/raw/generation';
 import type { RawPokemon } from '#/types/raw/pokemon';
-import type { RawEvolutionChain, RawSpecies } from '#/types/raw/species';
+import type { RawSpecies } from '#/types/raw/species';
 
 async function fetchJson<T>(url: string, entity: string): Promise<T> {
     const res = await fetch(url);
