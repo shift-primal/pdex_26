@@ -5,7 +5,7 @@ export type RawElementalType = {
     type: RawNamedResource;
 };
 
-type RawSprite = {
+export type RawSprite = {
     back_default: string | null;
     back_female: string | null;
     back_shiny: string | null;
@@ -16,10 +16,9 @@ type RawSprite = {
     front_shiny_female: string | null;
 };
 
-export type RawSprites = RawSprite & {
+export type RawSprites = {
     other: {
-        'official-artwork': RawSprite;
-        'showdown': RawSprite;
+        showdown: RawSprite;
     };
     versions: {
         'generation-v': {
@@ -49,5 +48,6 @@ export interface RawPokemon {
     stats: RawStat[];
     sprites: RawSprites;
     cries: RawCries;
+    species: RawNamedResource;
     is_default: boolean;
 }

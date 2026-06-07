@@ -1,11 +1,8 @@
-import type { PokemonEvolution } from '#/types/pokemon/evolution';
-import type { ELEMENTAL_TYPES, FORM_CATEGORIES, GENERATIONS, STATS } from '#/constants/constants';
+import type { ELEMENTAL_TYPES, STATS } from '#/constants/constants';
 import type { Icon } from '@phosphor-icons/react';
 
 export type ElementalTypeName = keyof typeof ELEMENTAL_TYPES;
 export type StatName = keyof typeof STATS;
-export type FormCategoryName = keyof typeof FORM_CATEGORIES;
-export type PokemonGeneration = (typeof GENERATIONS)[keyof typeof GENERATIONS];
 
 export type PokemonElementalType = {
     name: ElementalTypeName;
@@ -20,26 +17,23 @@ export type PokemonStat = {
     icon: Icon;
 };
 
+type PokemonSpriteSet = {
+    default: string | null;
+    female: string | null;
+    shiny: string | null;
+};
+
 export type PokemonSprites = {
-    front: {
-        default: string;
-        female: string | null;
-        shiny: string | null;
-    };
-    back: {
-        default: string;
-        female: string | null;
-        shiny: string | null;
-    };
+    front: PokemonSpriteSet;
+    back: PokemonSpriteSet;
 };
 
 export type PokemonCries = {
-    latest: string;
-    legacy: string;
+    latest: string | null;
+    legacy: string | null;
 };
 
 export type PokemonForm = {
-    category: FormCategoryName;
     isDefault: boolean;
     name: string;
 };
@@ -55,21 +49,33 @@ export type PokemonClassification = {
     isMythical: boolean;
 };
 
-export interface PokemonBasic {
+export type PokemonEvolutionNode = {
+    name: string;
+    isBaby: boolean;
+    evolvesTo: PokemonEvolutionNode[];
+};
+
+export type PokemonGeneration = {
+    id: number;
+    name: string;
+    region: string;
+    pokemon: string[];
+};
+
+export interface Pokemon {
     id: number;
     name: string;
     sprites: PokemonSprites;
     types: PokemonElementalType[];
-}
-
-export interface PokemonFull extends PokemonBasic {
     classification: PokemonClassification;
+    color: string;
+    eggGroups: string[];
     cries: PokemonCries;
-    evolution: PokemonEvolution;
+    evolution: PokemonEvolutionNode;
     flavorText: string;
     forms: PokemonForm[];
     gender: PokemonGender;
-    generation: PokemonGeneration | null;
+    generation: PokemonGeneration;
     habitat: string;
     height: number;
     isDefault: boolean;
@@ -77,3 +83,5 @@ export interface PokemonFull extends PokemonBasic {
     stats: PokemonStat[];
     weight: number;
 }
+
+export type PokemonBasic = Pick<Pokemon, 'id' | 'name' | 'sprites' | 'types'>;

@@ -1,16 +1,5 @@
 import type { RawNamedResource } from '#/types/generic';
 
-export type RawEvolution = {
-    evolves_to: RawEvolution[];
-    is_baby: boolean;
-    species: RawNamedResource;
-};
-
-export interface RawEvolutionChain {
-    id: number;
-    chain: RawEvolution;
-}
-
 export type RawFlavorTextEntry = {
     flavor_text: string;
     language: RawNamedResource;
@@ -24,7 +13,6 @@ export type RawForm = {
 export interface RawSpecies {
     color: RawNamedResource;
     egg_groups: RawNamedResource[];
-    evolves_from_species: RawNamedResource | null;
     evolution_chain: {
         url: string;
     };
