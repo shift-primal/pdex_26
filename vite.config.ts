@@ -11,7 +11,10 @@ import { nitro } from 'nitro/vite';
 const config = defineConfig({
     resolve: { tsconfigPaths: true },
     plugins: [
-        devtools(),
+        devtools({
+            enhancedLogs: { enabled: false },
+            consolePiping: { enabled: false }
+        }),
         nitro({ rollupConfig: { external: [/^@sentry\//] } }),
         tailwindcss(),
         tanstackStart(),
