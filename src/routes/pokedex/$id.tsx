@@ -17,21 +17,21 @@ const PokemonDetails = () => {
         ...pokemonListQueryOptions()
     });
 
-    const evolutions = useSuspenseQueries({
-        queries: flattenEvolutions(pokemon.evolution).map((e) => pokemonBasicQueryOptions(e.name))
-    }).map(({ data }) => data);
+    // const evolutions = useSuspenseQueries({
+    //     queries: flattenEvolutions(pokemon.evolution).map((e) => pokemonBasicQueryOptions(e.name))
+    // }).map(({ data }) => data);
+    //
+    // const forms = useSuspenseQueries({
+    //     queries: pokemon.forms.map((f) => pokemonBasicQueryOptions(f.name))
+    // }).map(({ data }) => data);
 
-    const forms = useSuspenseQueries({
-        queries: pokemon.forms.map((f) => pokemonBasicQueryOptions(f.name))
-    }).map(({ data }) => data);
-
-    const adjacent = pokemon && pokemonList ? findAdjacentPokemon(pokemon.id, pokemonList) : null;
+    const adjacent = findAdjacentPokemon(pokemon.id, pokemonList);
 
     useHotkey('ArrowLeft', () => {
-        if (adjacent?.prev) navigate({ to: '/pokedex/$id', params: { id: adjacent.prev.name } });
+        if (adjacent.prev) navigate({ to: '/pokedex/$id', params: { id: adjacent.prev.name } });
     });
     useHotkey('ArrowRight', () => {
-        if (adjacent?.next) navigate({ to: '/pokedex/$id', params: { id: adjacent.next.name } });
+        if (adjacent.next) navigate({ to: '/pokedex/$id', params: { id: adjacent.next.name } });
     });
 
     return (

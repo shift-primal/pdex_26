@@ -7,6 +7,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 
 import type { QueryClient } from '@tanstack/react-query';
+import { DefaultPendingComponent } from '#/components/layout/DefaultPendingComponent';
 
 interface MyRouterContext {
     queryClient: QueryClient;
@@ -23,7 +24,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
                 content: 'width=device-width, initial-scale=1'
             },
             {
-                title: 'TanStack Start Starter'
+                title: 'Pokemon App'
             }
         ],
         links: [
@@ -43,7 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <HeadContent />
             </head>
             <body>
-                {children}
+                <main className="flex-1">{children}</main>
                 <TanStackDevtools
                     config={{
                         position: 'bottom-right'
