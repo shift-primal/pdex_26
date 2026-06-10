@@ -4,6 +4,7 @@ import { routeTree } from './routeTree.gen';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { getContext } from './integrations/tanstack-query/root-provider';
 import { DefaultPendingComponent } from '#/components/layout/DefaultPendingComponent';
+import { DefaultNotFoundComponent } from '#/components/layout/DefaultNotFoundComponent';
 
 export function getRouter() {
     const context = getContext();
@@ -14,6 +15,7 @@ export function getRouter() {
         scrollRestoration: true,
         defaultPreload: 'intent',
         defaultPreloadStaleTime: 0,
+        defaultNotFoundComponent: DefaultNotFoundComponent,
         defaultPendingComponent: DefaultPendingComponent
     });
 

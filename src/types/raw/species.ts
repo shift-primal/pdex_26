@@ -24,6 +24,7 @@ export interface RawSpecies {
     is_baby: boolean;
     is_legendary: boolean;
     is_mythical: boolean;
+    name: string;
     shape: RawNamedResource;
     varieties: RawForm[];
 }

@@ -15,8 +15,20 @@ async function fetchJson<T>(url: string, entity: string): Promise<T> {
     return res.json();
 }
 
-export function fetchPokemon(name: string) {
-    return fetchJson<RawPokemon>(`${API_BASE_URL}/pokemon/${name}`, `Pokemon "${name}"`);
+export async function fetchPokemon(name: string) {
+    try {
+        return await fetchJson<RawPokemon>(`${API_BASE_URL}/pokemon/${name}`, `Pokemon "${name}"`);
+    } catch (err) {
+        const species = await fetchSpecies(`${API_BASE_URL}/pokemon-species/${name}`);
+        const defaultVariety = species.varieties.find((v) => v.is_default);
+
+        if (!defaultVariety) throw err;
+
+        return fetchJson<RawPokemon>(
+            `${API_BASE_URL}/pokemon/${defaultVariety.pokemon.name}`,
+            `Pokemon "${defaultVariety.pokemon.name}"`
+        );
+    }
 }
 
 export function fetchSpecies(url: string) {

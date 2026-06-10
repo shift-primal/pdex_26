@@ -7,7 +7,6 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 
 import type { QueryClient } from '@tanstack/react-query';
-import { DefaultPendingComponent } from '#/components/layout/DefaultPendingComponent';
 
 interface MyRouterContext {
     queryClient: QueryClient;
@@ -43,8 +42,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <head>
                 <HeadContent />
             </head>
-            <body>
-                <main className="flex-1">{children}</main>
+            <body className="flex flex-col h-screen">
+                <main className="flex-1 h-full">{children}</main>
                 <TanStackDevtools
                     config={{
                         position: 'bottom-right'

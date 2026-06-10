@@ -9,7 +9,7 @@ import {
 } from '@phosphor-icons/react';
 
 export const getTypeIcon = (name: string) =>
-    `'https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons'/${name}.svg`;
+    `https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${name}.svg`;
 
 export const STAT_ICONS = {
     'hp': HeartIcon,

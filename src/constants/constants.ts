@@ -41,3 +41,5 @@ export const STATS = {
     'speed': { displayName: 'SPD', icon: STAT_ICONS.speed, color: STAT_COLORS.speed },
     'total': { displayName: 'TOTAL', icon: STAT_ICONS.total, color: STAT_COLORS.total }
 } as const;
+
+export const TABS = ['about', 'base-stats', 'evolutions', 'forms'] as const;

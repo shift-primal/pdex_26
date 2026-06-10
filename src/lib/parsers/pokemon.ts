@@ -11,36 +11,30 @@ import type {
     StatName
 } from '#/types/pokemon';
 
-import type {
-    RawElementalType,
-    RawPokemon,
-    RawSprite,
-    RawSprites,
-    RawStat
-} from '#/types/raw/pokemon';
+import type { RawElementalType, RawPokemon, RawSprites, RawStat } from '#/types/raw/pokemon';
 import type { RawFlavorTextEntry, RawSpecies } from '#/types/raw/species';
 import type { RawEvolutionNode, RawEvolutionChain } from '#/types/raw/evolution';
 import type { RawGeneration } from '#/types/raw/generation';
 import { withFallback } from '#/lib/utils';
 
 function parseSprites(sprites: RawSprites): PokemonSprites {
-    const findSpriteSide = (
-        side: 'front' | 'back',
-        source: RawSprite
-    ): PokemonSprites['front'] => ({
-        default: source[`${side}_default`],
-        female: source[`${side}_female`],
-        shiny: source[`${side}_shiny`]
-    });
-
-    const genV = sprites.versions['generation-v']['black-white'].animated;
+    const official = sprites.other['official-artwork'];
     const showdown = sprites.other.showdown;
+    const genV = sprites.versions['generation-v']['black-white'].animated;
 
-    const source = [genV, showdown].find((s) => s.front_default && s.back_default) ?? showdown;
+    const fullSource = showdown.front_default ? showdown : genV;
 
     return {
-        front: findSpriteSide('front', source),
-        back: findSpriteSide('back', source)
+        front: {
+            default: official.front_default ?? fullSource.front_default,
+            shiny: official.front_shiny ?? fullSource.front_shiny,
+            female: fullSource.front_female
+        },
+        back: {
+            default: fullSource.back_default,
+            shiny: fullSource.back_shiny,
+            female: fullSource.back_female
+        }
     };
 }
 
@@ -120,7 +114,7 @@ export function selectPokemon([pokemon, species, evolution, generation]: [
 ]): Pokemon {
     const fullPokemon = {
         id: pokemon.id,
-        name: pokemon.name,
+        name: species.name,
         sprites: parseSprites(pokemon.sprites),
         types: parseElementalTypes(pokemon.types),
         classification: {

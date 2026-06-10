@@ -1,5 +1,5 @@
 import type { RawNamedResource } from '#/types/generic';
-import type { PokemonEvolutionNode } from '#/types/pokemon';
+import type { PokemonEvolutionNode, PokemonForm } from '#/types/pokemon';
 import type { AdjacentPokemon } from '#/types/raw/list';
 
 export const findAdjacentPokemon = (currId: number, list: RawNamedResource[]): AdjacentPokemon => {
@@ -15,3 +15,21 @@ export const flattenEvolutions = (node: PokemonEvolutionNode): PokemonEvolutionN
     node,
     ...node.evolvesTo.flatMap(flattenEvolutions)
 ];
+
+export const formatId = (id: number): string => `#${id.toString().padStart(4, '0')}`;
+
+export const genderVariants = (forms: PokemonForm[]) =>
+    forms.filter((f) => f.name.endsWith('-male') || f.name.endsWith('-female'));
+
+export const formVariants = (forms: PokemonForm[]) =>
+    forms.filter((f) => !f.isDefault && !f.name.endsWith('-male') && !f.name.endsWith('-female'));
+
+export function getImageSize(size: 'lg' | 'xl') {
+    const sizes = {
+        lg: 72,
+        xl: 128
+    };
+
+    const val = sizes[size];
+    return `w-${val} h-${val}`;
+}

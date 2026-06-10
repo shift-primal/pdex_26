@@ -19,7 +19,7 @@ const Pokedex = () => {
     );
 };
 
-export const Route = createFileRoute('/pokedex/')({
+export const Route = createFileRoute('/pokemon/')({
     component: Pokedex,
     validateSearch: searchPokemonSchema
 });
