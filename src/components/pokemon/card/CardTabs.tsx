@@ -5,10 +5,9 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "#/components/shadcn/tabs";
-import { tabsConfig } from "#/config/tabs";
-import { TABS } from "#/constants/constants";
+import { TABS, tabsConfig } from "#/config/tabs";
 import { usePokemonCard } from "#/context/PokemonCardContext";
-import type { PokemonCardProps } from "#/types/props/card";
+import type { PokemonCardProps } from "#/components/pokemon/PokemonCard";
 
 export const CardTabs = ({
 	activeTab,

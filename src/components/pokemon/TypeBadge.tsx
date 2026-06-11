@@ -12,7 +12,7 @@ export const TypeBadge = ({
 
 	const defaultBadge = (
 		<div
-			className="w-24 rounded-full flex justify-center gap-x-2 items-center py-1"
+			className="w-28 rounded-full flex justify-center gap-x-2 items-center py-1"
 			style={{ backgroundColor: type.color }}
 		>
 			<div className="aspect-square rounded-full bg-background p-1">

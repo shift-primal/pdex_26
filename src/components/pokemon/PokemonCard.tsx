@@ -1,10 +1,22 @@
 import { CardTabs } from "#/components/pokemon/card/CardTabs";
 import { formatId, getFormName } from "#/lib/pokemon.utils";
-import type { PokemonElementalType } from "#/types/pokemon";
+import type {
+	Pokemon,
+	PokemonBasic,
+	PokemonElementalType,
+} from "#/types/pokemon";
 import { Pokeball } from "#/assets/Pokeball";
-import type { PokemonCardProps } from "#/types/props/card";
 import { PokemonSprite } from "#/components/pokemon/PokemonSprite";
 import PokemonCardContext from "#/context/PokemonCardContext";
+
+export interface PokemonCardProps {
+	base: Pokemon;
+	active: Pokemon;
+	evolutions: PokemonBasic[];
+	forms: PokemonBasic[];
+	activeTab: string;
+	onTabChange: (tab: string) => void;
+}
 
 const CardBg = ({ type }: { type: PokemonElementalType }) => {
 	return (
@@ -38,13 +50,13 @@ const CardTitle = ({
 					{name}
 				</span>
 				{form && (
-					<span className="text-lg capitalize font-medium text-background block">
+					<span className="text-xl capitalize font-medium text-background block">
 						{getFormName(form, name)}
 					</span>
 				)}
 			</div>
 
-			<span className="text-3xl lg:text-3xl font-bold text-muted tracking-tight font-display">
+			<span className="text-3xl lg:text-3xl font-bold text-muted tracking-tight font-display mt-2">
 				{formatId(id)}
 			</span>
 		</div>

@@ -10,7 +10,11 @@ export const TabForms = () => {
 			<p>{active.name}</p>
 			<div className="flex justify-center items-center gap-x-2">
 				{forms.map((p) => (
-					<PokemonBasicEntry pokemon={p} baseName={active.name} />
+					<PokemonBasicEntry
+						key={p.id}
+						pokemon={p}
+						baseName={active.name}
+					/>
 				))}
 			</div>
 		</>

@@ -6,7 +6,7 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import { PokemonCard } from "#/components/pokemon/PokemonCard";
 import z from "zod";
-import { TABS } from "#/constants/constants";
+import { TABS } from "#/config/tabs";
 import { pokemonBasicQueryOptions } from "#/hooks/usePokemonBasic";
 
 const tabSchema = z.object({

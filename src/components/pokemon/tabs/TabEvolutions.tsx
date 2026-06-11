@@ -7,14 +7,12 @@ export const TabEvolutions = () => {
 	if (!evolutions || evolutions.length <= 1) return <p>no evolutions</p>;
 	return (
 		<>
-			<>
-				<p>{active.name}</p>
-				<div className="flex gap-x-2 items-center justify-center">
-					{evolutions.map((p) => (
-						<PokemonBasicEntry pokemon={p} />
-					))}
-				</div>
-			</>
+			<p>{active.name}</p>
+			<div className="flex gap-x-2 items-center justify-center">
+				{evolutions.map((p) => (
+					<PokemonBasicEntry key={p.id} pokemon={p} />
+				))}
+			</div>
 		</>
 	);
 };

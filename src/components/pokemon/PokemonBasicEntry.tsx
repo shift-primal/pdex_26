@@ -26,7 +26,7 @@ export const PokemonBasicEntry = ({
 				/>
 				<div className="flex gap-x-2">
 					{pokemon.types.map((t) => (
-						<TypeBadge type={t} variant="icon" />
+						<TypeBadge key={t.name} type={t} variant="icon" />
 					))}
 				</div>
 			</div>

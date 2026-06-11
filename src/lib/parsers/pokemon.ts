@@ -1,5 +1,3 @@
-import { ELEMENTAL_TYPES, STATS } from "#/constants/constants";
-
 import type {
 	ElementalTypeName,
 	Pokemon,
@@ -24,6 +22,8 @@ import type {
 } from "#/types/raw/evolution";
 import type { RawGeneration } from "#/types/raw/generation";
 import { withFallback } from "#/lib/utils";
+import { ELEMENTAL_TYPES } from "#/config/elemental-types";
+import { STATS } from "#/config/stats";
 
 function parseSprites(sprites: RawSprites): PokemonSprites {
 	const official = sprites.other["official-artwork"];

@@ -1,4 +1,5 @@
-import type { ELEMENTAL_TYPES, STATS } from "#/constants/constants";
+import type { ELEMENTAL_TYPES } from "#/config/elemental-types";
+import type { STATS } from "#/config/stats";
 import type { Icon } from "@phosphor-icons/react";
 
 export type ElementalTypeName = keyof typeof ELEMENTAL_TYPES;
