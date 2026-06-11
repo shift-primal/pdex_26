@@ -46,6 +46,7 @@ export function getSpriteSize(size: "sm" | "md" | "lg" | "xl") {
 }
 
 export function getFormName(formName: string, baseName: string) {
-	console.log(formName);
+	console.log("formName:", formName);
+	console.log("baseName:", baseName);
 	return formName.replaceAll(`${baseName}-`, "").replaceAll("-", " ");
 }

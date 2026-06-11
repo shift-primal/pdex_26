@@ -1,16 +1,17 @@
 import { TypeBadge } from "#/components/pokemon/TypeBadge";
-import type { TabProps } from "#/types/props/tabs";
+import { usePokemonCard } from "#/context/PokemonCardContext";
 
-export const TabAbout = ({ pokemon }: Pick<TabProps, "pokemon">) => {
+export const TabAbout = () => {
+	const { active } = usePokemonCard();
 	return (
 		<>
 			<span>About</span>
 			<div className="flex items-center gap-x-4">
-				{pokemon.types.map((t) => (
+				{active.types.map((t) => (
 					<TypeBadge key={t.name} type={t} />
 				))}
 			</div>
-			<span>{pokemon.name}</span>
+			<span>{active.name}</span>
 		</>
 	);
 };

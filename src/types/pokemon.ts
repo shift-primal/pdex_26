@@ -65,6 +65,7 @@ export type PokemonGeneration = {
 export interface Pokemon {
 	id: number;
 	name: string;
+	slug: string;
 	sprites: PokemonSprites;
 	types: PokemonElementalType[];
 	classification: PokemonClassification;

@@ -4,6 +4,7 @@ import type { PokemonElementalType } from "#/types/pokemon";
 import { Pokeball } from "#/assets/Pokeball";
 import type { PokemonCardProps } from "#/types/props/card";
 import { PokemonSprite } from "#/components/pokemon/PokemonSprite";
+import PokemonCardContext from "#/context/PokemonCardContext";
 
 const CardBg = ({ type }: { type: PokemonElementalType }) => {
 	return (
@@ -51,36 +52,31 @@ const CardTitle = ({
 };
 
 export const PokemonCard = ({
-	pokemon,
-	activePokemon,
-	activeForm,
+	base,
+	active,
 	evolutions,
 	forms,
 	activeTab,
 	onTabChange,
 }: PokemonCardProps) => {
 	return (
-		<div className="relative flex flex-col h-screen transform-gpu overflow-clip gap-y-2">
-			<CardBg type={activePokemon.types[0]} />
-			<CardTitle
-				name={pokemon.name}
-				id={pokemon.id}
-				form={activePokemon.isDefault ? undefined : activeForm.name}
-			/>
-			<PokemonSprite
-				name={activePokemon.name}
-				sprites={activePokemon.sprites}
-				className="mt-24"
-			/>
-			<CardTabs
-				pokemon={activePokemon}
-				activePokemon={activePokemon}
-				activeForm={activeForm}
-				evolutions={evolutions}
-				forms={forms}
-				activeTab={activeTab}
-				onTabChange={onTabChange}
-			/>
-		</div>
+		<PokemonCardContext.Provider
+			value={{ base, active, evolutions, forms }}
+		>
+			<div className="relative flex flex-col h-screen transform-gpu overflow-clip gap-y-2">
+				<CardBg type={active.types[0]} />
+				<CardTitle
+					name={base.name}
+					id={base.id}
+					form={active.isDefault ? undefined : active.slug}
+				/>
+				<PokemonSprite
+					name={active.name}
+					sprites={active.sprites}
+					className="mt-24"
+				/>
+				<CardTabs activeTab={activeTab} onTabChange={onTabChange} />
+			</div>
+		</PokemonCardContext.Provider>
 	);
 };

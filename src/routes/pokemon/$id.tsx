@@ -39,11 +39,6 @@ const PokemonDetails = () => {
 		queries: pokemon.forms.map((f) => pokemonBasicQueryOptions(f.name)),
 	}).map(({ data }) => data);
 
-	const activeForm =
-		forms.find((f) => f.name === form) ??
-		forms.find((f) => f.isDefault) ??
-		forms[0];
-
 	const adjacent = findAdjacentPokemon(pokemon.id, pokemonList);
 
 	useHotkey("ArrowLeft", (e) => {
@@ -70,9 +65,8 @@ const PokemonDetails = () => {
 
 	return (
 		<PokemonCard
-			pokemon={pokemon}
-			activePokemon={activePokemon}
-			activeForm={activeForm}
+			base={pokemon}
+			active={activePokemon}
 			evolutions={evolutions}
 			forms={forms}
 			activeTab={tab}

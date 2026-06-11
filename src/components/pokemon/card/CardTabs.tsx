@@ -7,17 +7,14 @@ import {
 } from "#/components/shadcn/tabs";
 import { tabsConfig } from "#/config/tabs";
 import { TABS } from "#/constants/constants";
+import { usePokemonCard } from "#/context/PokemonCardContext";
 import type { PokemonCardProps } from "#/types/props/card";
-import type { TabProps } from "#/types/props/tabs";
 
 export const CardTabs = ({
-	pokemon,
-	evolutions,
-	forms,
 	activeTab,
 	onTabChange,
-}: PokemonCardProps) => {
-	const tabProps: TabProps = { pokemon, evolutions, forms };
+}: Pick<PokemonCardProps, "activeTab" | "onTabChange">) => {
+	const { active } = usePokemonCard();
 	return (
 		<Tabs
 			value={activeTab}
@@ -29,7 +26,11 @@ export const CardTabs = ({
 					<TabsTrigger
 						key={t}
 						value={t}
-						color={pokemon.types[0].color}
+						color={active.types[0].color}
+						onKeyDown={(e) => {
+							if (e.key === "ArrowLeft" || e.key === "ArrowRight")
+								e.preventDefault();
+						}}
 					>
 						<span className="capitalize text-base">
 							{t.replaceAll("-", " ")}
@@ -42,7 +43,7 @@ export const CardTabs = ({
 				return (
 					<TabsContent key={t} value={t}>
 						<TabContainer>
-							<Tab {...tabProps} />
+							<Tab />
 						</TabContainer>
 					</TabsContent>
 				);

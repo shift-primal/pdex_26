@@ -1,10 +1,11 @@
-import type { TabProps } from '#/types/props/tabs';
+import { usePokemonCard } from "#/context/PokemonCardContext";
 
-export const TabBaseStats = ({ pokemon }: Pick<TabProps, 'pokemon'>) => {
-    return (
-        <>
-            <span>BaseStats</span>
-            <span>{pokemon.name}</span>
-        </>
-    );
+export const TabBaseStats = () => {
+	const { active } = usePokemonCard();
+	return (
+		<>
+			<span>BaseStats</span>
+			<span>{active.name}</span>
+		</>
+	);
 };
