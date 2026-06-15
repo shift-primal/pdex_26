@@ -1,35 +1,25 @@
-import type { PokemonElementalType } from "#/types/pokemon";
-import SVG from "react-inlinesvg";
+import type { PokemonElementalType } from "#/types/pokemon"
+import SVG from "react-inlinesvg"
 
-export const TypeBadge = ({
-	type,
-	variant
-}: {
-	type: PokemonElementalType;
-	variant?: "default" | "icon";
-}) => {
-	const v = variant ? variant : "default";
+export const TypeBadge = ({ type, variant }: { type: PokemonElementalType; variant?: "default" | "icon" }) => {
+	const v = variant ? variant : "default"
 
 	const defaultBadge = (
 		<div
-			className="w-28 rounded-full flex justify-center gap-x-2 items-center py-1"
+			className="w-32 rounded-full flex justify-center gap-x-2 items-center py-1"
 			style={{ backgroundColor: type.color }}
 		>
-			<div className="aspect-square rounded-full bg-background p-1">
+			<div className="aspect-square rounded-full bg-background p-0.75">
 				<SVG
 					src={type.icon}
-					className="h-4 w-4"
+					className="h-3.5 w-3.5"
 					description={`Icon for ${type.name}`}
-					preProcessor={(code) =>
-						code.replace(/fill=".*?"/g, `fill="${type.color}"`)
-					}
+					preProcessor={(code) => code.replace(/fill=".*?"/g, `fill="${type.color}"`)}
 				/>
 			</div>
-			<span className="font-semibold text-background text-sm capitalize">
-				{type.name}
-			</span>
+			<span className="font-semibold text-background text-sm capitalize">{type.name}</span>
 		</div>
-	);
+	)
 
 	const iconBadge = (
 		<div
@@ -44,9 +34,9 @@ export const TypeBadge = ({
 				/>
 			</div>
 		</div>
-	);
+	)
 
-	if (v === "default") return defaultBadge;
+	if (v === "default") return defaultBadge
 
-	return iconBadge;
-};
+	return iconBadge
+}

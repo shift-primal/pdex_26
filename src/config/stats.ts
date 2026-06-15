@@ -6,9 +6,9 @@ import {
 	ShieldPlusIcon,
 	SigmaIcon,
 	SwordIcon
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react"
 
-const STAT_ICONS = {
+export const STAT_ICONS = {
 	"hp": HeartIcon,
 	"attack": SwordIcon,
 	"defense": ShieldIcon,
@@ -16,9 +16,9 @@ const STAT_ICONS = {
 	"special-defense": ShieldPlusIcon,
 	"speed": LightningIcon,
 	"total": SigmaIcon
-} as const;
+} as const
 
-const STAT_COLORS = {
+export const STAT_COLORS = {
 	"hp": "#e8637a",
 	"attack": "#e07d3f",
 	"defense": "#5b8dd9",
@@ -26,7 +26,7 @@ const STAT_COLORS = {
 	"special-defense": "#4daa7d",
 	"speed": "#d4b83a",
 	"total": "#5BC8AF"
-} as const;
+} as const
 
 export const STATS = {
 	"hp": { displayName: "HP", icon: STAT_ICONS.hp, color: STAT_COLORS.hp },
@@ -54,10 +54,5 @@ export const STATS = {
 		displayName: "SPD",
 		icon: STAT_ICONS.speed,
 		color: STAT_COLORS.speed
-	},
-	"total": {
-		displayName: "TOTAL",
-		icon: STAT_ICONS.total,
-		color: STAT_COLORS.total
 	}
-} as const;
+} as const

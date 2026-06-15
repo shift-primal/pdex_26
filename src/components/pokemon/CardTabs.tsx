@@ -1,19 +1,12 @@
-import { TabContainer } from "#/components/pokemon/tabs/TabContainer";
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger
-} from "#/components/shadcn/tabs";
-import { TABS, tabsConfig } from "#/config/tabs";
-import { usePokemonCard } from "#/context/PokemonCardContext";
-import type { PokemonCardProps } from "#/components/pokemon/PokemonCard";
+import { TabContainer } from "#/components/pokemon/tabs/TabContainer"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "#/components/shadcn/tabs"
+import { TABS, tabsConfig } from "#/config/tabs"
+import { usePokemonCard } from "#/context/PokemonCardContext"
+import type { PokemonCardProps } from "#/components/pokemon/PokemonCard"
+import { cn } from "#/lib/utils"
 
-export const CardTabs = ({
-	activeTab,
-	onTabChange
-}: Pick<PokemonCardProps, "activeTab" | "onTabChange">) => {
-	const { active } = usePokemonCard();
+export const CardTabs = ({ activeTab, onTabChange }: Pick<PokemonCardProps, "activeTab" | "onTabChange">) => {
+	const { active } = usePokemonCard()
 	return (
 		<Tabs
 			value={activeTab}
@@ -27,26 +20,27 @@ export const CardTabs = ({
 						value={t}
 						color={active.types[0].color}
 						onKeyDown={(e) => {
-							if (e.key === "ArrowLeft" || e.key === "ArrowRight")
-								e.preventDefault();
+							if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.preventDefault()
 						}}
 					>
-						<span className="capitalize text-base">
+						<span
+							className={cn("uppercase tracking-wider", activeTab === t ? "" : "text-muted-foreground")}
+						>
 							{t.replaceAll("-", " ")}
 						</span>
 					</TabsTrigger>
 				))}
 			</TabsList>
 			{TABS.map((t) => {
-				const Tab = tabsConfig[t].component;
+				const Tab = tabsConfig[t].component
 				return (
 					<TabsContent key={t} value={t}>
 						<TabContainer>
 							<Tab />
 						</TabContainer>
 					</TabsContent>
-				);
+				)
 			})}
 		</Tabs>
-	);
-};
+	)
+}

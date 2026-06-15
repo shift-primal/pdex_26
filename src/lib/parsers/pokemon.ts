@@ -50,7 +50,7 @@ function parseElementalTypes(types: RawElementalType[]): PokemonElementalType[] 
 }
 
 function parseStats(stats: RawStat[]): PokemonStat[] {
-	const baseStats = stats.map((s) => {
+	return stats.map((s) => {
 		const statName = s.stat.name as StatName
 
 		return {
@@ -60,18 +60,6 @@ function parseStats(stats: RawStat[]): PokemonStat[] {
 			color: STATS[statName].color
 		}
 	})
-
-	const total = baseStats.reduce((acc, curr) => acc + curr.value, 0)
-
-	return [
-		...baseStats,
-		{
-			value: total,
-			name: "total",
-			icon: STATS["total"].icon,
-			color: STATS["total"].color
-		}
-	]
 }
 
 function parseEvolutions(node: RawEvolutionNode): PokemonEvolutionNode {
@@ -92,7 +80,7 @@ function parseFlavorText(flavorTextEntries: RawFlavorTextEntry[]): string {
 				.replace(/\b[A-Z]{3,}\b/g, (word) => word.charAt(0) + word.slice(1).toLowerCase())
 				.replace(/\s+/g, " ")
 				.trim()
-		: "Unknown flavor text"
+		: "unknown"
 }
 
 export function selectPokemonBasic(pokemon: RawPokemon): PokemonBasic {
