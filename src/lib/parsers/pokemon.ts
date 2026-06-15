@@ -6,72 +6,62 @@ import type {
 	PokemonSprites,
 	PokemonStat,
 	PokemonEvolutionNode,
-	StatName,
-} from "#/types/pokemon";
+	StatName
+} from "#/types/pokemon"
 
-import type {
-	RawElementalType,
-	RawPokemon,
-	RawSprites,
-	RawStat,
-} from "#/types/raw/pokemon";
-import type { RawFlavorTextEntry, RawSpecies } from "#/types/raw/species";
-import type {
-	RawEvolutionNode,
-	RawEvolutionChain,
-} from "#/types/raw/evolution";
-import type { RawGeneration } from "#/types/raw/generation";
-import { withFallback } from "#/lib/utils";
-import { ELEMENTAL_TYPES } from "#/config/elemental-types";
-import { STATS } from "#/config/stats";
+import type { RawElementalType, RawPokemon, RawSprites, RawStat } from "#/types/raw/pokemon"
+import type { RawFlavorTextEntry, RawSpecies } from "#/types/raw/species"
+import type { RawEvolutionNode, RawEvolutionChain } from "#/types/raw/evolution"
+import type { RawGeneration } from "#/types/raw/generation"
+import { withFallback } from "#/lib/utils"
+import { ELEMENTAL_TYPES } from "#/config/elemental-types"
+import { STATS } from "#/config/stats"
 
 function parseSprites(sprites: RawSprites): PokemonSprites {
-	const official = sprites.other["official-artwork"];
-	const showdown = sprites.other.showdown;
-	const genV = sprites.versions["generation-v"]["black-white"].animated;
+	const official = sprites.other["official-artwork"]
+	const showdown = sprites.other.showdown
+	const genV = sprites.versions["generation-v"]["black-white"].animated
 
-	const fullSource = showdown.front_default ? showdown : genV;
+	const fullSource = showdown.front_default ? showdown : genV
 
 	return {
 		front: {
 			default: official.front_default ?? fullSource.front_default,
 			shiny: official.front_shiny ?? fullSource.front_shiny,
-			female: fullSource.front_female,
+			female: fullSource.front_female
 		},
 		back: {
 			default: fullSource.back_default,
 			shiny: fullSource.back_shiny,
-			female: fullSource.back_female,
-		},
-	};
+			female: fullSource.back_female
+		}
+	}
 }
 
-function parseElementalTypes(
-	types: RawElementalType[],
-): PokemonElementalType[] {
+function parseElementalTypes(types: RawElementalType[]): PokemonElementalType[] {
 	return types.map((t) => {
-		const name = t.type.name as ElementalTypeName;
+		const name = t.type.name as ElementalTypeName
 		return {
 			name,
 			color: ELEMENTAL_TYPES[name].color,
-			icon: ELEMENTAL_TYPES[name].icon,
-		};
-	});
+			icon: ELEMENTAL_TYPES[name].icon
+		}
+	})
 }
 
 function parseStats(stats: RawStat[]): PokemonStat[] {
 	const baseStats = stats.map((s) => {
-		const statName = s.stat.name as StatName;
+		const statName = s.stat.name as StatName
 
 		return {
 			value: s.base_stat,
 			name: statName,
 			icon: STATS[statName].icon,
-			color: STATS[statName].color,
-		};
-	});
+			color: STATS[statName].color
+		}
+	})
 
-	const total = baseStats.reduce((acc, curr) => acc + curr.value, 0);
+	const total = baseStats.reduce((acc, curr) => acc + curr.value, 0)
 
 	return [
 		...baseStats,
@@ -79,35 +69,30 @@ function parseStats(stats: RawStat[]): PokemonStat[] {
 			value: total,
 			name: "total",
 			icon: STATS["total"].icon,
-			color: STATS["total"].color,
-		},
-	];
+			color: STATS["total"].color
+		}
+	]
 }
 
 function parseEvolutions(node: RawEvolutionNode): PokemonEvolutionNode {
 	return {
 		name: node.species.name,
 		isBaby: node.is_baby,
-		evolvesTo: node.evolves_to.map(parseEvolutions),
-	};
+		evolvesTo: node.evolves_to.map(parseEvolutions)
+	}
 }
 
 function parseFlavorText(flavorTextEntries: RawFlavorTextEntry[]): string {
-	const englishFlavorText = flavorTextEntries.find(
-		(ft) => ft.language.name === "en",
-	)?.flavor_text;
+	const englishFlavorText = flavorTextEntries.find((ft) => ft.language.name === "en")?.flavor_text
 
 	return englishFlavorText
 		? englishFlavorText
 				.replace(/\n/g, " ")
 				.replace(/\bPOK[ÉE]MON\b/gi, "Pokémon")
-				.replace(
-					/\b[A-Z]{3,}\b/g,
-					(word) => word.charAt(0) + word.slice(1).toLowerCase(),
-				)
+				.replace(/\b[A-Z]{3,}\b/g, (word) => word.charAt(0) + word.slice(1).toLowerCase())
 				.replace(/\s+/g, " ")
 				.trim()
-		: "Unknown flavor text";
+		: "Unknown flavor text"
 }
 
 export function selectPokemonBasic(pokemon: RawPokemon): PokemonBasic {
@@ -116,56 +101,58 @@ export function selectPokemonBasic(pokemon: RawPokemon): PokemonBasic {
 		name: pokemon.name,
 		sprites: parseSprites(pokemon.sprites),
 		types: parseElementalTypes(pokemon.types),
-		isDefault: pokemon.is_default,
-	};
+		weight: pokemon.weight,
+		height: pokemon.height,
+		stats: parseStats(pokemon.stats),
+		isDefault: pokemon.is_default
+	}
 }
 
 export function selectPokemon([pokemon, species, evolution, generation]: [
 	RawPokemon,
 	RawSpecies,
 	RawEvolutionChain,
-	RawGeneration,
+	RawGeneration
 ]): Pokemon {
 	const fullPokemon = {
 		id: pokemon.id,
 		name: species.name,
-		slug: pokemon.name,
 		sprites: parseSprites(pokemon.sprites),
 		types: parseElementalTypes(pokemon.types),
+		captureRate: species.capture_rate,
 		classification: {
 			isBaby: species.is_baby,
 			isLegendary: species.is_legendary,
-			isMythical: species.is_mythical,
+			isMythical: species.is_mythical
 		},
 		color: withFallback(species.color.name, "unknown"),
 		cries: {
 			latest: pokemon.cries.latest,
-			legacy: pokemon.cries.legacy,
+			legacy: pokemon.cries.legacy
 		},
 		eggGroups: species.egg_groups.map((e) => e.name),
 		evolution: parseEvolutions(evolution.chain),
 		flavorText: parseFlavorText(species.flavor_text_entries),
 		forms: species.varieties.map((f) => ({
 			isDefault: f.is_default,
-			name: f.pokemon.name,
+			name: f.pokemon.name
 		})),
-		gender: {
-			hasGenderDifferences: species.has_gender_differences,
-			genderRate: species.gender_rate,
-		},
+		genderRate: species.gender_rate,
 		generation: {
 			id: generation.id,
 			name: generation.name,
 			region: generation.main_region.name,
-			pokemon: generation.pokemon_species.map((p) => p.name),
+			pokemon: generation.pokemon_species.map((p) => p.name)
 		},
+		growthRate: parseInt(species.growth_rate.url.at(-2) ?? "0"),
 		habitat: withFallback(species.habitat?.name, "unknown"),
+		hatchCounter: species.hatch_counter,
 		height: pokemon.height,
 		isDefault: pokemon.is_default,
 		shape: withFallback(species.shape.name, "unknown"),
 		stats: parseStats(pokemon.stats),
-		weight: pokemon.weight,
-	};
+		weight: pokemon.weight
+	}
 
-	return fullPokemon;
+	return fullPokemon
 }

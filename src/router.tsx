@@ -18,12 +18,12 @@ export function getRouter() {
 		defaultPreloadStaleTime: 0,
 		defaultNotFoundComponent: DefaultNotFoundComponent,
 		defaultPendingComponent: DefaultPendingComponent,
-		defaultErrorComponent: DefaultErrorComponent,
+		defaultErrorComponent: DefaultErrorComponent
 	});
 
 	setupRouterSsrQueryIntegration({
 		router,
-		queryClient: context.queryClient,
+		queryClient: context.queryClient
 	});
 
 	return router;

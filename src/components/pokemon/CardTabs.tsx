@@ -3,7 +3,7 @@ import {
 	Tabs,
 	TabsContent,
 	TabsList,
-	TabsTrigger,
+	TabsTrigger
 } from "#/components/shadcn/tabs";
 import { TABS, tabsConfig } from "#/config/tabs";
 import { usePokemonCard } from "#/context/PokemonCardContext";
@@ -11,7 +11,7 @@ import type { PokemonCardProps } from "#/components/pokemon/PokemonCard";
 
 export const CardTabs = ({
 	activeTab,
-	onTabChange,
+	onTabChange
 }: Pick<PokemonCardProps, "activeTab" | "onTabChange">) => {
 	const { active } = usePokemonCard();
 	return (

@@ -12,7 +12,7 @@ async function fetchJson<T>(url: string, entity: string): Promise<T> {
 	if (res.status === 404) throw new Error(`${entity} not found`);
 	if (!res.ok)
 		throw new Error(
-			`Failed to fetch ${entity.toLowerCase()} (${res.status})`,
+			`Failed to fetch ${entity.toLowerCase()} (${res.status})`
 		);
 
 	return res.json();
@@ -22,11 +22,11 @@ export async function fetchPokemon(name: string) {
 	try {
 		return await fetchJson<RawPokemon>(
 			`${API_BASE_URL}/pokemon/${name}`,
-			`Pokemon "${name}"`,
+			`Pokemon "${name}"`
 		);
 	} catch (err) {
 		const species = await fetchSpecies(
-			`${API_BASE_URL}/pokemon-species/${name}`,
+			`${API_BASE_URL}/pokemon-species/${name}`
 		);
 		const defaultVariety = species.varieties.find((v) => v.is_default);
 
@@ -34,7 +34,7 @@ export async function fetchPokemon(name: string) {
 
 		return fetchJson<RawPokemon>(
 			`${API_BASE_URL}/pokemon/${defaultVariety.pokemon.name}`,
-			`Pokemon "${defaultVariety.pokemon.name}"`,
+			`Pokemon "${defaultVariety.pokemon.name}"`
 		);
 	}
 }
@@ -54,7 +54,7 @@ export function fetchGeneration(url: string) {
 export async function fetchPokemonList(): Promise<RawNamedResource[]> {
 	const data = await fetchJson<RawListResponse>(
 		`${API_BASE_URL}/pokemon?limit=1302`,
-		"Pokemon list",
+		"Pokemon list"
 	);
 	return data.results;
 }

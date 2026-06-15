@@ -5,7 +5,7 @@ import { Link, useSearch } from "@tanstack/react-router";
 
 export const PokemonBasicEntry = ({
 	pokemon,
-	baseName,
+	baseName
 }: {
 	pokemon: PokemonBasic;
 	baseName?: string;

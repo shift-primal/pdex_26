@@ -3,7 +3,7 @@ import {
 	fetchEvolutionChain,
 	fetchGeneration,
 	fetchPokemon,
-	fetchSpecies,
+	fetchSpecies
 } from "#/services/api";
 import type { Pokemon } from "#/types/pokemon";
 import type { RawEvolutionChain } from "#/types/raw/evolution";
@@ -24,11 +24,11 @@ export const usePokemon = (nameOrId: string) =>
 			const species = await fetchSpecies(pokemon.species.url);
 			const [evolution, generation] = await Promise.all([
 				fetchEvolutionChain(species.evolution_chain.url),
-				fetchGeneration(species.generation.url),
+				fetchGeneration(species.generation.url)
 			]);
 
 			return [pokemon, species, evolution, generation] as const;
 		},
 		select: selectPokemon,
-		staleTime: Infinity,
+		staleTime: Infinity
 	});

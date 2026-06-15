@@ -3,7 +3,7 @@ import type { Pokemon, PokemonBasic } from "#/types/pokemon";
 
 type PokemonCardContext = {
 	base: Pokemon;
-	active: Pokemon;
+	active: PokemonBasic;
 	evolutions: PokemonBasic[];
 	forms: PokemonBasic[];
 };

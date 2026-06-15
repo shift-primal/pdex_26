@@ -7,11 +7,14 @@ import { useHotkey } from "@tanstack/react-hotkeys";
 import { PokemonCard } from "#/components/pokemon/PokemonCard";
 import z from "zod";
 import { TABS } from "#/config/tabs";
-import { pokemonBasicQueryOptions } from "#/hooks/usePokemonBasic";
+import {
+	pokemonBasicQueryOptions,
+	usePokemonBasic
+} from "#/hooks/usePokemonBasic";
 
 const tabSchema = z.object({
 	tab: z.enum(TABS).default("about"),
-	form: z.string().optional(),
+	form: z.string().optional()
 });
 
 type TAB = z.infer<typeof tabSchema>["tab"];
@@ -22,24 +25,24 @@ const PokemonDetails = () => {
 
 	const navigate = useNavigate({ from: "/pokemon/$id" });
 
-	const { data: pokemon } = usePokemon(id);
-	const { data: activePokemon } = usePokemon(form ?? id);
+	const { data: basePokemon } = usePokemon(id);
+	const { data: activePokemon } = usePokemonBasic(form ?? id);
 
 	const { data: pokemonList } = useSuspenseQuery({
-		...pokemonListQueryOptions(),
+		...pokemonListQueryOptions()
 	});
 
 	const evolutions = useSuspenseQueries({
-		queries: flattenEvolutions(pokemon.evolution).map((e) =>
-			pokemonBasicQueryOptions(e.name),
-		),
+		queries: flattenEvolutions(basePokemon.evolution).map((e) =>
+			pokemonBasicQueryOptions(e.name)
+		)
 	}).map(({ data }) => data);
 
 	const forms = useSuspenseQueries({
-		queries: pokemon.forms.map((f) => pokemonBasicQueryOptions(f.name)),
+		queries: basePokemon.forms.map((f) => pokemonBasicQueryOptions(f.name))
 	}).map(({ data }) => data);
 
-	const adjacent = findAdjacentPokemon(pokemon.id, pokemonList);
+	const adjacent = findAdjacentPokemon(basePokemon.id, pokemonList);
 
 	useHotkey("ArrowLeft", (e) => {
 		e.preventDefault();
@@ -47,7 +50,7 @@ const PokemonDetails = () => {
 			navigate({
 				to: "/pokemon/$id",
 				params: { id: adjacent.prev.name },
-				search: { tab },
+				search: { tab }
 			});
 	});
 	useHotkey("ArrowRight", (e) => {
@@ -56,7 +59,7 @@ const PokemonDetails = () => {
 			navigate({
 				to: "/pokemon/$id",
 				params: { id: adjacent.next.name },
-				search: { tab },
+				search: { tab }
 			});
 	});
 
@@ -65,7 +68,7 @@ const PokemonDetails = () => {
 
 	return (
 		<PokemonCard
-			base={pokemon}
+			base={basePokemon}
 			active={activePokemon}
 			evolutions={evolutions}
 			forms={forms}
@@ -79,11 +82,11 @@ export const Route = createFileRoute("/pokemon/$id")({
 	beforeLoad: async ({ params, context }) => {
 		if (/^\d+$/.test(params.id)) {
 			const data = await context.queryClient.fetchQuery(
-				pokemonBasicQueryOptions(params.id),
+				pokemonBasicQueryOptions(params.id)
 			);
 			throw redirect({ to: "/pokemon/$id", params: { id: data.name } });
 		}
 	},
 	component: PokemonDetails,
-	validateSearch: tabSchema,
+	validateSearch: tabSchema
 });

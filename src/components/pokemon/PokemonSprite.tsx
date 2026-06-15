@@ -8,7 +8,7 @@ export const PokemonSprite = ({
 	name,
 	sprites,
 	size,
-	className,
+	className
 }: {
 	name: string;
 	sprites: PokemonSprites;
@@ -32,7 +32,7 @@ export const PokemonSprite = ({
 			className={cn(
 				getSpriteSize(sz),
 				"flex items-center justify-center mx-auto",
-				className,
+				className
 			)}
 		>
 			<img

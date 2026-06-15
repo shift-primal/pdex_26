@@ -1,17 +1,17 @@
-import { CardTabs } from "#/components/pokemon/card/CardTabs";
 import { formatId, getFormName } from "#/lib/pokemon.utils";
 import type {
 	Pokemon,
 	PokemonBasic,
-	PokemonElementalType,
+	PokemonElementalType
 } from "#/types/pokemon";
 import { Pokeball } from "#/assets/Pokeball";
 import { PokemonSprite } from "#/components/pokemon/PokemonSprite";
 import PokemonCardContext from "#/context/PokemonCardContext";
+import { CardTabs } from "#/components/pokemon/CardTabs";
 
 export interface PokemonCardProps {
 	base: Pokemon;
-	active: Pokemon;
+	active: PokemonBasic;
 	evolutions: PokemonBasic[];
 	forms: PokemonBasic[];
 	activeTab: string;
@@ -26,7 +26,7 @@ const CardBg = ({ type }: { type: PokemonElementalType }) => {
 				background: `linear-gradient(to bottom,
                       color-mix(in oklch, ${type.color} 85%, white),
                       ${type.color},
-                      color-mix(in oklch, ${type.color} 85%, black))`,
+                      color-mix(in oklch, ${type.color} 85%, black))`
 			}}
 		>
 			<Pokeball className="opacity-40 w-lg absolute left-3/4 top-1/8 -translate-x-50 -translate-y-50 drop-shadow-2xl" />
@@ -37,7 +37,7 @@ const CardBg = ({ type }: { type: PokemonElementalType }) => {
 const CardTitle = ({
 	name,
 	id,
-	form,
+	form
 }: {
 	name: string;
 	id: number;
@@ -69,7 +69,7 @@ export const PokemonCard = ({
 	evolutions,
 	forms,
 	activeTab,
-	onTabChange,
+	onTabChange
 }: PokemonCardProps) => {
 	return (
 		<PokemonCardContext.Provider
@@ -80,7 +80,7 @@ export const PokemonCard = ({
 				<CardTitle
 					name={base.name}
 					id={base.id}
-					form={active.isDefault ? undefined : active.slug}
+					form={active.isDefault ? undefined : active.name}
 				/>
 				<PokemonSprite
 					name={active.name}

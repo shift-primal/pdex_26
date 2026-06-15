@@ -3,7 +3,7 @@ import SVG from "react-inlinesvg";
 
 export const TypeBadge = ({
 	type,
-	variant,
+	variant
 }: {
 	type: PokemonElementalType;
 	variant?: "default" | "icon";
