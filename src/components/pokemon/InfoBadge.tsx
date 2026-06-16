@@ -4,10 +4,10 @@ export const InfoBadge = ({ title, value, Icon }: { title: string; value: React.
 	return (
 		<div className="flex items-center justify-between py-px">
 			<div className="flex items-center gap-x-1.5 text-muted-foreground">
-				<Icon className="size-4" />
-				<span className="text-sm">{title}</span>
+				<Icon className="size-4 lg:size-6" />
+				<span className="text-sm lg:text-lg">{title}</span>
 			</div>
-			<span className="text-sm">{value}</span>
+			<span className="text-sm lg:text-lg">{value}</span>
 		</div>
 	)
 }

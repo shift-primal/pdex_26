@@ -11,7 +11,7 @@ export const CardTabs = ({ activeTab, onTabChange }: Pick<PokemonCardProps, "act
 		<Tabs
 			value={activeTab}
 			onValueChange={onTabChange}
-			className="h-full bg-accent/95 shadow-lg border-t border-t-accent/25 mt-6 rounded-t-4xl p-4"
+			className="flex-1 flex flex-col bg-accent/95 shadow-lg border-t border-t-accent/25 mt-6 rounded-t-4xl p-4"
 		>
 			<TabsList className="w-full" variant="line">
 				{TABS.map((t) => (
@@ -19,6 +19,7 @@ export const CardTabs = ({ activeTab, onTabChange }: Pick<PokemonCardProps, "act
 						key={t}
 						value={t}
 						color={active.types[0].color}
+						className="lg:text-base"
 						onKeyDown={(e) => {
 							if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.preventDefault()
 						}}
@@ -34,7 +35,7 @@ export const CardTabs = ({ activeTab, onTabChange }: Pick<PokemonCardProps, "act
 			{TABS.map((t) => {
 				const Tab = tabsConfig[t].component
 				return (
-					<TabsContent key={t} value={t}>
+					<TabsContent key={t} value={t} className="flex-1">
 						<TabContainer>
 							<Tab />
 						</TabContainer>

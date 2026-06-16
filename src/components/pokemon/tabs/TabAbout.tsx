@@ -22,8 +22,10 @@ import {
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	return (
-		<div className="flex flex-col gap-y-1.5 mb-1.5">
-			<span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</span>
+		<div className="flex flex-col gap-y-1.5 lg:gap-y-3 mb-1.5 lg:mb-3">
+			<span className="text-xs lg:text-base font-semibold uppercase tracking-wider text-muted-foreground">
+				{title}
+			</span>
 			<div className="flex flex-col gap-y-1">{children}</div>
 		</div>
 	)

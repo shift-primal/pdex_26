@@ -4,17 +4,29 @@ import { STAT_COLORS, STAT_ICONS, STATS } from "#/config/stats"
 import { usePokemonCard } from "#/context/PokemonCardContext"
 import type { Icon } from "@phosphor-icons/react"
 
-const StatEntry = ({ name, value, color, Icon }: { name: string; value: number; color: string; Icon: Icon }) => {
+const StatEntry = ({
+	name,
+	value,
+	color,
+	Icon,
+	max = 255
+}: {
+	name: string
+	value: number
+	color: string
+	Icon: Icon
+	max?: number
+}) => {
 	return (
-		<div className="flex items-center justify-between text-sm gap-3 w-full" key={name}>
-			<div className="flex gap-x-1.5 items-center w-20 shrink-0">
+		<div className="flex items-center justify-between text-sm lg:text-lg gap-3 w-full" key={name}>
+			<div className="flex gap-x-1.5 items-center w-20 lg:w-30 shrink-0">
 				<Icon size={16} style={{ color: color }} />
-				<span className="text-sm text-center text-muted-foreground">{name}</span>
+				<span className="text-sm lg:text-lg text-center text-muted-foreground">{name}</span>
 			</div>
 			<span className="font-semibold text-right min-w-8">{value}</span>
 			<Progress
-				value={(value / 255) * 100}
-				className="h-2 rounded-full mt-1"
+				value={(value / max) * 100}
+				className="h-3 rounded-full mt-1 lg:h-4"
 				colorFilled={color}
 				colorUnfilled="#e0e0e0"
 			/>
@@ -35,7 +47,7 @@ export const TabBaseStats = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex flex-col gap-6 h-full justify-center">
 			{active.stats.map((s) => {
 				const props = {
 					name: STATS[s.name].displayName,
@@ -43,10 +55,10 @@ export const TabBaseStats = () => {
 					color: s.color,
 					Icon: STATS[s.name].icon
 				}
-				return <StatEntry {...props} />
+				return <StatEntry key={s.name} {...props} />
 			})}
 			<Separator />
-			<StatEntry {...totalProps} />
+			<StatEntry {...totalProps} max={720} />
 		</div>
 	)
 }

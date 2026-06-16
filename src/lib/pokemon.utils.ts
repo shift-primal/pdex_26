@@ -26,9 +26,9 @@ export const formVariants = (forms: PokemonForm[]) =>
 export function getSpriteSize(size: "sm" | "md" | "lg" | "xl") {
 	const sizes = {
 		sm: "w-24 h-24",
-		md: "w-32 h-32",
-		lg: "w-48 h-48",
-		xl: "w-72 h-72"
+		md: "w-64 h-64",
+		lg: "w-72 h-72",
+		xl: "w-120 h-120"
 	}
 	return sizes[size]
 }
@@ -55,4 +55,32 @@ export const getPokemonWeight = (weight: number) => {
 export const getPokemonEggCycles = (hatchCounter: number) => {
 	if (hatchCounter > 40) return "N/A"
 	return `${(hatchCounter * 255).toLocaleString("nb-NO")} steps`
+}
+
+export function findEvolutionNode(node: PokemonEvolutionNode, name: string): PokemonEvolutionNode | null {
+	if (node.name === name) return node
+	for (const child of node.evolvesTo) {
+		const found = findEvolutionNode(child, name)
+		if (found) return found
+	}
+	return null
+}
+
+export function findEvolutionParent(node: PokemonEvolutionNode, name: string): PokemonEvolutionNode | null {
+	if (node.evolvesTo.some((c) => c.name === name)) return node
+	for (const child of node.evolvesTo) {
+		const found = findEvolutionParent(child, name)
+		if (found) return found
+	}
+	return null
+}
+
+export function buildEvolutionChain(root: PokemonEvolutionNode): string[] {
+	const result = [root.name]
+	let node = root
+	while (node.evolvesTo.length === 1) {
+		node = node.evolvesTo[0]
+		result.push(node.name)
+	}
+	return result
 }
