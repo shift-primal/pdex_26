@@ -5,12 +5,13 @@ export type RawFlavorTextEntry = {
 	language: RawNamedResource
 }
 
-export type RawForm = {
+export type RawVariety = {
 	is_default: boolean
 	pokemon: RawNamedResource
 }
 
 export interface RawSpecies {
+	id: number
 	capture_rate: number
 	color: RawNamedResource
 	egg_groups: RawNamedResource[]
@@ -28,5 +29,5 @@ export interface RawSpecies {
 	is_mythical: boolean
 	name: string
 	shape: RawNamedResource
-	varieties: RawForm[]
+	varieties: RawVariety[]
 }

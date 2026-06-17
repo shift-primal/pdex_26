@@ -1,16 +1,25 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/")({
 	component: Home
-});
+})
 
 function Home() {
 	return (
-		<div className="p-8">
-			<h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-			<p className="mt-4 text-lg">
-				Edit <code>src/routes/index.tsx</code> to get started.
-			</p>
+		<div>
+			<h1>Pokedex (data sandbox)</h1>
+			<ul>
+				<li>
+					<Link to="/pokemon" search={{ search: undefined, page: 1, pageSize: 25 }}>
+						/pokemon — list
+					</Link>
+				</li>
+				<li>
+					<Link to="/pokemon/$id" params={{ id: "bulbasaur" }} search={{ tab: "about" }}>
+						/pokemon/bulbasaur — detail
+					</Link>
+				</li>
+			</ul>
 		</div>
-	);
+	)
 }

@@ -1,1 +1,1 @@
-export type RawNamedResource = { name: string; url: string };
+export type RawNamedResource = { name: string; url: string }

@@ -1,92 +1,65 @@
-import { usePokemon } from "#/hooks/usePokemon";
-import { pokemonListQueryOptions } from "#/hooks/usePokemonList";
-import { findAdjacentPokemon, flattenEvolutions } from "#/lib/pokemon.utils";
-import { useSuspenseQueries, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useHotkey } from "@tanstack/react-hotkeys";
-import { PokemonCard } from "#/components/pokemon/PokemonCard";
-import z from "zod";
-import { TABS } from "#/config/tabs";
-import {
-	pokemonBasicQueryOptions,
-	usePokemonBasic
-} from "#/hooks/usePokemonBasic";
+import { createFileRoute, redirect } from "@tanstack/react-router"
+import z from "zod"
+import { flattenEvolutions } from "#/lib/domain/evolution.utils"
+import { capFirstLetter, formatId } from "#/lib/format"
+import { usePokemonDetail } from "#/queries/detail"
+import { varietyQueryOptions } from "#/queries/variety"
 
-const tabSchema = z.object({
-	tab: z.enum(TABS).default("about"),
+const searchSchema = z.object({
+	tab: z.string().default("about"),
+	variety: z.string().optional(),
 	form: z.string().optional()
-});
-
-type TAB = z.infer<typeof tabSchema>["tab"];
+})
 
 const PokemonDetails = () => {
-	const { id } = Route.useParams();
-	const { tab, form } = Route.useSearch();
+	const { id } = Route.useParams()
+	const { variety, form } = Route.useSearch()
 
-	const navigate = useNavigate({ from: "/pokemon/$id" });
+	const { species, activeVariety, activeForm } = usePokemonDetail(id, variety, form)
 
-	const { data: basePokemon } = usePokemon(id);
-	const { data: activePokemon } = usePokemonBasic(form ?? id);
+	const evolutionNames = flattenEvolutions(species.evolution).map((e) => capFirstLetter(e.name))
 
-	const { data: pokemonList } = useSuspenseQuery({
-		...pokemonListQueryOptions()
-	});
-
-	const evolutions = useSuspenseQueries({
-		queries: flattenEvolutions(basePokemon.evolution).map((e) =>
-			pokemonBasicQueryOptions(e.name)
-		)
-	}).map(({ data }) => data);
-
-	const forms = useSuspenseQueries({
-		queries: basePokemon.forms.map((f) => pokemonBasicQueryOptions(f.name))
-	}).map(({ data }) => data);
-
-	const adjacent = findAdjacentPokemon(basePokemon.id, pokemonList);
-
-	useHotkey("ArrowLeft", (e) => {
-		e.preventDefault();
-		if (adjacent.prev)
-			navigate({
-				to: "/pokemon/$id",
-				params: { id: adjacent.prev.name },
-				search: { tab }
-			});
-	});
-	useHotkey("ArrowRight", (e) => {
-		e.preventDefault();
-		if (adjacent.next)
-			navigate({
-				to: "/pokemon/$id",
-				params: { id: adjacent.next.name },
-				search: { tab }
-			});
-	});
-
-	const handleTabChange = (tab: string) =>
-		navigate({ search: { tab: tab as TAB, form } });
+	const sprite = activeForm.sprites.front.default ?? activeVariety.sprites.front.default
+	const title = capFirstLetter(activeForm.displayName)
 
 	return (
-		<PokemonCard
-			base={basePokemon}
-			active={activePokemon}
-			evolutions={evolutions}
-			forms={forms}
-			activeTab={tab}
-			onTabChange={handleTabChange}
-		/>
-	);
-};
+		<div className="mx-auto flex max-w-md flex-col items-center gap-4 p-8">
+			<span className="text-sm text-gray-500">{formatId(species.id)}</span>
+			<h1 className="text-3xl font-bold">{title}</h1>
+
+			{sprite && <img src={sprite} alt={title} width={220} height={220} />}
+
+			<div className="flex gap-2">
+				{activeVariety.types.map((t) => (
+					<span key={t.name} className="rounded bg-gray-200 px-2 py-1 text-sm">
+						{t.name}
+					</span>
+				))}
+			</div>
+
+			<p className="text-center text-sm text-gray-600">{species.flavorText}</p>
+
+			<ul className="w-full">
+				{activeVariety.stats.map((s) => (
+					<li key={s.name} className="flex justify-between border-b py-1 text-sm">
+						<span>{s.name}</span>
+						<span className="font-medium">{s.value}</span>
+					</li>
+				))}
+			</ul>
+
+			<div className="text-sm text-gray-600">Evolutions: {evolutionNames.join(" → ")}</div>
+		</div>
+	)
+}
 
 export const Route = createFileRoute("/pokemon/$id")({
 	beforeLoad: async ({ params, context }) => {
 		if (/^\d+$/.test(params.id)) {
-			const data = await context.queryClient.fetchQuery(
-				pokemonBasicQueryOptions(params.id)
-			);
-			throw redirect({ to: "/pokemon/$id", params: { id: data.name } });
+			const data = await context.queryClient.fetchQuery(varietyQueryOptions(params.id))
+			throw redirect({ to: "/pokemon/$id", params: { id: data.name } })
 		}
 	},
 	component: PokemonDetails,
-	validateSearch: tabSchema
-});
+	validateSearch: searchSchema
+})

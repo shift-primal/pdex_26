@@ -1,21 +1,15 @@
-import type { ELEMENTAL_TYPES } from "#/config/elemental-types"
-import type { STATS } from "#/config/stats"
-import type { Icon } from "@phosphor-icons/react"
+import type { ElementalTypeName } from "#/theme/elemental-types.theme"
+import type { StatName } from "#/theme/stats.theme"
 
-export type ElementalTypeName = keyof typeof ELEMENTAL_TYPES
-export type StatName = keyof typeof STATS
+export type { ElementalTypeName, StatName }
 
 export type PokemonElementalType = {
 	name: ElementalTypeName
-	color: string
-	icon: string
 }
 
 export type PokemonStat = {
-	color: string
 	name: StatName
 	value: number
-	icon: Icon
 }
 
 type PokemonSpriteSet = {
@@ -32,11 +26,6 @@ export type PokemonSprites = {
 export type PokemonCries = {
 	latest: string | null
 	legacy: string | null
-}
-
-export type PokemonForm = {
-	isDefault: boolean
-	name: string
 }
 
 export type PokemonClassification = {
@@ -58,32 +47,61 @@ export type PokemonGeneration = {
 	pokemon: string[]
 }
 
-export interface Pokemon {
+/** A reference to one of a species' varieties (the API's `varieties` list). */
+export type VarietyRef = {
+	name: string
+	isDefault: boolean
+}
+
+/** A concrete `/pokemon` — varies between the varieties of a single species. */
+export type Variety = {
 	id: number
 	name: string
 	sprites: PokemonSprites
 	types: PokemonElementalType[]
+	stats: PokemonStat[]
+	height: number
+	weight: number
+	isDefault: boolean
+	/** Names of this variety's `/pokemon-form` entries (usually just the default). */
+	forms: string[]
+}
+
+/**
+ * A `/pokemon-form` — a sub-variation of a single Variety, usually cosmetic
+ * (e.g. Unown letters, Vivillon patterns). Most varieties have only the default.
+ */
+export type Form = {
+	name: string
+	/** Raw form slug, e.g. "mega", "attack", or "" for the default. */
+	formName: string
+	/** Short form label (English `form_names`), e.g. "Mega X", "Fire Type", "A". */
+	label: string
+	/** Full display name (English `names`), e.g. "Mega Charizard X", "Fire Arceus", "Unown A". */
+	displayName: string
+	isDefault: boolean
+	isMega: boolean
+	isBattleOnly: boolean
+	sprites: PokemonSprites
+	types: PokemonElementalType[]
+}
+
+/** Variety-invariant data — shared across every variety of a species. */
+export interface Species {
+	id: number
+	name: string
 	captureRate: number
 	classification: PokemonClassification
 	color: string
-	eggGroups: string[]
 	cries: PokemonCries
+	eggGroups: string[]
 	evolution: PokemonEvolutionNode
 	flavorText: string
-	forms: PokemonForm[]
+	varieties: VarietyRef[]
 	genderRate: number
 	generation: PokemonGeneration
 	growthRate: number
 	habitat: string
 	hatchCounter: number
-	height: number
-	isDefault: boolean
 	shape: string
-	stats: PokemonStat[]
-	weight: number
 }
-
-export type PokemonBasic = Pick<
-	Pokemon,
-	"id" | "name" | "sprites" | "types" | "isDefault" | "stats" | "height" | "weight"
->
