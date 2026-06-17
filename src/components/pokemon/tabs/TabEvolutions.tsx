@@ -7,10 +7,10 @@ import type { PokemonBasic } from "#/types/pokemon"
 type Entries = Record<string, PokemonBasic>
 
 const FanLayout = ({ entries, top, bottom }: { entries: Entries; top: string; bottom: string[] }) => (
-	<div className="flex flex-col items-center gap-4 h-48">
+	<div className="flex flex-col items-center gap-2">
 		<PokemonBasicEntry pokemon={entries[top]} />
-		<ArrowDownIcon className="text-muted-foreground" />
-		<div className="flex flex-wrap items-center gap-2 justify-center">
+		<ArrowDownIcon size={16} className="text-muted-foreground" />
+		<div className="flex flex-wrap items-center gap-2 justify-center overflow-y-auto max-h-64">
 			{bottom.map((name) => (
 				<PokemonBasicEntry key={name} pokemon={entries[name]} />
 			))}

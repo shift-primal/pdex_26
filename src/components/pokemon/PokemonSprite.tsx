@@ -23,11 +23,7 @@ export const PokemonSprite = ({
 
 	return (
 		<div className={cn(getSpriteSize(sz), "flex items-center justify-center mx-auto", className)}>
-			<img
-				src={sprites.front.default}
-				alt={`Sprite of ${name}`}
-				className="w-full h-full object-cover drop-shadow-2xl"
-			/>
+			<img src={sprites.front.default} alt={`Sprite of ${name}`} className="w-full h-full object-cover" />
 		</div>
 	)
 }
