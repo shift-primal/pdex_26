@@ -18,12 +18,25 @@ import type { RawGeneration } from "#/types/raw/generation"
 import type { RawElementalType, RawPokemon, RawSpriteSetFull, RawSprites, RawStat } from "#/types/raw/pokemon"
 import type { RawFlavorTextEntry, RawSpecies } from "#/types/raw/species"
 
+const EMPTY_SPRITE_SET: RawSpriteSetFull = {
+	front_default: null,
+	front_shiny: null,
+	front_female: null,
+	front_shiny_female: null,
+	back_default: null,
+	back_shiny: null,
+	back_female: null,
+	back_shiny_female: null
+}
+
 function parseSprites(sprites: RawSprites): PokemonSprites {
 	const official = sprites.other["official-artwork"]
 	const showdown = sprites.other.showdown
 	const genV = sprites.versions["generation-v"]["black-white"].animated
 
-	const fullSource = showdown.front_default ? showdown : genV
+	// Both `showdown` and `genV.animated` can be empty/absent (Gen 6+), so fall back to a
+	// null-filled set rather than dereferencing `undefined`.
+	const fullSource = showdown.front_default ? showdown : (genV ?? EMPTY_SPRITE_SET)
 
 	return {
 		front: {

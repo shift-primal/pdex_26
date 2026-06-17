@@ -27,7 +27,8 @@ export type RawSprites = {
 	versions: {
 		"generation-v": {
 			"black-white": {
-				animated: RawSpriteSetFull
+				// Absent in the live API for Gen 6+ Pokémon, despite always being present in the schema docs.
+				animated?: RawSpriteSetFull
 			}
 		}
 	}

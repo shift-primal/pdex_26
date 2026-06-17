@@ -53,7 +53,6 @@ export type VarietyRef = {
 	isDefault: boolean
 }
 
-/** A concrete `/pokemon` — varies between the varieties of a single species. */
 export type Variety = {
 	id: number
 	name: string
@@ -63,7 +62,6 @@ export type Variety = {
 	height: number
 	weight: number
 	isDefault: boolean
-	/** Names of this variety's `/pokemon-form` entries (usually just the default). */
 	forms: string[]
 }
 
@@ -86,7 +84,6 @@ export type Form = {
 	types: PokemonElementalType[]
 }
 
-/** Variety-invariant data — shared across every variety of a species. */
 export interface Species {
 	id: number
 	name: string

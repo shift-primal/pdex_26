@@ -33,7 +33,6 @@ export function buildEvolutionChain(root: PokemonEvolutionNode): string[] {
 	return result
 }
 
-/** View-model describing how an evolution chain should be laid out. */
 export type EvolutionLayout =
 	| { kind: "single"; node: PokemonEvolutionNode } // no evolutions (e.g. Tauros)
 	| { kind: "linear"; line: PokemonEvolutionNode[] } // a → b → c
@@ -54,15 +53,11 @@ export function getEvolutionLayout(root: PokemonEvolutionNode): EvolutionLayout 
 	const branchPoints = flattenEvolutions(root).filter((n) => n.evolvesTo.length > 1)
 
 	if (branchPoints.length === 0)
-		return root.evolvesTo.length === 0
-			? { kind: "single", node: root }
-			: { kind: "linear", line: linearLine(root) }
+		return root.evolvesTo.length === 0 ? { kind: "single", node: root } : { kind: "linear", line: linearLine(root) }
 
 	// one branch point, at the root, whose children are all leaves → Eevee / Tyrogue
 	const isRootFan =
-		branchPoints.length === 1 &&
-		branchPoints[0] === root &&
-		root.evolvesTo.every((c) => c.evolvesTo.length === 0)
+		branchPoints.length === 1 && branchPoints[0] === root && root.evolvesTo.every((c) => c.evolvesTo.length === 0)
 
 	if (isRootFan) return { kind: "branch", base: root, branches: root.evolvesTo }
 
