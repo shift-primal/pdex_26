@@ -1,4 +1,4 @@
-import { useSuspenseQueries } from "@tanstack/react-query"
+import { useSuspenseQueries, useSuspenseQuery } from "@tanstack/react-query"
 import { findAdjacentPokemon } from "#/lib/domain/pokemon.utils"
 import { formQueryOptions } from "#/queries/form"
 import { pokemonListQueryOptions } from "#/queries/list"
@@ -10,17 +10,19 @@ export function usePokemonDetail(id: string, varietyName?: string, formName?: st
 		queries: [speciesQueryOptions(id), pokemonListQueryOptions()]
 	})
 
+	const requestedVariety =
+		varietyName && species.varieties.some((v) => v.name === varietyName) ? varietyName : undefined
 	const activeVarietyName =
-		varietyName ?? species.varieties.find((v) => v.isDefault)?.name ?? species.varieties[0]?.name ?? species.name
+		requestedVariety ??
+		species.varieties.find((v) => v.isDefault)?.name ??
+		species.varieties[0]?.name ??
+		species.name
 
-	// A variety's default form shares its name, so the form name is resolvable from the variety
-	// name alone — no need to wait on the variety payload. This lets variety + form fetch in
-	// parallel instead of as a species → variety → form waterfall.
-	const activeFormName = formName ?? activeVarietyName
+	const { data: activeVariety } = useSuspenseQuery(varietyQueryOptions(activeVarietyName))
 
-	const [{ data: activeVariety }, { data: activeForm }] = useSuspenseQueries({
-		queries: [varietyQueryOptions(activeVarietyName), formQueryOptions(activeFormName)]
-	})
+	const requestedForm = formName && activeVariety.forms.includes(formName) ? formName : undefined
+	const activeFormName = requestedForm ?? activeVariety.forms[0] ?? activeVariety.name
+	const { data: activeForm } = useSuspenseQuery(formQueryOptions(activeFormName))
 
 	const adjacent = findAdjacentPokemon(species.id, dexList)
 

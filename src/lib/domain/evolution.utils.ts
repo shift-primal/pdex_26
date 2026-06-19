@@ -1,6 +1,6 @@
-import type { PokemonEvolutionNode } from "#/types/pokemon"
+import type { PokemonEvolutionChainLink } from "#/types/pokemon"
 
-export const flattenEvolutions = (node: PokemonEvolutionNode): PokemonEvolutionNode[] => [
+export const flattenEvolutions = (node: PokemonEvolutionChainLink): PokemonEvolutionChainLink[] => [
 	node,
 	...node.evolvesTo.flatMap(flattenEvolutions)
 ]

@@ -5,7 +5,7 @@ export type { ElementalTypeName, StatName }
 
 export type Gender = "male" | "female"
 
-export type PokemonElementalType = {
+export type PokemonType = {
 	name: ElementalTypeName
 }
 
@@ -36,10 +36,10 @@ export type PokemonClassification = {
 	isMythical: boolean
 }
 
-export type PokemonEvolutionNode = {
+export type PokemonEvolutionChainLink = {
 	name: string
 	isBaby: boolean
-	evolvesTo: PokemonEvolutionNode[]
+	evolvesTo: PokemonEvolutionChainLink[]
 }
 
 export type PokemonGeneration = {
@@ -59,7 +59,7 @@ export type Variety = {
 	id: number
 	name: string
 	sprites: PokemonSprites
-	types: PokemonElementalType[]
+	types: PokemonType[]
 	stats: PokemonStat[]
 	height: number
 	weight: number
@@ -83,7 +83,7 @@ export type Form = {
 	isMega: boolean
 	isBattleOnly: boolean
 	sprites: PokemonSprites
-	types: PokemonElementalType[]
+	types: PokemonType[]
 }
 
 export interface Species {
@@ -94,7 +94,7 @@ export interface Species {
 	color: string
 	cries: PokemonCries
 	eggGroups: string[]
-	evolution: PokemonEvolutionNode
+	evolution: PokemonEvolutionChainLink
 	flavorText: string
 	varieties: VarietyRef[]
 	genderRate: number

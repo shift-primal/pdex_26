@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from "@tanstack/react-query"
 import { flattenEvolutions } from "#/lib/domain/evolution.utils"
 import { varietyQueryOptions } from "#/queries/variety"
-import type { PokemonEvolutionNode, Species } from "#/types/pokemon"
+import type { PokemonEvolutionChainLink, Species } from "#/types/pokemon"
 import { ArrowDownIcon, ArrowRightIcon } from "@phosphor-icons/react"
 import { TemporaryWrapper } from "#/components/TemporaryWrapper"
 import { Chip } from "#/components/Chip"
@@ -15,7 +15,7 @@ const EvolutionTree = ({
 	spriteMap,
 	dir
 }: {
-	node: PokemonEvolutionNode
+	node: PokemonEvolutionChainLink
 	spriteMap: SpriteMap
 	dir: Direction
 }) => {

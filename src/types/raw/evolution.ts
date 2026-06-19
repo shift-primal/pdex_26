@@ -1,12 +1,12 @@
 import type { RawNamedResource } from "#/types/generic"
 
-export type RawEvolutionNode = {
-	evolves_to: RawEvolutionNode[]
+export type RawEvolutionChainLink = {
+	evolves_to: RawEvolutionChainLink[]
 	is_baby: boolean
 	species: RawNamedResource
 }
 
 export interface RawEvolutionChain {
 	id: number
-	chain: RawEvolutionNode
+	chain: RawEvolutionChainLink
 }

@@ -6,14 +6,37 @@ import { resolveFrontSprite } from "#/lib/domain/pokemon.utils"
 import { formatId, formatText } from "#/lib/format"
 import { usePokemonDetail } from "#/queries/detail"
 import type { Gender } from "#/types/pokemon"
+import { useNavigate } from "@tanstack/react-router"
+import { useEffect } from "react"
 
 export const PokemonDetails = ({
 	id,
 	variety,
 	form,
 	gender
-}: { id: string; variety?: string; form?: string; gender?: Gender }) => {
+}: {
+	id: string
+	variety?: string
+	form?: string
+	gender?: Gender
+}) => {
 	const { species, activeVariety, activeForm } = usePokemonDetail(id, variety, form)
+
+	const navigate = useNavigate({ from: "/pokemon/$id" })
+	useEffect(() => {
+		const stripVariety = variety !== undefined && variety !== activeVariety.name
+		const stripForm = form !== undefined && form !== activeForm.name
+		if (stripVariety || stripForm) {
+			navigate({
+				replace: true,
+				search: (s) => ({
+					...s,
+					...(stripVariety ? { variety: undefined } : {}),
+					...(stripForm ? { form: undefined } : {})
+				})
+			})
+		}
+	}, [variety, form, activeVariety.name, activeForm.name, navigate])
 
 	const sprite = resolveFrontSprite(activeVariety, activeForm, gender)
 

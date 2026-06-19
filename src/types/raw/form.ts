@@ -1,21 +1,18 @@
-import type { RawNamedResource } from "#/types/generic"
-import type { RawElementalType, RawSpriteSetFull } from "#/types/raw/pokemon"
-
-export type RawFormName = {
-	name: string
-	language: RawNamedResource
-}
+import type { RawName, RawNamedResource } from "#/types/generic"
+import type { RawPokemonType, RawSpriteSet } from "#/types/raw/pokemon"
 
 export interface RawPokemonForm {
 	id: number
 	name: string
 	form_name: string
-	form_names: RawFormName[]
-	names: RawFormName[]
+	form_names: RawName[]
+	names: RawName[]
 	is_default: boolean
 	is_battle_only: boolean
 	is_mega: boolean
-	sprites: RawSpriteSetFull
-	types: RawElementalType[]
+	// The docs' PokemonFormSprites table lists only 4 fields, but the live API returns the full flat
+	// set (female/back variants included, often null) — and we derive HOME urls from these.
+	sprites: RawSpriteSet
+	types: RawPokemonType[]
 	version_group: RawNamedResource
 }

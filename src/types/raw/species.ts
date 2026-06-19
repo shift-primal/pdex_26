@@ -1,11 +1,11 @@
 import type { RawNamedResource } from "#/types/generic"
 
-export type RawFlavorTextEntry = {
+export type RawFlavorText = {
 	flavor_text: string
 	language: RawNamedResource
 }
 
-export type RawVariety = {
+export type RawPokemonSpeciesVariety = {
 	is_default: boolean
 	pokemon: RawNamedResource
 }
@@ -18,7 +18,7 @@ export interface RawSpecies {
 	evolution_chain: {
 		url: string
 	}
-	flavor_text_entries: RawFlavorTextEntry[]
+	flavor_text_entries: RawFlavorText[]
 	gender_rate: number
 	generation: RawNamedResource
 	growth_rate: RawNamedResource
@@ -29,5 +29,5 @@ export interface RawSpecies {
 	is_mythical: boolean
 	name: string
 	shape: RawNamedResource
-	varieties: RawVariety[]
+	varieties: RawPokemonSpeciesVariety[]
 }

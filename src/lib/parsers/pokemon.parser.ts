@@ -1,30 +1,35 @@
 import { withFallback } from "#/lib/utils"
 import { TYPE_THEME } from "#/theme/elemental-types.theme"
 import { STAT_THEME } from "#/theme/stats.theme"
+import type { RawName } from "#/types/generic"
 import type {
 	ElementalTypeName,
 	Form,
-	PokemonElementalType,
-	PokemonEvolutionNode,
+	PokemonEvolutionChainLink,
 	PokemonSprites,
 	PokemonStat,
+	PokemonType,
 	Species,
 	StatName,
 	Variety
 } from "#/types/pokemon"
-import type { RawEvolutionChain, RawEvolutionNode } from "#/types/raw/evolution"
-import type { RawFormName, RawPokemonForm } from "#/types/raw/form"
+import type { RawEvolutionChain, RawEvolutionChainLink } from "#/types/raw/evolution"
+import type { RawPokemonForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
-import type { RawElementalType, RawPokemon, RawSpriteSetFull, RawStat } from "#/types/raw/pokemon"
-import type { RawFlavorTextEntry, RawSpecies } from "#/types/raw/species"
+import type { RawPokemon, RawPokemonStat, RawPokemonType, RawSpriteSet } from "#/types/raw/pokemon"
+import type { RawFlavorText, RawSpecies } from "#/types/raw/species"
 
-// Every pokemon — variety or form — uses its plain default sprites (same flat shape for both).
-function parseSprites(sprites: RawSpriteSetFull): PokemonSprites {
+const SPRITE_DIR = "/sprites/pokemon/"
+const HOME_DIR = "/sprites/pokemon/other/home/"
+
+const toHomeUrl = (url: string | null): string | null => (url ? url.replace(SPRITE_DIR, HOME_DIR) : null)
+
+function parseSprites(sprites: RawSpriteSet): PokemonSprites {
 	return {
 		front: {
-			default: sprites.front_default,
-			shiny: sprites.front_shiny,
-			female: sprites.front_female
+			default: toHomeUrl(sprites.front_default),
+			shiny: toHomeUrl(sprites.front_shiny),
+			female: toHomeUrl(sprites.front_female)
 		},
 		back: {
 			default: sprites.back_default,
@@ -34,23 +39,20 @@ function parseSprites(sprites: RawSpriteSetFull): PokemonSprites {
 	}
 }
 
-// PokeAPI exposes types/stats outside our unions (unknown, shadow, stellar, …).
-// Validate at this trust boundary against the exhaustive theme tables, dropping unknowns
-// so an invalid name can never reach TYPE_THEME[name] / STAT_THEME[name] and crash.
-function parseElementalTypes(types: RawElementalType[]): PokemonElementalType[] {
+function parseElementalTypes(types: RawPokemonType[]): PokemonType[] {
 	return types
 		.map((t) => t.type.name)
 		.filter((name): name is ElementalTypeName => name in TYPE_THEME)
 		.map((name) => ({ name }))
 }
 
-function parseStats(stats: RawStat[]): PokemonStat[] {
+function parseStats(stats: RawPokemonStat[]): PokemonStat[] {
 	return stats
-		.filter((s): s is RawStat & { stat: { name: StatName } } => s.stat.name in STAT_THEME)
+		.filter((s): s is RawPokemonStat & { stat: { name: StatName } } => s.stat.name in STAT_THEME)
 		.map((s) => ({ value: s.base_stat, name: s.stat.name }))
 }
 
-function parseEvolutions(node: RawEvolutionNode): PokemonEvolutionNode {
+function parseEvolutions(node: RawEvolutionChainLink): PokemonEvolutionChainLink {
 	return {
 		name: node.species.name,
 		isBaby: node.is_baby,
@@ -58,7 +60,7 @@ function parseEvolutions(node: RawEvolutionNode): PokemonEvolutionNode {
 	}
 }
 
-function parseFlavorText(flavorTextEntries: RawFlavorTextEntry[]): string {
+function parseFlavorText(flavorTextEntries: RawFlavorText[]): string {
 	const englishFlavorText = flavorTextEntries.find((ft) => ft.language.name === "en")?.flavor_text
 
 	return englishFlavorText
@@ -86,7 +88,7 @@ export function selectVariety(pokemon: RawPokemon): Variety {
 }
 
 export function selectForm(form: RawPokemonForm): Form {
-	const en = (entries: RawFormName[]) => entries.find((n) => n.language.name === "en")?.name
+	const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
 
 	return {
 		name: form.name,
