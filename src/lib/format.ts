@@ -1,6 +1,6 @@
 export const formatId = (id: number): string => `#${id.toString().padStart(4, "0")}`
 
-export function capFirstLetter(text: string) {
+export function formatText(text: string) {
 	return text
 		.replaceAll(" ", "-")
 		.split("-")

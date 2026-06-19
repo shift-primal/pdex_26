@@ -19,21 +19,6 @@ export interface RawSpriteSetFull extends RawSpriteSetBasic {
 	front_shiny_female: string | null
 }
 
-export type RawSprites = {
-	other: {
-		showdown: RawSpriteSetFull
-		"official-artwork": RawSpriteSetBasic
-	}
-	versions: {
-		"generation-v": {
-			"black-white": {
-				// Absent in the live API for Gen 6+ Pokémon, despite always being present in the schema docs.
-				animated?: RawSpriteSetFull
-			}
-		}
-	}
-}
-
 export type RawStat = {
 	base_stat: number
 	stat: RawNamedResource
@@ -51,7 +36,7 @@ export interface RawPokemon {
 	weight: number
 	types: RawElementalType[]
 	stats: RawStat[]
-	sprites: RawSprites
+	sprites: RawSpriteSetFull
 	cries: RawCries
 	species: RawNamedResource
 	is_default: boolean

@@ -15,44 +15,11 @@ import type {
 import type { RawEvolutionChain, RawEvolutionNode } from "#/types/raw/evolution"
 import type { RawFormName, RawPokemonForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
-import type { RawElementalType, RawPokemon, RawSpriteSetFull, RawSprites, RawStat } from "#/types/raw/pokemon"
+import type { RawElementalType, RawPokemon, RawSpriteSetFull, RawStat } from "#/types/raw/pokemon"
 import type { RawFlavorTextEntry, RawSpecies } from "#/types/raw/species"
 
-const EMPTY_SPRITE_SET: RawSpriteSetFull = {
-	front_default: null,
-	front_shiny: null,
-	front_female: null,
-	front_shiny_female: null,
-	back_default: null,
-	back_shiny: null,
-	back_female: null,
-	back_shiny_female: null
-}
-
-function parseSprites(sprites: RawSprites): PokemonSprites {
-	const official = sprites.other["official-artwork"]
-	const showdown = sprites.other.showdown
-	const genV = sprites.versions["generation-v"]["black-white"].animated
-
-	// Both `showdown` and `genV.animated` can be empty/absent (Gen 6+), so fall back to a
-	// null-filled set rather than dereferencing `undefined`.
-	const fullSource = showdown.front_default ? showdown : (genV ?? EMPTY_SPRITE_SET)
-
-	return {
-		front: {
-			default: official.front_default ?? fullSource.front_default,
-			shiny: official.front_shiny ?? fullSource.front_shiny,
-			female: fullSource.front_female
-		},
-		back: {
-			default: fullSource.back_default,
-			shiny: fullSource.back_shiny,
-			female: fullSource.back_female
-		}
-	}
-}
-
-function parseFormSprites(sprites: RawSpriteSetFull): PokemonSprites {
+// Every pokemon — variety or form — uses its plain default sprites (same flat shape for both).
+function parseSprites(sprites: RawSpriteSetFull): PokemonSprites {
 	return {
 		front: {
 			default: sprites.front_default,
@@ -129,7 +96,7 @@ export function selectForm(form: RawPokemonForm): Form {
 		isDefault: form.is_default,
 		isMega: form.is_mega,
 		isBattleOnly: form.is_battle_only,
-		sprites: parseFormSprites(form.sprites),
+		sprites: parseSprites(form.sprites),
 		types: parseElementalTypes(form.types)
 	}
 }

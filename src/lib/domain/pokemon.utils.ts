@@ -12,18 +12,26 @@ export const findAdjacentPokemon = (currId: number, list: RawNamedResource[]) =>
 
 const isGenderName = (name: string) => name.endsWith("-male") || name.endsWith("-female")
 
-export const alternateVarieties = (varieties: VarietyRef[]) =>
-	varieties.filter((v) => !v.isDefault && !isGenderName(v.name))
+/**
+ * Varieties you can switch *to* from the active one: every variety except the one currently
+ * shown, with gender splits removed (those get their own ♀/♂ toggle). On default Dragonite
+ * this yields [Mega]; on Mega Dragonite it yields [default] — a true toggle.
+ */
+export const alternateVarieties = (varieties: VarietyRef[], activeName: string) =>
+	varieties.filter((v) => v.name !== activeName && !isGenderName(v.name))
 
 export type VariantOption = { kind: "variety"; name: string } | { kind: "form"; name: string }
 
-export function getVariants(species: Species, variety: Variety): VariantOption[] {
-	return [
-		...alternateVarieties(species.varieties).map((v): VariantOption => ({ kind: "variety", name: v.name })),
-		...variety.forms
-			.filter((f) => f !== variety.name && !isGenderName(f))
-			.map((f): VariantOption => ({ kind: "form", name: f }))
-	]
+export function getVariants(species: Species, activeVariety: Variety): VariantOption[] {
+	const varieties = alternateVarieties(species.varieties, activeVariety.name).map(
+		(v): VariantOption => ({ kind: "variety", name: v.name })
+	)
+
+	const forms = activeVariety.forms
+		.filter((f) => f !== activeVariety.name && !isGenderName(f))
+		.map((f): VariantOption => ({ kind: "form", name: f }))
+
+	return [...varieties, ...forms]
 }
 
 export type GenderPresentation =
