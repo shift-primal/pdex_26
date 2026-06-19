@@ -3,6 +3,8 @@ import type { StatName } from "#/theme/stats.theme"
 
 export type { ElementalTypeName, StatName }
 
+export type Gender = "male" | "female"
+
 export type PokemonElementalType = {
 	name: ElementalTypeName
 }

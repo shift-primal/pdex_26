@@ -1,6 +1,6 @@
 import { MAX_DEX_ID } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
-import type { Form, Species, Variety, VarietyRef } from "#/types/pokemon"
+import type { Form, Gender, Species, Variety, VarietyRef } from "#/types/pokemon"
 
 export const findAdjacentPokemon = (currId: number, list: RawNamedResource[]) => {
 	const index = currId - 1
@@ -47,6 +47,9 @@ const findGenderPair = (names: string[]) => {
 }
 
 export function resolveGenderPresentation(species: Species, variety: Variety): GenderPresentation {
+	// genderRate -1 = genderless (Magnemite, most legendaries): never a gender toggle.
+	if (species.genderRate === -1) return { kind: "none" }
+
 	const varietyPair = findGenderPair(species.varieties.map((v) => v.name))
 	if (varietyPair) return { kind: "varieties", ...varietyPair }
 
@@ -56,6 +59,18 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 	if (variety.sprites.front.female) return { kind: "sprite" }
 
 	return { kind: "none" }
+}
+
+/** The gender a variety/form name encodes via its `-male`/`-female` suffix (defaults to male). */
+export const genderOf = (name: string): Gender => (name.endsWith("-female") ? "female" : "male")
+
+/**
+ * Front sprite to display: prefer the active form's own sprite set (cosmetic forms carry their own),
+ * fall back to the variety's, then honour a female selection for sexually-dimorphic species.
+ */
+export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender): string | null => {
+	const front = form.sprites.front.default ? form.sprites.front : variety.sprites.front
+	return gender === "female" ? (front.female ?? front.default) : front.default
 }
 
 // Form classification — uses the /pokemon-form flags rather than name-suffix guessing.

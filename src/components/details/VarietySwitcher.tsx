@@ -12,7 +12,7 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 	const options = variants.map((v, i) => ({ ...v, form: forms[i].data }))
 	const defaultVarietyName = species.varieties.find((v) => v.isDefault)?.name
 
-	const hasVarieties = variants.length > 1
+	const hasVarieties = variants.length > 0
 
 	return (
 		<TemporaryWrapper title="Varieties">

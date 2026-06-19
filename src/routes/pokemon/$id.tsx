@@ -6,14 +6,15 @@ import { PokemonDetails } from "#/components/details/PokemonDetails"
 const searchSchema = z.object({
 	tab: z.string().default("about"),
 	variety: z.string().optional(),
-	form: z.string().optional()
+	form: z.string().optional(),
+	gender: z.enum(["male", "female"]).optional()
 })
 
 const PokemonDetailsPage = () => {
 	const { id } = Route.useParams()
-	const { variety, form } = Route.useSearch()
+	const { variety, form, gender } = Route.useSearch()
 
-	return <PokemonDetails id={id} variety={variety} form={form} />
+	return <PokemonDetails id={id} variety={variety} form={form} gender={gender} />
 }
 
 export const Route = createFileRoute("/pokemon/$id")({

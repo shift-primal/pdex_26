@@ -1,13 +1,21 @@
 import { EvolutionChain } from "#/components/details/EvolutionChain"
+import { GenderSwitcher } from "#/components/details/GenderSwitcher"
 import { VarietySwitcher } from "#/components/details/VarietySwitcher"
 import { SpriteWrapper } from "#/components/SpriteWrapper"
+import { resolveFrontSprite } from "#/lib/domain/pokemon.utils"
 import { formatId, formatText } from "#/lib/format"
 import { usePokemonDetail } from "#/queries/detail"
+import type { Gender } from "#/types/pokemon"
 
-export const PokemonDetails = ({ id, variety, form }: { id: string; variety?: string; form?: string }) => {
+export const PokemonDetails = ({
+	id,
+	variety,
+	form,
+	gender
+}: { id: string; variety?: string; form?: string; gender?: Gender }) => {
 	const { species, activeVariety, activeForm } = usePokemonDetail(id, variety, form)
 
-	const sprite = activeForm.sprites.front.default ?? activeVariety.sprites.front.default
+	const sprite = resolveFrontSprite(activeVariety, activeForm, gender)
 
 	const title = formatText(activeForm.displayName)
 
@@ -17,6 +25,7 @@ export const PokemonDetails = ({ id, variety, form }: { id: string; variety?: st
 			<h1 className="text-3xl font-bold">{title}</h1>
 
 			<VarietySwitcher species={species} activeVariety={activeVariety} />
+			<GenderSwitcher species={species} activeVariety={activeVariety} activeForm={activeForm} gender={gender} />
 			<EvolutionChain species={species} />
 
 			{sprite && <SpriteWrapper spriteUrl={sprite} alt={title} size={256} />}
