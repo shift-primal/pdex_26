@@ -36,9 +36,16 @@ export type RawPokemonCries = {
 	legacy: string | null
 }
 
+export type RawPokemonAbility = {
+	slot: number
+	is_hidden: boolean
+	ability: RawNamedResource
+}
+
 export interface RawPokemon {
 	id: number
 	name: string
+	abilities: RawPokemonAbility[]
 	height: number
 	weight: number
 	types: RawPokemonType[]

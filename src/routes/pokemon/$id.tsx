@@ -1,10 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import z from "zod"
+import { TABS } from "#/config/general.config"
 import { fetchPokemon } from "#/services/api"
 import { PokemonDetails } from "#/components/details/PokemonDetails"
 
 const searchSchema = z.object({
-	tab: z.string().default("about"),
+	tab: z.enum(TABS).default(TABS[0]).catch(TABS[0]),
 	variety: z.string().optional(),
 	form: z.string().optional(),
 	gender: z.enum(["male", "female"]).optional()
@@ -12,9 +13,9 @@ const searchSchema = z.object({
 
 const PokemonDetailsPage = () => {
 	const { id } = Route.useParams()
-	const { variety, form, gender } = Route.useSearch()
+	const { tab, variety, form, gender } = Route.useSearch()
 
-	return <PokemonDetails id={id} variety={variety} form={form} gender={gender} />
+	return <PokemonDetails id={id} tab={tab} variety={variety} form={form} gender={gender} />
 }
 
 export const Route = createFileRoute("/pokemon/$id")({

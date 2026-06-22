@@ -12,11 +12,6 @@ export const findAdjacentPokemon = (currId: number, list: RawNamedResource[]) =>
 
 const isGenderName = (name: string) => name.endsWith("-male") || name.endsWith("-female")
 
-/**
- * Varieties you can switch *to* from the active one: every variety except the one currently
- * shown, with gender splits removed (those get their own ♀/♂ toggle). On default Dragonite
- * this yields [Mega]; on Mega Dragonite it yields [default] — a true toggle.
- */
 export const alternateVarieties = (varieties: VarietyRef[], activeName: string) =>
 	varieties.filter((v) => v.name !== activeName && !isGenderName(v.name))
 
@@ -64,10 +59,6 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 /** The gender a variety/form name encodes via its `-male`/`-female` suffix (defaults to male). */
 export const genderOf = (name: string): Gender => (name.endsWith("-female") ? "female" : "male")
 
-/**
- * Front sprite to display: prefer the active form's own sprite set (cosmetic forms carry their own),
- * fall back to the variety's, then honour a female selection for sexually-dimorphic species.
- */
 export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender): string | null => {
 	const front = form.sprites.front.default ? form.sprites.front : variety.sprites.front
 	return gender === "female" ? (front.female ?? front.default) : front.default

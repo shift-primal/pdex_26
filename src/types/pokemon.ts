@@ -5,6 +5,20 @@ export type { ElementalTypeName, StatName }
 
 export type Gender = "male" | "female"
 
+/** Reference to an ability as listed on a variety (/pokemon) — no effect text, just where to fetch it. */
+export type AbilityRef = {
+	name: string
+	url: string
+	isHidden: boolean
+}
+
+/** Resolved ability detail fetched from /ability/{n}. */
+export type Ability = {
+	name: string
+	displayName: string
+	effect: string
+}
+
 export type PokemonType = {
 	name: ElementalTypeName
 }
@@ -58,6 +72,7 @@ export type VarietyRef = {
 export type Variety = {
 	id: number
 	name: string
+	abilities: AbilityRef[]
 	sprites: PokemonSprites
 	types: PokemonType[]
 	stats: PokemonStat[]

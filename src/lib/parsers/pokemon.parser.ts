@@ -3,6 +3,7 @@ import { TYPE_THEME } from "#/theme/elemental-types.theme"
 import { STAT_THEME } from "#/theme/stats.theme"
 import type { RawName } from "#/types/generic"
 import type {
+	Ability,
 	ElementalTypeName,
 	Form,
 	PokemonEvolutionChainLink,
@@ -13,6 +14,7 @@ import type {
 	StatName,
 	Variety
 } from "#/types/pokemon"
+import type { RawAbility } from "#/types/raw/ability"
 import type { RawEvolutionChain, RawEvolutionChainLink } from "#/types/raw/evolution"
 import type { RawPokemonForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
@@ -20,16 +22,17 @@ import type { RawPokemon, RawPokemonStat, RawPokemonType, RawSpriteSet } from "#
 import type { RawFlavorText, RawSpecies } from "#/types/raw/species"
 
 const SPRITE_DIR = "/sprites/pokemon/"
-const HOME_DIR = "/sprites/pokemon/other/home/"
+const SHOWDOWN_DIR = "/sprites/pokemon/other/showdown/"
 
-const toHomeUrl = (url: string | null): string | null => (url ? url.replace(SPRITE_DIR, HOME_DIR) : null)
+const toShowdownUrl = (url: string | null): string | null =>
+	url ? url.replace(SPRITE_DIR, SHOWDOWN_DIR).replace(/\.png$/, ".gif") : null
 
 function parseSprites(sprites: RawSpriteSet): PokemonSprites {
 	return {
 		front: {
-			default: toHomeUrl(sprites.front_default),
-			shiny: toHomeUrl(sprites.front_shiny),
-			female: toHomeUrl(sprites.front_female)
+			default: toShowdownUrl(sprites.front_default),
+			shiny: toShowdownUrl(sprites.front_shiny),
+			female: toShowdownUrl(sprites.front_female)
 		},
 		back: {
 			default: sprites.back_default,
@@ -73,10 +76,26 @@ function parseFlavorText(flavorTextEntries: RawFlavorText[]): string {
 		: "unknown"
 }
 
+export function selectAbility(ability: RawAbility): Ability {
+	const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
+	const enEffect = ability.effect_entries.find((e) => e.language.name === "en")
+
+	return {
+		name: ability.name,
+		displayName: en(ability.names) ?? ability.name,
+		effect: enEffect?.short_effect ?? enEffect?.effect ?? "unknown"
+	}
+}
+
 export function selectVariety(pokemon: RawPokemon): Variety {
 	return {
 		id: pokemon.id,
 		name: pokemon.name,
+		abilities: pokemon.abilities.map((a) => ({
+			name: a.ability.name,
+			url: a.ability.url,
+			isHidden: a.is_hidden
+		})),
 		sprites: parseSprites(pokemon.sprites),
 		types: parseElementalTypes(pokemon.types),
 		stats: parseStats(pokemon.stats),

@@ -1,5 +1,6 @@
 import { API_BASE_URL, MAX_DEX_LIMIT } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
+import type { RawAbility } from "#/types/raw/ability"
 import type { RawEvolutionChain } from "#/types/raw/evolution"
 import type { RawPokemonForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
@@ -46,6 +47,10 @@ export function fetchEvolutionChain(url: string) {
 
 export function fetchGeneration(url: string) {
 	return fetchJson<RawGeneration>(url, "Generation")
+}
+
+export function fetchAbility(url: string) {
+	return fetchJson<RawAbility>(url, "Ability")
 }
 
 export async function fetchPokemonList(): Promise<RawNamedResource[]> {

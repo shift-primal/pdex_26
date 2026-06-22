@@ -51,7 +51,7 @@ const EvolutionTree = ({
 	)
 }
 
-export function EvolutionChain({ species }: { species: Species }) {
+export const EvolutionChain = ({ species }: { species: Species }) => {
 	const nodes = flattenEvolutions(species.evolution)
 	const results = useSuspenseQueries({
 		queries: nodes.map((n) => varietyQueryOptions(n.name))

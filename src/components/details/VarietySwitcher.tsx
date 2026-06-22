@@ -27,9 +27,10 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 									? {
 											...s,
 											variety: o.name === defaultVarietyName ? undefined : o.name,
-											form: undefined
+											form: undefined,
+											gender: undefined
 										}
-									: { ...s, form: o.name }
+									: { ...s, form: o.name, gender: undefined }
 							}
 							sprite={o.form.sprites.front.default}
 							title={formatText(o.form.displayName)}
