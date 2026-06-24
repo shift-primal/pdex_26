@@ -20,7 +20,7 @@ export const AbilityList = ({ abilities }: { abilities: AbilityRef[] }) => {
 	return (
 		<div className="flex flex-col gap-2">
 			{results.map((a) => (
-				<AbilityChip ability={a} />
+				<AbilityChip key={a.name} ability={a} />
 			))}
 		</div>
 	)

@@ -2,6 +2,10 @@ import { MAX_DEX_ID } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
 import type { Form, Gender, Species, Variety, VarietyRef } from "#/types/pokemon"
 
+/** The name of a species' default variety, e.g. `"charizard"` for the Charizard species. */
+export const defaultVarietyName = (species: Species): string | undefined =>
+	species.varieties.find((v) => v.isDefault)?.name
+
 export const findAdjacentPokemon = (currId: number, list: RawNamedResource[]) => {
 	const index = currId - 1
 	return {
@@ -38,11 +42,12 @@ export type GenderPresentation =
 const findGenderPair = (names: string[]) => {
 	const male = names.find((n) => n.endsWith("-male"))
 	const female = names.find((n) => n.endsWith("-female"))
+
 	return male && female ? { male, female } : null
 }
 
 export function resolveGenderPresentation(species: Species, variety: Variety): GenderPresentation {
-	// genderRate -1 = genderless (Magnemite, most legendaries): never a gender toggle.
+	// genderRate -1 = genderless: never a gender toggle.
 	if (species.genderRate === -1) return { kind: "none" }
 
 	const varietyPair = findGenderPair(species.varieties.map((v) => v.name))
@@ -56,7 +61,7 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 	return { kind: "none" }
 }
 
-/** The gender a variety/form name encodes via its `-male`/`-female` suffix (defaults to male). */
+/** defaults to male */
 export const genderOf = (name: string): Gender => (name.endsWith("-female") ? "female" : "male")
 
 export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender): string | null => {
@@ -66,7 +71,5 @@ export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender
 
 // Form classification — uses the /pokemon-form flags rather than name-suffix guessing.
 export const megaForms = (forms: Form[]) => forms.filter((f) => f.isMega)
-
 export const battleOnlyForms = (forms: Form[]) => forms.filter((f) => f.isBattleOnly)
-
 export const cosmeticForms = (forms: Form[]) => forms.filter((f) => !f.isDefault && !f.isMega && !f.isBattleOnly)

@@ -26,7 +26,7 @@ const EvolutionTree = ({
 			<Chip
 				to="/pokemon/$id"
 				params={{ id: node.name }}
-				search={{ tab: "about" }}
+				search={(prev) => ({ tab: prev.tab })}
 				sprite={spriteMap.get(node.name)}
 				label={formatText(node.name)}
 			/>

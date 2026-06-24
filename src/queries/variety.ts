@@ -1,4 +1,4 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import { selectVariety } from "#/lib/parsers/pokemon.parser"
 import { fetchPokemon } from "#/services/api"
 import type { Variety } from "#/types/pokemon"
@@ -12,5 +12,3 @@ export function varietyQueryOptions(nameOrId: string) {
 		staleTime: Infinity
 	})
 }
-
-export const useVariety = (nameOrId: string) => useSuspenseQuery(varietyQueryOptions(nameOrId))

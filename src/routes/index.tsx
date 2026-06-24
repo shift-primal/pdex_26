@@ -1,10 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/")({
-	component: Home
-})
-
-function Home() {
+const Home = () => {
 	return (
 		<div>
 			<h1>Pokedex (data sandbox)</h1>
@@ -23,3 +19,7 @@ function Home() {
 		</div>
 	)
 }
+
+export const Route = createFileRoute("/")({
+	component: Home
+})

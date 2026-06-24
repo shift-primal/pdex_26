@@ -3,7 +3,8 @@ import type { StatName } from "#/theme/stats.theme"
 
 export type { ElementalTypeName, StatName }
 
-export type Gender = "male" | "female"
+export const GENDERS = ["male", "female"] as const
+export type Gender = (typeof GENDERS)[number]
 
 /** Reference to an ability as listed on a variety (/pokemon) — no effect text, just where to fetch it. */
 export type AbilityRef = {

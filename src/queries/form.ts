@@ -1,4 +1,4 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import { selectForm } from "#/lib/parsers/pokemon.parser"
 import { fetchPokemonForm } from "#/services/api"
 import type { Form } from "#/types/pokemon"
@@ -12,5 +12,3 @@ export function formQueryOptions(nameOrId: string) {
 		staleTime: Infinity
 	})
 }
-
-export const useForm = (nameOrId: string) => useSuspenseQuery(formQueryOptions(nameOrId))

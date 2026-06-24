@@ -1,11 +1,10 @@
 import { TemporaryWrapper } from "#/components/TemporaryWrapper"
-import { genderOf, resolveGenderPresentation } from "#/lib/domain/pokemon.utils"
+import { defaultVarietyName, genderOf, resolveGenderPresentation } from "#/lib/domain/pokemon.utils"
 import { cn } from "#/lib/utils"
-import type { Form, Gender, Species, Variety } from "#/types/pokemon"
+import { GENDERS, type Form, type Gender, type Species, type Variety } from "#/types/pokemon"
 import { GenderFemaleIcon, GenderMaleIcon, type Icon } from "@phosphor-icons/react"
 import { Link } from "@tanstack/react-router"
 
-const GENDERS = ["male", "female"] as const
 const SYMBOL: Record<Gender, Icon> = { male: GenderMaleIcon, female: GenderFemaleIcon }
 
 export const GenderSwitcher = ({
@@ -22,7 +21,7 @@ export const GenderSwitcher = ({
 	const presentation = resolveGenderPresentation(species, activeVariety)
 	const isDisabled = presentation.kind === "none"
 
-	const defaultVarietyName = species.varieties.find((v) => v.isDefault)?.name
+	const defaultName = defaultVarietyName(species)
 
 	const active = isDisabled
 		? "none"
@@ -48,11 +47,11 @@ export const GenderSwitcher = ({
 								if (presentation.kind === "varieties")
 									return {
 										...s,
-										variety: presentation[g] === defaultVarietyName ? undefined : presentation[g],
+										variety: presentation[g] === defaultName ? undefined : presentation[g],
 										form: undefined
 									}
 								if (presentation.kind === "forms") return { ...s, form: presentation[g] }
-								return s // "none" — disabled, navigation is a no-op
+								return s
 							}}
 							className={cn(
 								isDisabled

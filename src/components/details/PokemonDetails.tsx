@@ -1,13 +1,16 @@
 import { GenderSwitcher } from "#/components/details/GenderSwitcher"
 import { SpriteWrapper } from "#/components/SpriteWrapper"
 import { DetailTabs } from "#/components/DetailTabs"
-import { resolveFrontSprite, resolveGenderPresentation } from "#/lib/domain/pokemon.utils"
+import { resolveFrontSprite } from "#/lib/domain/pokemon.utils"
 import { formatId, formatText } from "#/lib/format"
 import { usePokemonDetail } from "#/queries/detail"
 import type { Gender } from "#/types/pokemon"
-import { useNavigate } from "@tanstack/react-router"
-import { useEffect } from "react"
 import type { Tab } from "#/config/general.config"
+
+import { useAdjacentPokemon } from "#/queries/adjacent"
+import { PokemonNavigation } from "#/components/details/PokemonNavigation"
+import { useNormalizeSearch } from "#/hooks/useNormalizeSearch"
+import { useAdjacentHotkeys } from "#/hooks/useAdjacentHotkeys"
 
 export const PokemonDetails = ({
 	id,
@@ -23,36 +26,21 @@ export const PokemonDetails = ({
 	tab: Tab
 }) => {
 	const { species, activeVariety, activeForm } = usePokemonDetail(id, variety, form)
+	const neighbors = useAdjacentPokemon(species.id)
 
-	const genderIsValid = resolveGenderPresentation(species, activeVariety).kind === "sprite" && gender === "female"
-
-	const navigate = useNavigate({ from: "/pokemon/$id" })
-	useEffect(() => {
-		const stripVariety = variety !== undefined && variety !== activeVariety.name
-		const stripForm = form !== undefined && form !== activeForm.name
-		const stripGender = gender !== undefined && !genderIsValid
-		if (stripVariety || stripForm || stripGender) {
-			navigate({
-				replace: true,
-				search: (s) => ({
-					...s,
-					...(stripVariety ? { variety: undefined } : {}),
-					...(stripForm ? { form: undefined } : {}),
-					...(stripGender ? { gender: undefined } : {})
-				})
-			})
-		}
-	}, [variety, form, gender, activeVariety.name, activeForm.name, genderIsValid, navigate])
+	useNormalizeSearch({ species, activeVariety, activeForm, variety, form, gender })
+	useAdjacentHotkeys(neighbors)
 
 	const sprite = resolveFrontSprite(activeVariety, activeForm, gender)
 	const fallbackSprite = resolveFrontSprite(activeVariety, activeForm)
-
 	const title = formatText(activeForm.displayName)
 
 	return (
 		<div className="mx-auto flex max-w-md flex-col items-center gap-4 p-8">
 			<span className="text-sm text-gray-500">{formatId(species.id)}</span>
 			<h1 className="text-3xl font-bold">{title}</h1>
+
+			<PokemonNavigation neighbors={neighbors} />
 
 			<GenderSwitcher species={species} activeVariety={activeVariety} activeForm={activeForm} gender={gender} />
 
@@ -70,7 +58,7 @@ export const PokemonDetails = ({
 
 			<p className="text-center text-sm text-gray-600">{species.flavorText}</p>
 
-			<DetailTabs tab={tab} onTabChange={(v) => navigate({ replace: true, search: (s) => ({ ...s, tab: v }) })} />
+			<DetailTabs tab={tab} />
 		</div>
 	)
 }

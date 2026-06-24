@@ -5,9 +5,6 @@ const SHOWDOWN_DIR = "/other/showdown/"
 const HOME_DIR = "/other/home/"
 const OFFICIAL_DIR = "/other/official-artwork/"
 
-// Sprites come in as derived showdown URLs (animated gifs). Showdown lacks gen-9 coverage and some
-// forms, so degrade at render time: showdown → home → official-artwork → nothing. Each tier is a
-// string-swap off the showdown URL; the art tiers also need .gif → .png.
 const toHome = (url: string) => url.replace(SHOWDOWN_DIR, HOME_DIR).replace(/\.gif$/, ".png")
 const toOfficial = (url: string) => url.replace(SHOWDOWN_DIR, OFFICIAL_DIR).replace(/\.gif$/, ".png")
 
@@ -26,9 +23,6 @@ export const SpriteWrapper = ({
 	scale?: number
 	alt?: string
 }) => {
-	// Try the requested sprite's cascade (showdown → home → official-artwork), then fall through to the
-	// fallback sprite's cascade — so a missing gender sprite lands on the male/default rather than
-	// "not found". Dedupe in case the requested and fallback URLs already coincide.
 	const candidates = [...new Set([...buildTiers(spriteUrl), ...buildTiers(fallbackUrl)])]
 
 	const [tier, setTier] = useState(0)
@@ -52,8 +46,6 @@ export const SpriteWrapper = ({
 				<img
 					src={src}
 					alt={alt}
-					// items-end + justify-center plants it bottom-centered; origin-bottom + a uniform scale
-					// enlarges every sprite by the same factor, filling the box while keeping relative sizes.
 					className={cn("max-h-full max-w-full origin-bottom", `scale-[${scale}]`)}
 					onError={() => setTier((t) => t + 1)}
 				/>

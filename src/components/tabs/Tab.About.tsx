@@ -1,13 +1,8 @@
 import { TemporaryWrapper } from "#/components/TemporaryWrapper"
-import { usePokemonDetail } from "#/queries/detail"
-import { getRouteApi } from "@tanstack/react-router"
-
-const route = getRouteApi("/pokemon/$id")
+import { usePokemonDetailFromRoute } from "#/queries/detail"
 
 export const About = () => {
-	const { id } = route.useParams()
-	const { variety, form } = route.useSearch()
-	const { species, activeVariety } = usePokemonDetail(id, variety, form)
+	const { species, activeVariety } = usePokemonDetailFromRoute()
 
 	return (
 		<TemporaryWrapper title="About">

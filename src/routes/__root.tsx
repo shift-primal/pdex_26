@@ -6,6 +6,20 @@ interface MyRouterContext {
 	queryClient: QueryClient
 }
 
+const RootDocument = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<html lang="en">
+			<head>
+				<HeadContent />
+			</head>
+			<body>
+				<main>{children}</main>
+				<Scripts />
+			</body>
+		</html>
+	)
+}
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
 		meta: [
@@ -29,17 +43,3 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 	shellComponent: RootDocument
 })
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="en">
-			<head>
-				<HeadContent />
-			</head>
-			<body>
-				<main>{children}</main>
-				<Scripts />
-			</body>
-		</html>
-	)
-}

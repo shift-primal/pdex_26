@@ -3,12 +3,13 @@ import z from "zod"
 import { TABS } from "#/config/general.config"
 import { fetchPokemon } from "#/services/api"
 import { PokemonDetails } from "#/components/details/PokemonDetails"
+import { GENDERS } from "#/types/pokemon"
 
 const searchSchema = z.object({
 	tab: z.enum(TABS).default(TABS[0]).catch(TABS[0]),
 	variety: z.string().optional(),
 	form: z.string().optional(),
-	gender: z.enum(["male", "female"]).optional()
+	gender: z.enum(GENDERS).optional()
 })
 
 const PokemonDetailsPage = () => {

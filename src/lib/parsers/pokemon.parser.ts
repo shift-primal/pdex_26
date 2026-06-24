@@ -1,4 +1,3 @@
-import { withFallback } from "#/lib/utils"
 import { TYPE_THEME } from "#/theme/elemental-types.theme"
 import { STAT_THEME } from "#/theme/stats.theme"
 import type { RawName } from "#/types/generic"
@@ -137,7 +136,7 @@ export function selectSpecies([pokemon, species, evolution, generation]: [
 			isLegendary: species.is_legendary,
 			isMythical: species.is_mythical
 		},
-		color: withFallback(species.color.name, "unknown"),
+		color: species.color.name ?? "unknown",
 		cries: {
 			latest: pokemon.cries.latest,
 			legacy: pokemon.cries.legacy
@@ -157,8 +156,8 @@ export function selectSpecies([pokemon, species, evolution, generation]: [
 			pokemon: generation.pokemon_species.map((p) => p.name)
 		},
 		growthRate: Number(species.growth_rate.url.split("/").filter(Boolean).at(-1)),
-		habitat: withFallback(species.habitat?.name, "unknown"),
+		habitat: species.habitat?.name ?? "unknown",
 		hatchCounter: species.hatch_counter,
-		shape: withFallback(species.shape.name, "unknown")
+		shape: species.shape.name ?? "unknown"
 	}
 }

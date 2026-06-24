@@ -1,6 +1,6 @@
 import { Chip } from "#/components/Chip"
 import { TemporaryWrapper } from "#/components/TemporaryWrapper"
-import { getVariants } from "#/lib/domain/pokemon.utils"
+import { defaultVarietyName, getVariants } from "#/lib/domain/pokemon.utils"
 import { formatText } from "#/lib/format"
 import { formQueryOptions } from "#/queries/form"
 import type { Species, Variety } from "#/types/pokemon"
@@ -10,7 +10,7 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 	const variants = getVariants(species, activeVariety)
 	const forms = useSuspenseQueries({ queries: variants.map((v) => formQueryOptions(v.name)) })
 	const options = variants.map((v, i) => ({ ...v, form: forms[i].data }))
-	const defaultVarietyName = species.varieties.find((v) => v.isDefault)?.name
+	const defaultName = defaultVarietyName(species)
 
 	const hasVarieties = variants.length > 0
 
@@ -26,7 +26,7 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 								o.kind === "variety"
 									? {
 											...s,
-											variety: o.name === defaultVarietyName ? undefined : o.name,
+											variety: o.name === defaultName ? undefined : o.name,
 											form: undefined,
 											gender: undefined
 										}

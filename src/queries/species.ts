@@ -1,4 +1,4 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import { selectSpecies } from "#/lib/parsers/pokemon.parser"
 import { varietyQueryOptions } from "#/queries/variety"
 import { fetchEvolutionChain, fetchGeneration, fetchPokemon, fetchSpecies } from "#/services/api"
@@ -13,8 +13,6 @@ export function speciesQueryOptions(nameOrId: string) {
 		queryKey: ["pokemon", "species", nameOrId],
 		queryFn: async ({ client }) => {
 			const pokemon = await fetchPokemon(nameOrId)
-			// This /pokemon is also the default variety — seed its cache so usePokemonDetail
-			// gets a cache hit instead of re-fetching identical data.
 			client.setQueryData(varietyQueryOptions(pokemon.name).queryKey, pokemon)
 			const species = await fetchSpecies(pokemon.species.url)
 			const [evolution, generation] = await Promise.all([
@@ -28,5 +26,3 @@ export function speciesQueryOptions(nameOrId: string) {
 		staleTime: Infinity
 	})
 }
-
-export const useSpecies = (nameOrId: string) => useSuspenseQuery(speciesQueryOptions(nameOrId))

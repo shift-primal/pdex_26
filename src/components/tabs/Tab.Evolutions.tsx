@@ -1,13 +1,8 @@
 import { EvolutionChain } from "#/components/details/EvolutionChain"
-import { usePokemonDetail } from "#/queries/detail"
-import { getRouteApi } from "@tanstack/react-router"
-
-const route = getRouteApi("/pokemon/$id")
+import { usePokemonDetailFromRoute } from "#/queries/detail"
 
 export const Evolutions = () => {
-	const { id } = route.useParams()
-	const { variety, form } = route.useSearch()
-	const { species } = usePokemonDetail(id, variety, form)
+	const { species } = usePokemonDetailFromRoute()
 
 	return (
 		<div>
