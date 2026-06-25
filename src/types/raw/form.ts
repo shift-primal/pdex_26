@@ -1,7 +1,7 @@
 import type { RawName, RawNamedResource } from "#/types/generic"
 import type { RawPokemonType, RawSpriteSet } from "#/types/raw/pokemon"
 
-export interface RawPokemonForm {
+export interface RawForm {
 	id: number
 	name: string
 	form_name: string

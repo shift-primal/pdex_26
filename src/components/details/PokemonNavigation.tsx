@@ -1,8 +1,11 @@
 import { Chip } from "#/components/Chip"
 import { formatText } from "#/lib/format"
 import type { Neighbors } from "#/queries/adjacent"
+import { usePrefetchPokemon } from "#/queries/prefetch"
 
 export const PokemonNavigation = ({ neighbors }: { neighbors: Neighbors }) => {
+	const prefetchPokemon = usePrefetchPokemon()
+
 	return (
 		<div className="flex justify-between w-full absolute top-1/2 -translate-y-1/2 px-64">
 			<Chip
@@ -13,6 +16,7 @@ export const PokemonNavigation = ({ neighbors }: { neighbors: Neighbors }) => {
 				})}
 				sprite={neighbors.prev.sprite}
 				label={formatText(neighbors.prev.name)}
+				prefetch={() => prefetchPokemon(neighbors.prev.name)}
 			/>
 			<Chip
 				to="/pokemon/$id"
@@ -22,6 +26,7 @@ export const PokemonNavigation = ({ neighbors }: { neighbors: Neighbors }) => {
 				})}
 				sprite={neighbors.next.sprite}
 				label={formatText(neighbors.next.name)}
+				prefetch={() => prefetchPokemon(neighbors.next.name)}
 			/>
 		</div>
 	)

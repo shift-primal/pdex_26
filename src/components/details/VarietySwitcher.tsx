@@ -3,6 +3,7 @@ import { TemporaryWrapper } from "#/components/TemporaryWrapper"
 import { defaultVarietyName, getVariants } from "#/lib/domain/pokemon.utils"
 import { formatText } from "#/lib/format"
 import { formQueryOptions } from "#/queries/form"
+import { usePrefetchVariety } from "#/queries/prefetch"
 import type { Species, Variety } from "#/types/pokemon"
 import { useSuspenseQueries } from "@tanstack/react-query"
 
@@ -13,6 +14,8 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 	const defaultName = defaultVarietyName(species)
 
 	const hasVarieties = variants.length > 0
+
+	const prefetchVariety = usePrefetchVariety()
 
 	return (
 		<TemporaryWrapper title="Varieties">
@@ -32,8 +35,9 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 										}
 									: { ...s, form: o.name, gender: undefined }
 							}
-							sprite={o.form.sprites.front.default}
+							sprite={o.form.sprites.front.default.normal}
 							title={formatText(o.form.displayName)}
+							prefetch={() => prefetchVariety(o.name)}
 						/>
 					))}
 				</div>

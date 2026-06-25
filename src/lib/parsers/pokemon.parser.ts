@@ -1,9 +1,9 @@
-import { TYPE_THEME } from "#/theme/elemental-types.theme"
+import { toDamage } from "#/lib/domain/pokemon.utils"
+import { TYPE_THEME } from "#/theme/pokemon-types.theme"
 import { STAT_THEME } from "#/theme/stats.theme"
 import type { RawName } from "#/types/generic"
 import type {
 	Ability,
-	ElementalTypeName,
 	Form,
 	PokemonEvolutionChainLink,
 	PokemonSprites,
@@ -11,14 +11,17 @@ import type {
 	PokemonType,
 	Species,
 	StatName,
+	TypeName,
+	TypeRef,
 	Variety
 } from "#/types/pokemon"
 import type { RawAbility } from "#/types/raw/ability"
 import type { RawEvolutionChain, RawEvolutionChainLink } from "#/types/raw/evolution"
-import type { RawPokemonForm } from "#/types/raw/form"
+import type { RawForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
 import type { RawPokemon, RawPokemonStat, RawPokemonType, RawSpriteSet } from "#/types/raw/pokemon"
 import type { RawFlavorText, RawSpecies } from "#/types/raw/species"
+import type { RawType } from "#/types/raw/type"
 
 const SPRITE_DIR = "/sprites/pokemon/"
 const SHOWDOWN_DIR = "/sprites/pokemon/other/showdown/"
@@ -29,23 +32,32 @@ const toShowdownUrl = (url: string | null): string | null =>
 function parseSprites(sprites: RawSpriteSet): PokemonSprites {
 	return {
 		front: {
-			default: toShowdownUrl(sprites.front_default),
-			shiny: toShowdownUrl(sprites.front_shiny),
-			female: toShowdownUrl(sprites.front_female)
+			default: {
+				normal: toShowdownUrl(sprites.front_default),
+				shiny: toShowdownUrl(sprites.front_shiny)
+			},
+			female: {
+				normal: toShowdownUrl(sprites.front_female),
+				shiny: toShowdownUrl(sprites.front_shiny_female)
+			}
 		},
 		back: {
-			default: sprites.back_default,
-			shiny: sprites.back_shiny,
-			female: sprites.back_female
+			default: {
+				normal: sprites.back_default,
+				shiny: sprites.back_shiny
+			},
+			female: {
+				normal: sprites.back_female,
+				shiny: sprites.back_shiny_female
+			}
 		}
 	}
 }
 
-function parseElementalTypes(types: RawPokemonType[]): PokemonType[] {
+function parsePokemonTypes(types: RawPokemonType[]): TypeRef[] {
 	return types
-		.map((t) => t.type.name)
-		.filter((name): name is ElementalTypeName => name in TYPE_THEME)
-		.map((name) => ({ name }))
+		.filter((t): t is RawPokemonType & { type: { name: TypeName } } => t.type.name in TYPE_THEME)
+		.map((t) => ({ slot: t.slot, name: t.type.name, url: t.type.url }))
 }
 
 function parseStats(stats: RawPokemonStat[]): PokemonStat[] {
@@ -86,6 +98,17 @@ export function selectAbility(ability: RawAbility): Ability {
 	}
 }
 
+export function selectType(type: RawType): PokemonType {
+	const d = type.damage_relations
+	return {
+		name: type.name as TypeName,
+		relations: {
+			incoming: toDamage(d.no_damage_from, d.half_damage_from, d.double_damage_from),
+			outgoing: toDamage(d.no_damage_to, d.half_damage_to, d.double_damage_to)
+		}
+	}
+}
+
 export function selectVariety(pokemon: RawPokemon): Variety {
 	return {
 		id: pokemon.id,
@@ -96,7 +119,7 @@ export function selectVariety(pokemon: RawPokemon): Variety {
 			isHidden: a.is_hidden
 		})),
 		sprites: parseSprites(pokemon.sprites),
-		types: parseElementalTypes(pokemon.types),
+		types: parsePokemonTypes(pokemon.types),
 		stats: parseStats(pokemon.stats),
 		height: pokemon.height,
 		weight: pokemon.weight,
@@ -105,7 +128,7 @@ export function selectVariety(pokemon: RawPokemon): Variety {
 	}
 }
 
-export function selectForm(form: RawPokemonForm): Form {
+export function selectForm(form: RawForm): Form {
 	const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
 
 	return {
@@ -117,7 +140,7 @@ export function selectForm(form: RawPokemonForm): Form {
 		isMega: form.is_mega,
 		isBattleOnly: form.is_battle_only,
 		sprites: parseSprites(form.sprites),
-		types: parseElementalTypes(form.types)
+		types: parsePokemonTypes(form.types)
 	}
 }
 

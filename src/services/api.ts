@@ -2,11 +2,12 @@ import { API_BASE_URL, MAX_DEX_LIMIT } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
 import type { RawAbility } from "#/types/raw/ability"
 import type { RawEvolutionChain } from "#/types/raw/evolution"
-import type { RawPokemonForm } from "#/types/raw/form"
+import type { RawForm } from "#/types/raw/form"
 import type { RawGeneration } from "#/types/raw/generation"
 import type { RawListResponse } from "#/types/raw/list"
 import type { RawPokemon } from "#/types/raw/pokemon"
 import type { RawSpecies } from "#/types/raw/species"
+import type { RawType } from "#/types/raw/type"
 
 async function fetchJson<T>(url: string, entity: string): Promise<T> {
 	const res = await fetch(url)
@@ -34,11 +35,11 @@ export async function fetchPokemon(name: string) {
 }
 
 export function fetchSpecies(url: string) {
-	return fetchJson<RawSpecies>(url, `Species`)
+	return fetchJson<RawSpecies>(url, "Species")
 }
 
 export function fetchPokemonForm(nameOrId: string) {
-	return fetchJson<RawPokemonForm>(`${API_BASE_URL}/pokemon-form/${nameOrId}`, `Pokemon form "${nameOrId}"`)
+	return fetchJson<RawForm>(`${API_BASE_URL}/pokemon-form/${nameOrId}`, "Pokemon form")
 }
 
 export function fetchEvolutionChain(url: string) {
@@ -51,6 +52,10 @@ export function fetchGeneration(url: string) {
 
 export function fetchAbility(url: string) {
 	return fetchJson<RawAbility>(url, "Ability")
+}
+
+export function fetchType(url: string) {
+	return fetchJson<RawType>(url, "Type")
 }
 
 export async function fetchPokemonList(): Promise<RawNamedResource[]> {

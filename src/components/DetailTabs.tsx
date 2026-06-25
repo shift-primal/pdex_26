@@ -6,11 +6,12 @@ import { TemporaryWrapper } from "#/components/TemporaryWrapper"
 import { useNavigate } from "@tanstack/react-router"
 
 const TAB_CONTENT: Record<Tab, React.ComponentType> = {
-	about: TabsContent.About,
-	stats: TabsContent.Stats,
-	evolutions: TabsContent.Evolutions,
-	varieties: TabsContent.Varieties,
-	abilities: TabsContent.Abilities
+	"about": TabsContent.About,
+	"stats": TabsContent.Stats,
+	"evolutions": TabsContent.Evolutions,
+	"varieties": TabsContent.Varieties,
+	"abilities": TabsContent.Abilities,
+	"relations": TabsContent.Relations
 }
 
 export const DetailTabs = ({ tab }: { tab: Tab }) => {

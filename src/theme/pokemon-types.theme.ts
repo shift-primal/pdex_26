@@ -1,7 +1,7 @@
 import * as TypeIcons from "#/assets/type-icons"
 import type { ComponentType, SVGProps } from "react"
 
-export type ElementalTypeName =
+export type TypeName =
 	| "normal"
 	| "fighting"
 	| "flying"
@@ -120,4 +120,4 @@ export const TYPE_THEME = {
 		color: TYPE_COLORS.fairy,
 		icon: TypeIcons.FairyIcon
 	}
-} as const satisfies Record<ElementalTypeName, TypeTheme>
+} as const satisfies Record<TypeName, TypeTheme>

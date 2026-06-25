@@ -6,6 +6,7 @@ import { ArrowDownIcon, ArrowRightIcon } from "@phosphor-icons/react"
 import { TemporaryWrapper } from "#/components/TemporaryWrapper"
 import { Chip } from "#/components/Chip"
 import { formatText } from "#/lib/format"
+import { usePrefetchPokemon } from "#/queries/prefetch"
 
 type SpriteMap = Map<string, string | undefined>
 type Direction = "row" | "col"
@@ -21,6 +22,8 @@ const EvolutionTree = ({
 }) => {
 	const children = node.evolvesTo
 
+	const prefetchPokemon = usePrefetchPokemon()
+
 	return (
 		<div className={dir === "row" ? "flex items-center gap-2" : "flex flex-col items-center gap-2"}>
 			<Chip
@@ -29,6 +32,7 @@ const EvolutionTree = ({
 				search={(prev) => ({ tab: prev.tab })}
 				sprite={spriteMap.get(node.name)}
 				label={formatText(node.name)}
+				prefetch={() => prefetchPokemon(node.name)}
 			/>
 
 			{children.length > 0 && (
@@ -57,7 +61,7 @@ export const EvolutionChain = ({ species }: { species: Species }) => {
 		queries: nodes.map((n) => varietyQueryOptions(n.name))
 	})
 	const spriteMap: SpriteMap = new Map(
-		nodes.map((n, i) => [n.name, results[i].data.sprites.front.default ?? undefined])
+		nodes.map((n, i) => [n.name, results[i].data.sprites.front.default.normal ?? undefined])
 	)
 
 	const isLinear = nodes.every((n) => n.evolvesTo.length <= 1)

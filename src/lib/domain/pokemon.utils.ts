@@ -1,6 +1,6 @@
 import { MAX_DEX_ID } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
-import type { Form, Gender, Species, Variety, VarietyRef } from "#/types/pokemon"
+import type { Damage, Form, Gender, Species, TypeName, Variety, VarietyRef } from "#/types/pokemon"
 
 /** The name of a species' default variety, e.g. `"charizard"` for the Charizard species. */
 export const defaultVarietyName = (species: Species): string | undefined =>
@@ -56,7 +56,7 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 	const formPair = findGenderPair(variety.forms)
 	if (formPair) return { kind: "forms", ...formPair }
 
-	if (variety.sprites.front.female) return { kind: "sprite" }
+	if (variety.sprites.front.female.normal) return { kind: "sprite" }
 
 	return { kind: "none" }
 }
@@ -65,11 +65,21 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 export const genderOf = (name: string): Gender => (name.endsWith("-female") ? "female" : "male")
 
 export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender): string | null => {
-	const front = form.sprites.front.default ? form.sprites.front : variety.sprites.front
-	return gender === "female" ? (front.female ?? front.default) : front.default
+	const front = form.sprites.front.default.normal ? form.sprites.front : variety.sprites.front
+	return gender === "female" ? (front.female.normal ?? front.default.normal) : front.default.normal
 }
 
 // Form classification — uses the /pokemon-form flags rather than name-suffix guessing.
 export const megaForms = (forms: Form[]) => forms.filter((f) => f.isMega)
 export const battleOnlyForms = (forms: Form[]) => forms.filter((f) => f.isBattleOnly)
 export const cosmeticForms = (forms: Form[]) => forms.filter((f) => !f.isDefault && !f.isMega && !f.isBattleOnly)
+
+// Extract type name from api named resource
+const extractNames = (arr: RawNamedResource[]): TypeName[] => arr.map((t) => t.name as TypeName)
+
+// convert to damage type
+export const toDamage = (no: RawNamedResource[], half: RawNamedResource[], double: RawNamedResource[]): Damage => ({
+	noDamage: extractNames(no),
+	halfDamage: extractNames(half),
+	doubleDamage: extractNames(double)
+})

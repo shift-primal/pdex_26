@@ -2,6 +2,7 @@ import { findAdjacentPokemon } from "#/lib/domain/pokemon.utils"
 import { pokemonListQueryOptions } from "#/queries/list"
 import { varietyQueryOptions } from "#/queries/variety"
 import { useQueries, useSuspenseQuery } from "@tanstack/react-query"
+import { useHydrated } from "@tanstack/react-router"
 
 export type Neighbor = { name: string; sprite: string | null }
 
@@ -11,6 +12,7 @@ export interface Neighbors {
 }
 
 export function useAdjacentPokemon(speciesId: number): Neighbors {
+	const hydrated = useHydrated()
 	const { data: dexList } = useSuspenseQuery(pokemonListQueryOptions())
 	const { prev, next } = findAdjacentPokemon(speciesId, dexList)
 
@@ -19,7 +21,7 @@ export function useAdjacentPokemon(speciesId: number): Neighbors {
 	})
 
 	return {
-		prev: { name: prev.name, sprite: prevQ.data?.sprites.front.default ?? null },
-		next: { name: next.name, sprite: nextQ.data?.sprites.front.default ?? null }
+		prev: { name: prev.name, sprite: hydrated ? (prevQ.data?.sprites.front.default.normal ?? null) : null },
+		next: { name: next.name, sprite: hydrated ? (nextQ.data?.sprites.front.default.normal ?? null) : null }
 	}
 }

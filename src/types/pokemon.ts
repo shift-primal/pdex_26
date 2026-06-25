@@ -1,7 +1,7 @@
-import type { ElementalTypeName } from "#/theme/elemental-types.theme"
+import type { TypeName } from "#/theme/pokemon-types.theme"
 import type { StatName } from "#/theme/stats.theme"
 
-export type { ElementalTypeName, StatName }
+export type { TypeName, StatName }
 
 export const GENDERS = ["male", "female"] as const
 export type Gender = (typeof GENDERS)[number]
@@ -20,8 +20,28 @@ export type Ability = {
 	effect: string
 }
 
+/** Reference to a type as listed on a variety (/pokemon) — no damage relations, just where to fetch it. */
+export type TypeRef = {
+	slot: number
+	name: TypeName
+	url: string
+}
+
+export type Damage = {
+	noDamage: TypeName[]
+	halfDamage: TypeName[]
+	doubleDamage: TypeName[]
+}
+
+type TypeRelations = {
+	incoming: Damage
+	outgoing: Damage
+}
+
+/** Resolved type details fetched from /type/{n}. */
 export type PokemonType = {
-	name: ElementalTypeName
+	name: TypeName
+	relations: TypeRelations
 }
 
 export type PokemonStat = {
@@ -29,16 +49,11 @@ export type PokemonStat = {
 	value: number
 }
 
-type PokemonSpriteSet = {
-	default: string | null
-	female: string | null
-	shiny: string | null
-}
+type SpriteVariants = { normal: string | null; shiny: string | null } // shiny or not
 
-export type PokemonSprites = {
-	front: PokemonSpriteSet
-	back: PokemonSpriteSet
-}
+type GenderedSprites = { default: SpriteVariants; female: SpriteVariants } // "default" = canonical / male / genderless
+
+export type PokemonSprites = { front: GenderedSprites; back: GenderedSprites }
 
 export type PokemonCries = {
 	latest: string | null
@@ -75,7 +90,7 @@ export type Variety = {
 	name: string
 	abilities: AbilityRef[]
 	sprites: PokemonSprites
-	types: PokemonType[]
+	types: TypeRef[]
 	stats: PokemonStat[]
 	height: number
 	weight: number
@@ -99,7 +114,7 @@ export type Form = {
 	isMega: boolean
 	isBattleOnly: boolean
 	sprites: PokemonSprites
-	types: PokemonType[]
+	types: TypeRef[]
 }
 
 export interface Species {

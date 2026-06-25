@@ -41,7 +41,6 @@ export const SpriteWrapper = ({
 			style={{ width: size, height: size }}
 			className={cn("relative flex items-end justify-center overflow-hidden", isShowdown ? "pixel-art" : "")}
 		>
-			{!src && <p>Sprite not found!</p>}
 			{src && (
 				<img
 					src={src}
