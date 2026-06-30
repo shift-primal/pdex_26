@@ -1,8 +1,8 @@
+import { useQueries, useSuspenseQuery } from "@tanstack/react-query"
+import { useHydrated } from "@tanstack/react-router"
 import { findAdjacentPokemon } from "#/lib/domain/pokemon.utils"
 import { pokemonListQueryOptions } from "#/queries/list"
 import { varietyQueryOptions } from "#/queries/variety"
-import { useQueries, useSuspenseQuery } from "@tanstack/react-query"
-import { useHydrated } from "@tanstack/react-router"
 
 export type Neighbor = { name: string; sprite: string | null }
 

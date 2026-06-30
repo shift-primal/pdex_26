@@ -1,7 +1,7 @@
-import { resolveGenderPresentation } from "#/lib/domain/pokemon.utils"
-import type { Gender, Species, Variety, Form } from "#/types/pokemon"
 import { useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
+import { resolveGenderPresentation } from "#/lib/domain/pokemon.utils"
+import type { Form, Gender, Species, Variety } from "#/types/pokemon"
 
 export const useNormalizeSearch = ({
 	species,

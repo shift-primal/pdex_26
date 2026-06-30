@@ -145,3 +145,4 @@ vite.config.ts.timestamp-*
 
 /docs.md
 /todo.md
+/.nitro/vite/services/ssr

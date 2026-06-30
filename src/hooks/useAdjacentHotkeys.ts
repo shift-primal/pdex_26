@@ -1,6 +1,6 @@
-import type { Neighbors } from "#/queries/adjacent"
 import { useHotkey } from "@tanstack/react-hotkeys"
 import { useNavigate } from "@tanstack/react-router"
+import type { Neighbors } from "#/queries/adjacent"
 
 export const useAdjacentHotkeys = (neighbors: Neighbors) => {
 	const navigate = useNavigate({ from: "/pokemon/$id" })

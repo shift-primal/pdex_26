@@ -1,5 +1,5 @@
-import { cn } from "#/lib/utils"
 import { useState } from "react"
+import { cn } from "#/lib/utils"
 
 const SHOWDOWN_DIR = "/other/showdown/"
 const HOME_DIR = "/other/home/"
@@ -14,13 +14,11 @@ export const SpriteWrapper = ({
 	spriteUrl,
 	fallbackUrl,
 	size = 64,
-	scale = 1,
 	alt = "Image"
 }: {
 	spriteUrl: string | null | undefined
 	fallbackUrl?: string | null
 	size?: number
-	scale?: number
 	alt?: string
 }) => {
 	const candidates = [...new Set([...buildTiers(spriteUrl), ...buildTiers(fallbackUrl)])]
@@ -45,7 +43,7 @@ export const SpriteWrapper = ({
 				<img
 					src={src}
 					alt={alt}
-					className={cn("max-h-full max-w-full origin-bottom", `scale-[${scale}]`)}
+					className="max-h-full max-w-full origin-bottom"
 					onError={() => setTier((t) => t + 1)}
 				/>
 			)}

@@ -15,4 +15,5 @@ export interface RawType {
 	id: number
 	name: string
 	damage_relations: RawDamageRelations
+	pokemon: { slot: number; pokemon: RawNamedResource }[]
 }

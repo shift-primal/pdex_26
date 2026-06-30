@@ -1,5 +1,5 @@
-import * as TypeIcons from "#/assets/type-icons"
 import type { ComponentType, SVGProps } from "react"
+import * as TypeIcons from "#/assets/type-icons"
 
 export type TypeName =
 	| "normal"
@@ -121,3 +121,6 @@ export const TYPE_THEME = {
 		icon: TypeIcons.FairyIcon
 	}
 } as const satisfies Record<TypeName, TypeTheme>
+
+/** All type names in canonical order — for filter chips and search-param validation. */
+export const TYPE_NAMES = Object.keys(TYPE_THEME) as [TypeName, ...TypeName[]]

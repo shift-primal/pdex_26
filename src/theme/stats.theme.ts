@@ -1,11 +1,11 @@
 import {
 	HeartIcon,
+	type Icon,
 	LightningIcon,
 	MagicWandIcon,
 	ShieldIcon,
 	ShieldPlusIcon,
-	SwordIcon,
-	type Icon
+	SwordIcon
 } from "@phosphor-icons/react"
 
 export type StatName = "hp" | "attack" | "defense" | "special-attack" | "special-defense" | "speed"

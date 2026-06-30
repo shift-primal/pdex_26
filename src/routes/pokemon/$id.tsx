@@ -1,8 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import z from "zod"
+import { PokemonDetails } from "#/components/details/PokemonDetails"
+import { ErrorState } from "#/components/feedback/ErrorState"
+import { LoadingState } from "#/components/feedback/LoadingState"
 import { TABS } from "#/config/general.config"
 import { fetchPokemon } from "#/services/api"
-import { PokemonDetails } from "#/components/details/PokemonDetails"
 import { GENDERS } from "#/types/pokemon"
 
 const searchSchema = z.object({
@@ -27,5 +29,9 @@ export const Route = createFileRoute("/pokemon/$id")({
 		}
 	},
 	component: PokemonDetailsPage,
-	validateSearch: searchSchema
+	validateSearch: searchSchema,
+	pendingComponent: LoadingState,
+	errorComponent: ({ error, reset }) => (
+		<ErrorState error={error} reset={reset} eyebrow="Not found" title="No such Pokémon" />
+	)
 })

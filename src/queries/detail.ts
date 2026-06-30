@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
+import { getRouteApi } from "@tanstack/react-router"
 import { defaultVarietyName } from "#/lib/domain/pokemon.utils"
 import { formQueryOptions } from "#/queries/form"
 import { speciesQueryOptions } from "#/queries/species"
 import { varietyQueryOptions } from "#/queries/variety"
-import { getRouteApi } from "@tanstack/react-router"
 
 const route = getRouteApi("/pokemon/$id")
 

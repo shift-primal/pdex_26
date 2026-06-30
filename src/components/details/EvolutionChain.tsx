@@ -1,12 +1,11 @@
+import { CaretDownIcon, CaretRightIcon } from "@phosphor-icons/react"
 import { useSuspenseQueries } from "@tanstack/react-query"
-import { flattenEvolutions } from "#/lib/domain/evolution.utils"
-import { varietyQueryOptions } from "#/queries/variety"
-import type { PokemonEvolutionChainLink, Species } from "#/types/pokemon"
-import { ArrowDownIcon, ArrowRightIcon } from "@phosphor-icons/react"
-import { TemporaryWrapper } from "#/components/TemporaryWrapper"
 import { Chip } from "#/components/Chip"
+import { flattenEvolutions } from "#/lib/domain/evolution.utils"
 import { formatText } from "#/lib/format"
 import { usePrefetchPokemon } from "#/queries/prefetch"
+import { varietyQueryOptions } from "#/queries/variety"
+import type { PokemonEvolutionChainLink, Species } from "#/types/pokemon"
 
 type SpriteMap = Map<string, string | undefined>
 type Direction = "row" | "col"
@@ -21,11 +20,10 @@ const EvolutionTree = ({
 	dir: Direction
 }) => {
 	const children = node.evolvesTo
-
 	const prefetchPokemon = usePrefetchPokemon()
 
 	return (
-		<div className={dir === "row" ? "flex items-center gap-2" : "flex flex-col items-center gap-2"}>
+		<div className={dir === "row" ? "flex items-center gap-3" : "flex flex-col items-center gap-3"}>
 			<Chip
 				to="/pokemon/$id"
 				params={{ id: node.name }}
@@ -37,12 +35,14 @@ const EvolutionTree = ({
 
 			{children.length > 0 && (
 				<>
-					{dir === "row" ? <ArrowRightIcon /> : <ArrowDownIcon />}
-
-					{/* children branch out based on dir; a vertical in row mode, a horizontal in col mode */}
+					{dir === "row" ? (
+						<CaretRightIcon className="size-5 shrink-0 text-ink-faint" weight="bold" />
+					) : (
+						<CaretDownIcon className="size-5 shrink-0 text-ink-faint" weight="bold" />
+					)}
 					<div
 						className={
-							dir === "row" ? "flex flex-wrap flex-col gap-6" : "flex flex-wrap justify-center gap-6"
+							dir === "row" ? "flex flex-col flex-wrap gap-4" : "flex flex-wrap justify-center gap-4"
 						}
 					>
 						{children.map((child) => (
@@ -57,23 +57,25 @@ const EvolutionTree = ({
 
 export const EvolutionChain = ({ species }: { species: Species }) => {
 	const nodes = flattenEvolutions(species.evolution)
-	const results = useSuspenseQueries({
-		queries: nodes.map((n) => varietyQueryOptions(n.name))
-	})
+	const results = useSuspenseQueries({ queries: nodes.map((n) => varietyQueryOptions(n.name)) })
 	const spriteMap: SpriteMap = new Map(
 		nodes.map((n, i) => [n.name, results[i].data.sprites.front.default.normal ?? undefined])
 	)
 
 	const isLinear = nodes.every((n) => n.evolvesTo.length <= 1)
-
 	const hasEvolutions = nodes.length > 1
 
+	if (!hasEvolutions) {
+		return (
+			<div className="reveal flex h-32 items-center justify-center rounded-2xl border border-dashed border-line">
+				<p className="font-mono text-xs uppercase tracking-widest text-ink-faint">Does not evolve</p>
+			</div>
+		)
+	}
+
 	return (
-		<TemporaryWrapper title="Evolutions">
-			{hasEvolutions && (
-				<EvolutionTree node={species.evolution} spriteMap={spriteMap} dir={isLinear ? "row" : "col"} />
-			)}
-			{!hasEvolutions && <p>No evolutions</p>}
-		</TemporaryWrapper>
+		<div className="reveal flex justify-center overflow-x-auto py-2">
+			<EvolutionTree node={species.evolution} spriteMap={spriteMap} dir={isLinear ? "row" : "col"} />
+		</div>
 	)
 }

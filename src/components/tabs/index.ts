@@ -1,6 +1,6 @@
+export { Abilities } from "#/components/tabs/Tab.Abilities"
 export { About } from "#/components/tabs/Tab.About"
 export { Evolutions } from "#/components/tabs/Tab.Evolutions"
-export { Abilities } from "#/components/tabs/Tab.Abilities"
+export { Relations } from "#/components/tabs/Tab.Relations"
 export { Stats } from "#/components/tabs/Tab.Stats"
 export { Varieties } from "#/components/tabs/Tab.Varieties"
-export { Relations } from "#/components/tabs/Tab.Relations"
