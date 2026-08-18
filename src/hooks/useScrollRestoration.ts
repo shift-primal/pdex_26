@@ -2,9 +2,6 @@ import { useLayoutEffect } from "react"
 
 const PREFIX = "dex-scroll:"
 
-/** Persists window scroll per result-set signature and restores it before paint.
- *  Returning from a detail page lands where you left off; changing the `key`
- *  (filters/search/sort) restores that view's saved spot, or jumps to top if new. */
 export const useScrollRestoration = (key: string) => {
 	useLayoutEffect(() => {
 		const saved = sessionStorage.getItem(PREFIX + key)

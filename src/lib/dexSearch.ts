@@ -5,5 +5,6 @@ export const matchesQuery = (entry: { id: number; name: string }, rawQuery: stri
 	const idQuery = q.replace(/^#/, "")
 	if (/^\d+$/.test(idQuery)) return entry.id === Number(idQuery)
 
-	return entry.name.includes(q.replace(/\s+/g, "-"))
+	const slugQuery = q.replace(/[.']/g, "").replace(/\s+/g, "-")
+	return entry.name.includes(slugQuery)
 }

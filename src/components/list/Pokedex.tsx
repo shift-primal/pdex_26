@@ -17,8 +17,8 @@ import { useTypeIndex } from "#/queries/typeIndex"
 
 const route = getRouteApi("/pokemon/")
 
-const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
-const ROW =
+export const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
+export const ROW =
 	"grid grid-cols-2 gap-x-3 pb-3 sm:grid-cols-3 sm:gap-x-4 sm:pb-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
 
 const GridSkeleton = () => (

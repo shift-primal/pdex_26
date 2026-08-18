@@ -2,7 +2,6 @@
 @import 'tailwindcss';
 
 :root {
-  /* Editorial "paper + ink" base — the backdrop the type-color card floats on */
   --paper: oklch(0.965 0.004 250);
   --paper-edge: oklch(0.93 0.006 250);
   --sheet: oklch(0.995 0.001 250);
@@ -11,14 +10,12 @@
   --ink-faint: oklch(0.66 0.012 270);
   --line: oklch(0.92 0.005 270);
 
-  /* Overridden per-page from the active pokémon's primary type */
   --type: oklch(0.62 0.16 250);
   --type-2: oklch(0.62 0.16 250);
   --on-type: #18181b;
 
   --radius: 1.75rem;
 
-  /* legacy aliases so any stray shadcn-era utilities keep resolving */
   --background: var(--paper);
   --foreground: var(--ink);
   --border: var(--line);
@@ -63,7 +60,6 @@ body,
   }
 }
 
-/* ---- atmosphere: faint type bloom behind the floating card ---- */
 .backdrop-bloom {
   position: fixed;
   inset: 0;
@@ -77,7 +73,6 @@ body,
   transition: background 0.6s ease;
 }
 
-/* grain overlay for a printed, editorial texture */
 .grain::after {
   content: '';
   position: absolute;
@@ -88,7 +83,6 @@ body,
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* faint dotted constellation, top-right of the hero (à la the reference cards) */
 .dotfield {
   background-image: radial-gradient(currentColor 1px, transparent 1.4px);
   background-size: 14px 14px;
@@ -96,7 +90,6 @@ body,
   mask-image: radial-gradient(closest-side at 75% 25%, black, transparent 85%);
 }
 
-/* ---- motion ---- */
 @keyframes rise {
   from { opacity: 0; transform: translateY(1.4rem); }
   to { opacity: 1; transform: none; }

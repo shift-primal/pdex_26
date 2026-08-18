@@ -20,6 +20,7 @@ export type TypeName =
 	| "dragon"
 	| "dark"
 	| "fairy"
+	| "stellar"
 
 type TypeTheme = {
 	color: string
@@ -44,7 +45,8 @@ const TYPE_COLORS = {
 	ice: "#74ccbe",
 	dragon: "#0b6dc3",
 	dark: "#5a5366",
-	fairy: "#eb8fe5"
+	fairy: "#eb8fe5",
+	stellar: "#8c7afc"
 } as const
 
 export const TYPE_THEME = {
@@ -119,8 +121,12 @@ export const TYPE_THEME = {
 	fairy: {
 		color: TYPE_COLORS.fairy,
 		icon: TypeIcons.FairyIcon
+	},
+	stellar: {
+		color: TYPE_COLORS.stellar,
+		icon: TypeIcons.StellarIcon
 	}
 } as const satisfies Record<TypeName, TypeTheme>
 
-/** All type names in canonical order — for filter chips and search-param validation. */
+/** all type names in canonical order — for filter chips and search-param validation*/
 export const TYPE_NAMES = Object.keys(TYPE_THEME) as [TypeName, ...TypeName[]]

@@ -9,12 +9,19 @@ interface ChipOwnProps {
 }
 
 const ChipBase = forwardRef<HTMLAnchorElement, ChipOwnProps & React.AnchorHTMLAttributes<HTMLAnchorElement>>(
-	({ sprite, label, prefetch, ...props }, ref) => (
+	({ sprite, label, prefetch, onMouseEnter, onFocus, ...props }, ref) => (
+		// biome-ignore lint/a11y/noStaticElementInteractions: href is injected via {...props} by createLink, invisible to the static check
 		<a
 			ref={ref}
 			{...props}
-			onMouseEnter={prefetch}
-			onFocus={prefetch}
+			onMouseEnter={(e) => {
+				onMouseEnter?.(e)
+				prefetch?.()
+			}}
+			onFocus={(e) => {
+				onFocus?.(e)
+				prefetch?.()
+			}}
 			className="group flex flex-col items-center gap-1 rounded-2xl border border-line bg-sheet p-3 transition hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--type)_45%,white)] hover:shadow-[0_12px_24px_-16px_var(--type)]"
 		>
 			<div className="grid size-16 place-items-center rounded-full bg-[color-mix(in_oklab,var(--type)_10%,white)]">

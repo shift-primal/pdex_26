@@ -16,8 +16,24 @@ export const SearchBar = ({
 	const onSearchRef = useRef(onSearch)
 	onSearchRef.current = onSearch
 
+	// tracks the last value *this component* emitted, so external defaultValue changes
+	// (browser back/forward, a "clear filters" action) resync the field without fighting
+	// the round-trip where our own debounced onSearch flows back in as a new defaultValue
+	const emittedRef = useRef(defaultValue)
+
 	useEffect(() => {
-		const t = setTimeout(() => onSearchRef.current(value.trim()), delay)
+		if (defaultValue !== emittedRef.current) {
+			emittedRef.current = defaultValue
+			setValue(defaultValue)
+		}
+	}, [defaultValue])
+
+	useEffect(() => {
+		const t = setTimeout(() => {
+			const trimmed = value.trim()
+			emittedRef.current = trimmed
+			onSearchRef.current(trimmed)
+		}, delay)
 		return () => clearTimeout(t)
 	}, [value, delay])
 

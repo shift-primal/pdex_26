@@ -1,7 +1,6 @@
 import { useSuspenseQueries } from "@tanstack/react-query"
 import { Chip } from "#/components/Chip"
-import { defaultVarietyName, getVariants } from "#/lib/domain/pokemon.utils"
-import { formatText } from "#/lib/format"
+import { defaultVarietyName, getVariants, resolveDisplayName } from "#/lib/domain/pokemon.utils"
 import { formQueryOptions } from "#/queries/form"
 import { usePrefetchVariety } from "#/queries/prefetch"
 import type { Species, Variety } from "#/types/pokemon"
@@ -38,8 +37,8 @@ export const VarietySwitcher = ({ species, activeVariety }: { species: Species; 
 							: { ...s, form: o.name, gender: undefined }
 					}
 					sprite={o.form.sprites.front.default.normal}
-					label={formatText(o.form.displayName)}
-					title={formatText(o.form.displayName)}
+					label={resolveDisplayName(o.form, species)}
+					title={resolveDisplayName(o.form, species)}
 					prefetch={() => prefetchVariety(o.name)}
 				/>
 			))}

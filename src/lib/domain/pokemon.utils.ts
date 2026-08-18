@@ -2,7 +2,7 @@ import { MAX_DEX_ID } from "#/config/general.config"
 import type { RawNamedResource } from "#/types/generic"
 import type { Damage, Form, Gender, Species, TypeName, Variety, VarietyRef } from "#/types/pokemon"
 
-/** The name of a species' default variety, e.g. `"charizard"` for the Charizard species. */
+/** name of a species default variety, e.g. "charizard" for the Charizard species */
 export const defaultVarietyName = (species: Species): string | undefined =>
 	species.varieties.find((v) => v.isDefault)?.name
 
@@ -63,6 +63,12 @@ export function resolveGenderPresentation(species: Species, variety: Variety): G
 
 /** defaults to male */
 export const genderOf = (name: string): Gender => (name.endsWith("-female") ? "female" : "male")
+
+// A form's own displayName falls back to its raw slug (e.g. "squirtle") when PokeAPI has no
+// localized name for it — true for every default/base form, only real alt forms (Mega, regional
+// variants, ...) have one. When that happens, fall back to the species' own localized name instead.
+export const resolveDisplayName = (form: Form, species: Species): string =>
+	form.displayName !== form.name ? form.displayName : species.displayName
 
 export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender): string | null => {
 	const front = form.sprites.front.default.normal ? form.sprites.front : variety.sprites.front

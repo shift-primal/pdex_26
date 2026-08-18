@@ -15,7 +15,7 @@ const config = defineConfig({
 			enhancedLogs: { enabled: false },
 			consolePiping: { enabled: false }
 		}),
-		nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+		nitro(),
 		tailwindcss(),
 		tanstackStart(),
 		svgr(),

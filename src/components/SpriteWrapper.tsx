@@ -21,7 +21,6 @@ export const SpriteWrapper = ({
 	fallbackUrl?: string | null
 	size?: number
 	alt?: string
-	/** Scale the sprite up to fill the box (default only caps it at its native size). */
 	fill?: boolean
 }) => {
 	const candidates = [...new Set([...buildTiers(spriteUrl), ...buildTiers(fallbackUrl)])]
@@ -37,20 +36,38 @@ export const SpriteWrapper = ({
 	const src = candidates[tier] ?? null
 	const isShowdown = !!src?.includes(SHOWDOWN_DIR)
 
+	const [loadedSrc, setLoadedSrc] = useState<string | null>(null)
+	const isLoaded = loadedSrc === src
+	const spinnerSize = Math.min(40, Math.max(14, Math.round(size * 0.32)))
+
 	return (
 		<div
 			style={{ width: size, height: size }}
 			className={cn("relative flex items-end justify-center overflow-hidden", isShowdown ? "pixel-art" : "")}
 		>
 			{src && (
-				<img
-					src={src}
-					alt={alt}
-					className={cn(
-						fill ? "h-full w-full object-contain object-bottom" : "max-h-full max-w-full origin-bottom"
+				<>
+					{!isLoaded && (
+						<div className="pointer-events-none absolute inset-0 grid place-items-center">
+							<div
+								className="animate-spin rounded-full border-2 border-line border-t-type"
+								style={{ width: spinnerSize, height: spinnerSize }}
+							/>
+						</div>
 					)}
-					onError={() => setTier((t) => t + 1)}
-				/>
+					<img
+						src={src}
+						alt={alt}
+						draggable={false}
+						className={cn(
+							"select-none",
+							fill ? "h-full w-full object-contain object-bottom" : "max-h-full max-w-full origin-bottom",
+							!isLoaded && "invisible"
+						)}
+						onLoad={() => setLoadedSrc(src)}
+						onError={() => setTier((t) => t + 1)}
+					/>
+				</>
 			)}
 		</div>
 	)

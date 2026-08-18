@@ -66,13 +66,13 @@ export const Home = () => {
 			<section className="grain relative overflow-hidden" style={{ background: HERO_BG }}>
 				<div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:py-36">
 					<p className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.35em] text-ink-soft">
-						Gotta catalogue ’em all
+						Gotta fetch ’em all
 					</p>
 					<h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.92] tracking-tight text-ink sm:text-7xl lg:text-8xl">
 						Pokédex
 					</h1>
 					<p className="mt-5 max-w-xl text-balance font-display text-lg text-ink-soft sm:text-xl">
-						Every Pokémon, one search away — sprites, stats, types, evolutions and more, colour-coded by
+						Every Pokémon, one search away — sprites, stats, types, evolutions and more, color-coded by
 						type.
 					</p>
 
@@ -91,7 +91,7 @@ export const Home = () => {
 			</section>
 
 			{/* ───────────────── featured ───────────────── */}
-			<section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
+			<section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
 				<div className="mb-7 flex items-end justify-between gap-4">
 					<div>
 						<p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.3em] text-ink-faint">

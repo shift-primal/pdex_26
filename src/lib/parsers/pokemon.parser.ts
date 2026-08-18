@@ -87,8 +87,9 @@ function parseFlavorText(flavorTextEntries: RawFlavorText[]): string {
 		: "unknown"
 }
 
+const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
+
 export function selectAbility(ability: RawAbility): Ability {
-	const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
 	const enEffect = ability.effect_entries.find((e) => e.language.name === "en")
 
 	return {
@@ -129,8 +130,6 @@ export function selectVariety(pokemon: RawPokemon): Variety {
 }
 
 export function selectForm(form: RawForm): Form {
-	const en = (entries: RawName[]) => entries.find((n) => n.language.name === "en")?.name
-
 	return {
 		name: form.name,
 		formName: form.form_name,
@@ -153,6 +152,7 @@ export function selectSpecies([pokemon, species, evolution, generation]: [
 	return {
 		id: species.id,
 		name: species.name,
+		displayName: en(species.names) ?? species.name,
 		captureRate: species.capture_rate,
 		classification: {
 			isBaby: species.is_baby,

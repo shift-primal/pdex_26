@@ -1,26 +1,25 @@
 import type { TypeName } from "#/theme/pokemon-types.theme"
 import type { StatName } from "#/theme/stats.theme"
 
-export type { TypeName, StatName }
+export type { StatName, TypeName }
 
 export const GENDERS = ["male", "female"] as const
 export type Gender = (typeof GENDERS)[number]
 
-/** Reference to an ability as listed on a variety (/pokemon) — no effect text, just where to fetch it. */
 export type AbilityRef = {
 	name: string
 	url: string
 	isHidden: boolean
 }
 
-/** Resolved ability detail fetched from /ability/{n}. */
+/** ability detail fetched from /ability/n */
 export type Ability = {
 	name: string
 	displayName: string
 	effect: string
 }
 
-/** Reference to a type as listed on a variety (/pokemon) — no damage relations, just where to fetch it. */
+/** ref to a type as listed on a variety (/pokemon) */
 export type TypeRef = {
 	slot: number
 	name: TypeName
@@ -38,7 +37,7 @@ type TypeRelations = {
 	outgoing: Damage
 }
 
-/** Resolved type details fetched from /type/{n}. */
+/** type details fetched from /type/n */
 export type PokemonType = {
 	name: TypeName
 	relations: TypeRelations
@@ -79,7 +78,7 @@ export type PokemonGeneration = {
 	pokemon: string[]
 }
 
-/** A reference to one of a species' varieties (the API's `varieties` list). */
+/** reference to species' varieties (APIs varieties list) */
 export type VarietyRef = {
 	name: string
 	isDefault: boolean
@@ -99,8 +98,8 @@ export type Variety = {
 }
 
 /**
- * A `/pokemon-form` — a sub-variation of a single Variety, usually cosmetic
- * (e.g. Unown letters, Vivillon patterns). Most varieties have only the default.
+ *  form - a sub-variation of a single Variety, cosmetic
+ * (e.g. Unown letters, Vivillon patterns)
  */
 export type Form = {
 	name: string
@@ -120,6 +119,8 @@ export type Form = {
 export interface Species {
 	id: number
 	name: string
+	/** localized english names, e.g. "Mr. Mime", "Ho-Oh" — the source of truth for a Pokémon's real display name (details) */
+	displayName: string
 	captureRate: number
 	classification: PokemonClassification
 	color: string

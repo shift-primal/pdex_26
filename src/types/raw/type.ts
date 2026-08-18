@@ -10,7 +10,6 @@ type RawDamageRelations = {
 	double_damage_from: RawNamedResource[]
 }
 
-/** Detail from `/type/{n}` — parallels RawAbility from `/ability/{n}`. */
 export interface RawType {
 	id: number
 	name: string

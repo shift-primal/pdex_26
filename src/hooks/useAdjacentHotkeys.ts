@@ -6,9 +6,9 @@ export const useAdjacentHotkeys = (neighbors: Neighbors) => {
 	const navigate = useNavigate({ from: "/pokemon/$id" })
 
 	useHotkey("ArrowLeft", () =>
-		navigate({ to: "/pokemon/$id", params: { id: neighbors.prev.name }, search: (s) => ({ ...s }) })
+		navigate({ to: "/pokemon/$id", params: { id: neighbors.prev.name }, search: (s) => ({ tab: s.tab }) })
 	)
 	useHotkey("ArrowRight", () =>
-		navigate({ to: "/pokemon/$id", params: { id: neighbors.next.name }, search: (s) => ({ ...s }) })
+		navigate({ to: "/pokemon/$id", params: { id: neighbors.next.name }, search: (s) => ({ tab: s.tab }) })
 	)
 }

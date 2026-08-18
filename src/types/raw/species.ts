@@ -1,4 +1,4 @@
-import type { RawNamedResource } from "#/types/generic"
+import type { RawName, RawNamedResource } from "#/types/generic"
 
 export type RawFlavorText = {
 	flavor_text: string
@@ -28,6 +28,7 @@ export interface RawSpecies {
 	is_legendary: boolean
 	is_mythical: boolean
 	name: string
+	names: RawName[]
 	shape: RawNamedResource
 	varieties: RawPokemonSpeciesVariety[]
 }
