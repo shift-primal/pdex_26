@@ -7,7 +7,13 @@ import type { RawPokemon } from "#/types/raw/pokemon"
 export function varietyQueryOptions(nameOrId: string) {
 	return queryOptions<RawPokemon, Error, Variety>({
 		queryKey: ["pokemon", "variety", nameOrId],
-		queryFn: () => fetchPokemon(nameOrId),
+		queryFn: async ({ client }) => {
+			const pokemon = await fetchPokemon(nameOrId)
+			if (pokemon.name !== nameOrId) {
+				client.setQueryData(varietyQueryOptions(pokemon.name).queryKey, pokemon)
+			}
+			return pokemon
+		},
 		select: selectVariety,
 		staleTime: Infinity
 	})

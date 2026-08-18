@@ -25,7 +25,11 @@ export const Route = createFileRoute("/pokemon/$id")({
 	beforeLoad: async ({ params, search }) => {
 		if (/^\d+$/.test(params.id)) {
 			const pokemon = await fetchPokemon(params.id)
-			throw redirect({ to: "/pokemon/$id", params: { id: pokemon.name }, search })
+			throw redirect({
+				to: "/pokemon/$id",
+				params: { id: pokemon.name },
+				search: { ...search, variety: pokemon.is_default ? search.variety : pokemon.name }
+			})
 		}
 	},
 	component: PokemonDetailsPage,
