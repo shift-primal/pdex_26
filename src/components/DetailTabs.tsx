@@ -27,8 +27,8 @@ export const DetailTabs = ({ tab }: { tab: Tab }) => {
 		startTransition(() => navigate({ replace: true, search: (s) => ({ ...s, tab: v }) }))
 
 	return (
-		<Tabs.Root value={tab} onValueChange={(v) => onTabChange(v as Tab)} className="flex min-h-0 flex-1 flex-col">
-			<Tabs.List className="scrollbar-none -mx-1 flex shrink-0 gap-1 overflow-x-auto px-1">
+		<Tabs.Root value={tab} onValueChange={(v) => onTabChange(v as Tab)} className="flex flex-col">
+			<Tabs.List className="scrollbar-none -mx-1 flex shrink-0 gap-1 overflow-x-auto px-1 md:gap-1.5">
 				{TABS.map((t) => (
 					<Tabs.Trigger
 						key={t}
@@ -45,12 +45,7 @@ export const DetailTabs = ({ tab }: { tab: Tab }) => {
 				))}
 			</Tabs.List>
 
-			<div
-				className={cn(
-					"mt-4 min-h-0 min-w-0 flex-1 overflow-y-auto pr-0.5",
-					isPending && "opacity-50 transition-opacity"
-				)}
-			>
+			<div className={cn("mt-6 min-w-0", isPending && "opacity-50 transition-opacity")}>
 				<Suspense fallback={<TabFallback />}>
 					{TABS.map((t) => {
 						const Content = TAB_CONTENT[t]

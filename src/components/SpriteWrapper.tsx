@@ -14,12 +14,15 @@ export const SpriteWrapper = ({
 	spriteUrl,
 	fallbackUrl,
 	size = 64,
-	alt = "Image"
+	alt = "Image",
+	fill = false
 }: {
 	spriteUrl: string | null | undefined
 	fallbackUrl?: string | null
 	size?: number
 	alt?: string
+	/** Scale the sprite up to fill the box (default only caps it at its native size). */
+	fill?: boolean
 }) => {
 	const candidates = [...new Set([...buildTiers(spriteUrl), ...buildTiers(fallbackUrl)])]
 
@@ -43,7 +46,9 @@ export const SpriteWrapper = ({
 				<img
 					src={src}
 					alt={alt}
-					className="max-h-full max-w-full origin-bottom"
+					className={cn(
+						fill ? "h-full w-full object-contain object-bottom" : "max-h-full max-w-full origin-bottom"
+					)}
 					onError={() => setTier((t) => t + 1)}
 				/>
 			)}

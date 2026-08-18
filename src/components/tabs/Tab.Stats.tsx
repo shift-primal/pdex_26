@@ -18,7 +18,7 @@ export const Stats = () => {
 	const total = activeVariety.stats.reduce((sum, s) => sum + s.value, 0)
 
 	return (
-		<div className="reveal flex flex-col gap-3.5">
+		<div className="reveal grid grid-cols-1 gap-x-12 gap-y-3.5 lg:grid-cols-2">
 			{activeVariety.stats.map((s, i) => {
 				const { color, icon: Icon } = STAT_THEME[s.name]
 				const pct = Math.min(s.value / SCALE_MAX, 1) * 100
@@ -41,7 +41,7 @@ export const Stats = () => {
 				)
 			})}
 
-			<div className="mt-1 flex items-baseline justify-between border-t border-line pt-4">
+			<div className="mt-1 flex items-baseline justify-between border-t border-line pt-4 lg:col-span-2">
 				<span className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-ink-faint">
 					Total
 				</span>
