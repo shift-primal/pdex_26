@@ -78,8 +78,8 @@ body,
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: soft-light;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -98,15 +98,9 @@ body,
 }
 @keyframes ghost {
   from { opacity: 0; transform: translateY(1.5rem) scale(1.06); }
-  to { opacity: 0.14; transform: none; }
+  to { opacity: 0.1; transform: none; }
 }
-@keyframes floaty {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-11px); }
-}
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
+
 @keyframes barGrow {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -114,14 +108,11 @@ body,
 
 .reveal { opacity: 0; animation: rise 0.75s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
 .fade-in { opacity: 0; animation: fade 0.8s ease both; }
-.bloom-in { opacity: 0; animation: bloom 0.85s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
 .ghost-in { opacity: 0; animation: ghost 1s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
-.floaty { animation: floaty 4.5s ease-in-out infinite; }
-.spin-slow { animation: spin-slow 26s linear infinite; }
 .bar-fill { transform-origin: left; animation: barGrow 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .fade-in, .bloom-in, .ghost-in, .floaty, .spin-slow, .bar-fill {
+  .reveal, .fade-in, .ghost-in, .bar-fill {
     animation: none;
     opacity: 1;
   }

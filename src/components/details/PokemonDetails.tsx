@@ -54,7 +54,7 @@ export const PokemonDetails = ({
 	const classifications = tags(species.classification)
 	const flavor = species.flavorText?.replace(/\s+/g, " ").trim()
 	const eyebrow = `Gen ${ROMAN[species.generation.id] ?? species.generation.id} · ${formatText(species.generation.region)}`
-	const heroGradient = "linear-gradient(150deg, var(--type) 0%, color-mix(in oklab, var(--type) 74%, white) 100%)"
+	const heroGradient = "linear-gradient(150deg, var(--type) 0%, color-mix(in oklab, var(--type) 85%, white) 100%)"
 
 	const TypeTags = (
 		<>
@@ -176,7 +176,7 @@ export const PokemonDetails = ({
 									className="pointer-events-none absolute left-1/2 top-1/2 size-96 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
 									style={{
 										background:
-											"radial-gradient(circle, color-mix(in oklab, white 55%, transparent), transparent 70%)"
+											"radial-gradient(circle, color-mix(in oklab, white 30%, transparent), transparent 70%)"
 									}}
 								/>
 								<SpriteWrapper
