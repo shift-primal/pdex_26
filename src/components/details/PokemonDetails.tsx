@@ -1,4 +1,5 @@
 import PokeballIcon from "#/assets/pokeball.svg?react"
+import { ClassificationBadge } from "#/components/ClassificationBadge"
 import { DetailTabs } from "#/components/DetailTabs"
 import { BackButton } from "#/components/details/BackButton"
 import { GenderSwitcher } from "#/components/details/GenderSwitcher"
@@ -14,13 +15,16 @@ import { resolveDisplayName, resolveFrontSprite } from "#/lib/domain/pokemon.uti
 import { formatId, formatText } from "#/lib/format"
 import { useAdjacentPokemon } from "#/queries/adjacent"
 import { usePokemonDetail } from "#/queries/detail"
+import type { ClassificationName } from "#/theme/classification.theme"
 import { TYPE_THEME } from "#/theme/pokemon-types.theme"
 import type { Gender, Species, TypeRef } from "#/types/pokemon"
 
 const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
 
-const tags = (c: Species["classification"]) =>
-	[c.isBaby && "Baby", c.isLegendary && "Legendary", c.isMythical && "Mythical"].filter(Boolean) as string[]
+const tags = (c: Species["classification"]): ClassificationName[] =>
+	[c.isBaby && "baby", c.isLegendary && "legendary", c.isMythical && "mythical"].filter(
+		Boolean
+	) as ClassificationName[]
 
 export const PokemonDetails = ({
 	id,
@@ -56,20 +60,14 @@ export const PokemonDetails = ({
 	const eyebrow = `Gen ${ROMAN[species.generation.id] ?? species.generation.id} · ${formatText(species.generation.region)}`
 	const heroGradient = "linear-gradient(150deg, var(--type) 0%, color-mix(in oklab, var(--type) 85%, white) 100%)"
 
-	const TypeTags = (
-		<>
-			{types.map((t) => (
-				<TypeBadge key={t.name} type={t.name} variant="glass" />
-			))}
+	const TypeTags = types.map((t) => <TypeBadge key={t.name} type={t.name} variant="glass" />)
+
+	const ClassificationTags = classifications.length > 0 && (
+		<div className="mt-2 flex flex-wrap items-center gap-2">
 			{classifications.map((c) => (
-				<span
-					key={c}
-					className="rounded-full border border-current px-2.5 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-widest opacity-80"
-				>
-					{c}
-				</span>
+				<ClassificationBadge key={c} classification={c} size="sm" variant="glass" />
 			))}
-		</>
+		</div>
 	)
 
 	const MobileView = (
@@ -125,7 +123,10 @@ export const PokemonDetails = ({
 					>
 						{title}
 					</h1>
-					<div className="mt-3 flex flex-wrap items-center gap-2">{TypeTags}</div>
+					<div className="mt-3 flex flex-col items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2">
+						{TypeTags}
+					</div>
+					{ClassificationTags}
 				</div>
 			</header>
 
@@ -207,7 +208,8 @@ export const PokemonDetails = ({
 						<h1 className="font-display text-7xl font-extrabold leading-[0.92] tracking-tight wrap-anywhere xl:text-8xl 2xl:text-[7rem]">
 							{title}
 						</h1>
-						<div className="mt-6 flex flex-wrap items-center gap-2.5">{TypeTags}</div>
+						<div className="mt-6 flex items-center gap-2.5">{TypeTags}</div>
+						{ClassificationTags}
 						{flavor && (
 							<p className="mt-8 max-w-2xl font-display text-xl leading-relaxed opacity-90 2xl:text-2xl">
 								{flavor}

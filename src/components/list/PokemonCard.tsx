@@ -60,7 +60,7 @@ export const PokemonCard = ({ id, name, types: typesProp }: { id: number; name: 
 
 			<span className="z-10 mt-1 line-clamp-1 text-center font-display text-sm font-bold text-ink">{label}</span>
 
-			<div className="z-10 mt-2 flex min-h-5 flex-wrap justify-center gap-1">
+			<div className="z-10 mt-2 flex min-h-5 flex-col items-center gap-1 sm:flex-row sm:justify-center">
 				{types?.map((t) => (
 					<TypeBadge key={t} type={t} size="sm" />
 				))}
