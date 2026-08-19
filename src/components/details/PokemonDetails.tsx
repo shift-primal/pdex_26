@@ -71,9 +71,9 @@ export const PokemonDetails = ({
 	)
 
 	const MobileView = (
-		<div className="mx-auto w-full max-w-2xl px-4 py-5 sm:px-6">
+		<div className="w-full">
 			<header
-				className="grain relative z-0 overflow-hidden rounded-t-(--radius) px-7 pb-12 pt-6 text-(--on-type)"
+				className="grain relative z-0 overflow-hidden px-7 pb-12 pt-6 text-(--on-type)"
 				style={{ background: heroGradient }}
 			>
 				<div className="relative flex items-center justify-between">
@@ -123,27 +123,30 @@ export const PokemonDetails = ({
 					>
 						{title}
 					</h1>
-					<div className="mt-3 flex flex-col items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2">
-						{TypeTags}
-					</div>
+					<div className="mt-3 flex items-start gap-1.5 sm:flex-row sm:items-center sm:gap-2">{TypeTags}</div>
 					{ClassificationTags}
 				</div>
 			</header>
 
-			<main className="relative z-10 -mt-6 rounded-(--radius) bg-sheet px-6 pb-8 pt-6 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--type)_70%,black)] sm:px-8">
+			<main className="relative z-10 -mt-6 rounded-(--radius) bg-sheet px-6 pb-28 pt-6 shadow-[0_30px_80px_-40px_color-mix(in_oklab,var(--type)_70%,black)] sm:px-8">
 				{flavor && (
 					<p
-						className="reveal mb-5 max-w-prose font-display text-base leading-snug text-ink-soft"
+						className="mb-5 max-w-prose font-display text-base leading-snug text-ink-soft"
 						style={{ animationDelay: "0.16s" }}
 					>
 						{flavor}
 					</p>
 				)}
 				<DetailTabs tab={tab} />
-				<div className="mt-7 border-t border-line pt-4">
-					<PokemonNavigation neighbors={neighbors} />
-				</div>
 			</main>
+
+			{/* fixed so prev/next stay reachable without scrolling to the bottom */}
+			<div
+				className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper/95 px-4 py-2.5 backdrop-blur-md"
+				style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}
+			>
+				<PokemonNavigation neighbors={neighbors} />
+			</div>
 		</div>
 	)
 
