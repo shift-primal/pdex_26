@@ -12,7 +12,7 @@ type Dir = "asc" | "desc"
 const SORT_LABEL: Record<Sort, string> = { id: "Dex №", name: "A–Z" }
 
 const TypeChip = ({ type, active, onClick }: { type: TypeName; active: boolean; onClick: () => void }) => {
-	const { color, Icon, ink } = typeVisual(type)
+	const { color, Icon } = typeVisual(type)
 	return (
 		<button
 			type="button"
@@ -21,7 +21,7 @@ const TypeChip = ({ type, active, onClick }: { type: TypeName; active: boolean; 
 			title={formatText(type)}
 			style={
 				active
-					? { backgroundColor: color, color: ink, boxShadow: `0 6px 16px -9px ${color}` }
+					? { backgroundColor: color, color: "white", boxShadow: `0 6px 16px -9px ${color}` }
 					: { borderColor: `color-mix(in oklab, ${color} 40%, white)` }
 			}
 			className={cn(
@@ -30,10 +30,10 @@ const TypeChip = ({ type, active, onClick }: { type: TypeName; active: boolean; 
 			)}
 		>
 			{active ? (
-				<Icon className="size-3.5 [&_path]:fill-current" style={{ color: ink }} />
+				<Icon className="size-3.5 [&_path]:fill-current" style={{ color: "white" }} />
 			) : (
 				<span className="grid size-4 place-items-center rounded-full" style={{ backgroundColor: color }}>
-					<Icon className="size-2.5 [&_path]:fill-current" style={{ color: ink }} />
+					<Icon className="size-2.5 [&_path]:fill-current" style={{ color: "white" }} />
 				</span>
 			)}
 			{type}

@@ -59,7 +59,7 @@ export const PokemonDetails = ({
 	const TypeTags = (
 		<>
 			{types.map((t) => (
-				<TypeBadge key={t.name} type={t.name} />
+				<TypeBadge key={t.name} type={t.name} variant="glass" />
 			))}
 			{classifications.map((c) => (
 				<span
@@ -96,6 +96,7 @@ export const PokemonDetails = ({
 				<div className="relative mx-auto flex h-56 w-full items-center justify-center">
 					{sprite && (
 						<div className="fade-in relative">
+							<PokeballIcon className="pointer-events-none absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 text-current opacity-[0.08] [&_path]:fill-current" />
 							<div
 								className="pointer-events-none absolute left-1/2 top-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
 								style={{
@@ -108,7 +109,7 @@ export const PokemonDetails = ({
 								fallbackUrl={fallbackSprite}
 								alt={title}
 								size={208}
-								scale={2.2}
+								scale={1.8}
 							/>
 						</div>
 					)}

@@ -36,7 +36,7 @@ export const DetailTabs = ({ tab }: { tab: Tab }) => {
 						className={cn(
 							"relative shrink-0 whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[0.7rem] font-bold uppercase tracking-widest transition",
 							"text-ink-faint hover:text-ink-soft",
-							"data-[state=active]:bg-[color-mix(in_oklab,var(--type)_14%,white)] data-[state=active]:text-[color-mix(in_oklab,var(--type)_55%,black)]",
+							"data-[state=active]:bg-[color-mix(in_oklab,var(--type)_75%,white)] data-[state=active]:text-[color-mix(in_oklab,var(--type)_55%,black)]",
 							"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-type"
 						)}
 					>

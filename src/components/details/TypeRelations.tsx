@@ -31,7 +31,7 @@ const TypeRow = ({ entries }: { entries: [TypeName, number][] }) => {
 			{entries
 				.sort((a, b) => b[1] - a[1])
 				.map(([type, mult]) => {
-					const { color, Icon, ink } = typeVisual(type)
+					const { color, Icon } = typeVisual(type)
 					return (
 						<div
 							key={type}
@@ -41,7 +41,7 @@ const TypeRow = ({ entries }: { entries: [TypeName, number][] }) => {
 								className="grid size-6 place-items-center rounded-full"
 								style={{ backgroundColor: color }}
 							>
-								<Icon className="size-3.5 [&_path]:fill-current" style={{ color: ink }} />
+								<Icon className="size-3.5 [&_path]:fill-current" style={{ color: "white" }} />
 							</span>
 							<span className="font-mono text-[0.7rem] font-bold text-ink-soft">
 								{MULT_LABEL[mult] ?? `${mult}×`}

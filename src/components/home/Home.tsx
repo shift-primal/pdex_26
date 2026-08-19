@@ -12,9 +12,9 @@ const FEATURED: { id: number; name: string; types: TypeName[] }[] = [
 	{ id: 7, name: "squirtle", types: ["water"] },
 	{ id: 25, name: "pikachu", types: ["electric"] },
 	{ id: 94, name: "gengar", types: ["ghost", "poison"] },
-	{ id: 133, name: "eevee", types: ["normal"] },
-	{ id: 149, name: "dragonite", types: ["dragon", "flying"] },
-	{ id: 150, name: "mewtwo", types: ["psychic"] }
+	{ id: 483, name: "dialga", types: ["steel", "dragon"] },
+	{ id: 448, name: "lucario", types: ["fighting", "steel"] },
+	{ id: 149, name: "dragonite", types: ["dragon", "flying"] }
 ]
 
 const t = TYPE_THEME
