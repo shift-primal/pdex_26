@@ -4,7 +4,7 @@ import { PokemonDetails } from "#/components/details/PokemonDetails"
 import { ErrorState } from "#/components/feedback/ErrorState"
 import { LoadingState } from "#/components/feedback/LoadingState"
 import { TABS } from "#/config/general.config"
-import { fetchPokemon } from "#/services/api"
+import { varietyQueryOptions } from "#/queries/variety"
 import { GENDERS } from "#/types/pokemon"
 
 const searchSchema = z.object({
@@ -22,9 +22,9 @@ const PokemonDetailsPage = () => {
 }
 
 export const Route = createFileRoute("/pokemon/$id")({
-	beforeLoad: async ({ params, search }) => {
+	beforeLoad: async ({ params, search, context }) => {
 		if (/^\d+$/.test(params.id)) {
-			const pokemon = await fetchPokemon(params.id)
+			const pokemon = await context.queryClient.fetchQuery(varietyQueryOptions(params.id))
 			throw redirect({
 				to: "/pokemon/$id",
 				params: { id: pokemon.name },

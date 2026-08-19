@@ -1,10 +1,9 @@
 import { CaretDownIcon, FunnelIcon, SortAscendingIcon, SortDescendingIcon, XIcon } from "@phosphor-icons/react"
 import { useState } from "react"
-import { readableInk } from "#/lib/color"
 import { formatText } from "#/lib/format"
 import { SORT_FIELDS } from "#/lib/schemas/searchPokemon"
 import { cn } from "#/lib/utils"
-import { TYPE_NAMES, TYPE_THEME } from "#/theme/pokemon-types.theme"
+import { TYPE_NAMES, typeVisual } from "#/theme/pokemon-types.theme"
 import type { TypeName } from "#/types/pokemon"
 
 type Sort = (typeof SORT_FIELDS)[number]
@@ -13,8 +12,7 @@ type Dir = "asc" | "desc"
 const SORT_LABEL: Record<Sort, string> = { id: "Dex №", name: "A–Z" }
 
 const TypeChip = ({ type, active, onClick }: { type: TypeName; active: boolean; onClick: () => void }) => {
-	const { color, icon: Icon } = TYPE_THEME[type]
-	const ink = readableInk(color)
+	const { color, Icon, ink } = typeVisual(type)
 	return (
 		<button
 			type="button"

@@ -4,17 +4,18 @@ import { useState } from "react"
 import { Footer } from "#/components/Footer"
 import { PokemonCard } from "#/components/list/PokemonCard"
 import { TYPE_THEME } from "#/theme/pokemon-types.theme"
+import type { TypeName } from "#/types/pokemon"
 
-const FEATURED = [
-	{ id: 1, name: "bulbasaur" },
-	{ id: 4, name: "charmander" },
-	{ id: 7, name: "squirtle" },
-	{ id: 25, name: "pikachu" },
-	{ id: 94, name: "gengar" },
-	{ id: 133, name: "eevee" },
-	{ id: 149, name: "dragonite" },
-	{ id: 150, name: "mewtwo" }
-] as const
+const FEATURED: { id: number; name: string; types: TypeName[] }[] = [
+	{ id: 1, name: "bulbasaur", types: ["grass", "poison"] },
+	{ id: 4, name: "charmander", types: ["fire"] },
+	{ id: 7, name: "squirtle", types: ["water"] },
+	{ id: 25, name: "pikachu", types: ["electric"] },
+	{ id: 94, name: "gengar", types: ["ghost", "poison"] },
+	{ id: 133, name: "eevee", types: ["normal"] },
+	{ id: 149, name: "dragonite", types: ["dragon", "flying"] },
+	{ id: 150, name: "mewtwo", types: ["psychic"] }
+]
 
 const t = TYPE_THEME
 const HERO_BG = [
@@ -113,7 +114,7 @@ export const Home = () => {
 
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
 					{FEATURED.map((p) => (
-						<PokemonCard key={p.name} id={p.id} name={p.name} />
+						<PokemonCard key={p.name} id={p.id} name={p.name} types={p.types} />
 					))}
 				</div>
 			</section>

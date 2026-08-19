@@ -9,11 +9,22 @@ import type { RawPokemon } from "#/types/raw/pokemon"
 import type { RawSpecies } from "#/types/raw/species"
 import type { RawType } from "#/types/raw/type"
 
+export class ApiError extends Error {
+	status: number
+
+	constructor(message: string, status: number) {
+		super(message)
+		this.name = "ApiError"
+		this.status = status
+	}
+}
+
 async function fetchJson<T>(url: string, entity: string): Promise<T> {
 	const res = await fetch(url)
 
-	if (res.status === 404) throw new Error(`${entity} not found`)
-	if (!res.ok) throw new Error(`Failed to fetch ${entity.toLowerCase()} (${res.status})`)
+	if (res.status === 404) throw new ApiError(`${entity} not found`, 404)
+	if (res.status === 429) throw new ApiError("PokeAPI is rate-limiting requests, please try again shortly", 429)
+	if (!res.ok) throw new ApiError(`Failed to fetch ${entity.toLowerCase()} (${res.status})`, res.status)
 
 	return res.json()
 }

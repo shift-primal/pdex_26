@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
-import { Suspense, useRef } from "react"
+import { Suspense, useMemo, useRef } from "react"
 import PokeballIcon from "#/assets/pokeball.svg?react"
 import { Footer } from "#/components/Footer"
 import { FilterBar } from "#/components/list/FilterBar"
@@ -17,6 +17,7 @@ import { useTypeIndex } from "#/queries/typeIndex"
 
 const route = getRouteApi("/pokemon/")
 
+// keep in sync with COLUMN_BREAKPOINTS/BASE_COLUMNS in hooks/useColumns.ts
 export const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
 export const ROW =
 	"grid grid-cols-2 gap-x-3 pb-3 sm:grid-cols-3 sm:gap-x-4 sm:pb-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
@@ -37,17 +38,21 @@ const Results = () => {
 
 	const query = search.search ?? ""
 
-	let items = list
-		.map((p) => ({ id: idFromUrl(p.url), name: p.name }))
-		.filter((it) => it.id <= MAX_DEX_ID && matchesQuery(it, query))
-		.map((it) => ({ ...it, types: index.get(it.name) ?? [] }))
+	const items = useMemo(() => {
+		let filtered = list
+			.map((p) => ({ id: idFromUrl(p.url), name: p.name }))
+			.filter((it) => it.id <= MAX_DEX_ID && matchesQuery(it, query))
+			.map((it) => ({ ...it, types: index.get(it.name) ?? [] }))
 
-	if (search.types.length > 0) {
-		items = items.filter((it) => search.types.every((t) => it.types.includes(t)))
-	}
+		if (search.types.length > 0) {
+			filtered = filtered.filter((it) => search.types.every((t) => it.types.includes(t)))
+		}
 
-	items.sort((a, b) => (search.sort === "name" ? a.name.localeCompare(b.name) : a.id - b.id))
-	if (search.dir === "desc") items.reverse()
+		filtered.sort((a, b) => (search.sort === "name" ? a.name.localeCompare(b.name) : a.id - b.id))
+		if (search.dir === "desc") filtered.reverse()
+
+		return filtered
+	}, [list, query, index, search.types, search.sort, search.dir])
 
 	const total = items.length
 	const columns = useColumns()

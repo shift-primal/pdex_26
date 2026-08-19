@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react"
 
+// keep in sync with the GRID/ROW Tailwind classes in components/list/Pokedex.tsx —
+// Tailwind's JIT scanner needs static class strings, so this table can't drive them directly.
 export const BASE_COLUMNS = 2
 
 export const COLUMN_BREAKPOINTS = [

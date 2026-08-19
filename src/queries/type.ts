@@ -1,12 +1,5 @@
-import { queryOptions } from "@tanstack/react-query"
 import { selectType } from "#/lib/parsers/pokemon.parser"
+import { makeQueryOptions } from "#/queries/factory"
 import { fetchType } from "#/services/api"
 
-export function typeQueryOptions(url: string) {
-	return queryOptions({
-		queryKey: ["type", url],
-		queryFn: () => fetchType(url),
-		select: selectType,
-		staleTime: Infinity
-	})
-}
+export const typeQueryOptions = makeQueryOptions(["type"], (url) => fetchType(url), selectType)

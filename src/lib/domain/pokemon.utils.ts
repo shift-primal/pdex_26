@@ -75,11 +75,6 @@ export const resolveFrontSprite = (variety: Variety, form: Form, gender?: Gender
 	return gender === "female" ? (front.female.normal ?? front.default.normal) : front.default.normal
 }
 
-// Form classification — uses the /pokemon-form flags rather than name-suffix guessing.
-export const megaForms = (forms: Form[]) => forms.filter((f) => f.isMega)
-export const battleOnlyForms = (forms: Form[]) => forms.filter((f) => f.isBattleOnly)
-export const cosmeticForms = (forms: Form[]) => forms.filter((f) => !f.isDefault && !f.isMega && !f.isBattleOnly)
-
 // Extract type name from api named resource
 const extractNames = (arr: RawNamedResource[]): TypeName[] => arr.map((t) => t.name as TypeName)
 

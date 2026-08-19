@@ -1,5 +1,6 @@
 import type { ComponentType, SVGProps } from "react"
 import * as TypeIcons from "#/assets/type-icons"
+import { readableInk } from "#/lib/color"
 
 export type TypeName =
 	| "normal"
@@ -130,3 +131,9 @@ export const TYPE_THEME = {
 
 /** all type names in canonical order — for filter chips and search-param validation*/
 export const TYPE_NAMES = Object.keys(TYPE_THEME) as [TypeName, ...TypeName[]]
+
+/** a type's color, icon, and a readable ink color for text/icons drawn on top of it */
+export const typeVisual = (type: TypeName) => {
+	const { color, icon: Icon } = TYPE_THEME[type]
+	return { color, Icon, ink: readableInk(color) }
+}

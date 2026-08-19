@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { cn } from "#/lib/utils"
 
 const SHOWDOWN_DIR = "/other/showdown/"
@@ -15,13 +15,13 @@ export const SpriteWrapper = ({
 	fallbackUrl,
 	size = 64,
 	alt = "Image",
-	fill = false
+	scale = 1
 }: {
 	spriteUrl: string | null | undefined
 	fallbackUrl?: string | null
 	size?: number
 	alt?: string
-	fill?: boolean
+	scale?: number
 }) => {
 	const candidates = [...new Set([...buildTiers(spriteUrl), ...buildTiers(fallbackUrl)])]
 
@@ -40,10 +40,19 @@ export const SpriteWrapper = ({
 	const isLoaded = loadedSrc === src
 	const spinnerSize = Math.min(40, Math.max(14, Math.round(size * 0.32)))
 
+	const imgRef = useRef<HTMLImageElement>(null)
+	// catch ssr img load before hydration
+	useEffect(() => {
+		const img = imgRef.current
+		if (!img?.complete) return
+		if (img.naturalWidth > 0) setLoadedSrc(src)
+		else setTier((t) => t + 1)
+	}, [src])
+
 	return (
 		<div
 			style={{ width: size, height: size }}
-			className={cn("relative flex items-end justify-center overflow-hidden", isShowdown ? "pixel-art" : "")}
+			className={cn("relative flex items-end justify-center", isShowdown ? "pixel-art" : "")}
 		>
 			{src && (
 				<>
@@ -56,14 +65,12 @@ export const SpriteWrapper = ({
 						</div>
 					)}
 					<img
+						ref={imgRef}
 						src={src}
 						alt={alt}
 						draggable={false}
-						className={cn(
-							"select-none",
-							fill ? "h-full w-full object-contain object-bottom" : "max-h-full max-w-full origin-bottom",
-							!isLoaded && "invisible"
-						)}
+						style={{ maxHeight: size, maxWidth: size, transform: `scale(${scale})` }}
+						className={cn("select-none origin-bottom", !isLoaded && "invisible")}
 						onLoad={() => setLoadedSrc(src)}
 						onError={() => setTier((t) => t + 1)}
 					/>

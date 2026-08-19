@@ -1,7 +1,6 @@
 import { useSuspenseQueries } from "@tanstack/react-query"
-import { readableInk } from "#/lib/color"
 import { typeQueryOptions } from "#/queries/type"
-import { TYPE_THEME } from "#/theme/pokemon-types.theme"
+import { typeVisual } from "#/theme/pokemon-types.theme"
 import type { Damage, PokemonType, TypeName, TypeRef } from "#/types/pokemon"
 
 type DamageMap = Map<TypeName, number>
@@ -32,7 +31,7 @@ const TypeRow = ({ entries }: { entries: [TypeName, number][] }) => {
 			{entries
 				.sort((a, b) => b[1] - a[1])
 				.map(([type, mult]) => {
-					const { color, icon: Icon } = TYPE_THEME[type]
+					const { color, Icon, ink } = typeVisual(type)
 					return (
 						<div
 							key={type}
@@ -42,10 +41,7 @@ const TypeRow = ({ entries }: { entries: [TypeName, number][] }) => {
 								className="grid size-6 place-items-center rounded-full"
 								style={{ backgroundColor: color }}
 							>
-								<Icon
-									className="size-3.5 [&_path]:fill-current"
-									style={{ color: readableInk(color) }}
-								/>
+								<Icon className="size-3.5 [&_path]:fill-current" style={{ color: ink }} />
 							</span>
 							<span className="font-mono text-[0.7rem] font-bold text-ink-soft">
 								{MULT_LABEL[mult] ?? `${mult}×`}

@@ -2,6 +2,7 @@ import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
 import { Link } from "@tanstack/react-router"
 import { SpriteWrapper } from "#/components/SpriteWrapper"
 import { formatText } from "#/lib/format"
+import { showdownSpriteFromId } from "#/lib/sprites"
 import type { Neighbor, Neighbors } from "#/queries/adjacent"
 import { usePrefetchPokemon } from "#/queries/prefetch"
 
@@ -30,7 +31,12 @@ const NavLink = ({ neighbor, dir, prefetch }: { neighbor: Neighbor; dir: "prev" 
 				/>
 			)}
 			<div className="size-9 shrink-0">
-				<SpriteWrapper spriteUrl={neighbor.sprite} alt={neighbor.name} size={36} />
+				<SpriteWrapper
+					spriteUrl={neighbor.sprite}
+					fallbackUrl={showdownSpriteFromId(neighbor.id)}
+					alt={neighbor.name}
+					size={36}
+				/>
 			</div>
 			<div className={`flex flex-col ${isPrev ? "items-start" : "items-end"}`}>
 				<span className="font-mono text-[0.58rem] font-bold uppercase tracking-[0.18em] text-ink-faint">
