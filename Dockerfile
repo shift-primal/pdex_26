@@ -16,6 +16,5 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app/.output ./.output
-COPY --from=build /app/.nitro ./.nitro
 EXPOSE 3000
 CMD ["node", ".output/server/index.mjs"]
