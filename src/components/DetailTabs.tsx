@@ -35,7 +35,7 @@ export const DetailTabs = ({ tab }: { tab: Tab }) => {
 	return (
 		<Tabs.Root value={tab} onValueChange={(v) => onTabChange(v as Tab)} className="flex flex-col">
 			<div className="relative -mx-1 px-1">
-				<Tabs.List className="scrollbar-none flex shrink-0 gap-1 overflow-x-auto md:gap-1.5">
+				<Tabs.List className="scrollbar-none flex shrink-0 gap-1 overflow-x-auto md:gap-1.5 md:justify-center">
 					{TABS.map((t) => (
 						<Tabs.Trigger
 							key={t}
@@ -51,8 +51,6 @@ export const DetailTabs = ({ tab }: { tab: Tab }) => {
 						</Tabs.Trigger>
 					))}
 				</Tabs.List>
-				{/* hints that the tab list scrolls horizontally on narrow screens */}
-				<div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-sheet to-transparent" />
 			</div>
 
 			<div className={cn("mt-6 min-w-0", isPending && "opacity-50 transition-opacity")}>

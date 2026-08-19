@@ -19,7 +19,7 @@ export const Stats = () => {
 
 	return (
 		<div className="reveal">
-			<div className="grid grid-cols-1 gap-x-12 gap-y-3.5 lg:grid-flow-col lg:grid-rows-3">
+			<div className="grid grid-cols-1 gap-x-12 gap-y-3.5 lg:grid-cols-2 lg:grid-flow-col lg:grid-rows-3">
 				{activeVariety.stats.map((s, i) => {
 					const { color, icon: Icon } = STAT_THEME[s.name]
 					const pct = Math.min(s.value / SCALE_MAX, 1) * 100

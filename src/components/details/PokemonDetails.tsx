@@ -224,7 +224,7 @@ export const PokemonDetails = ({
 
 			{/* content */}
 			<main className="flex flex-1 flex-col bg-paper">
-				<div className="mx-auto w-full max-w-7xl flex-1 px-8 py-14 xl:px-12 xl:py-16 2xl:max-w-384">
+				<div className="mx-auto w-full max-w-7xl flex-1 px-8 py-14 xl:px-12 xl:py-6 2xl:max-w-384">
 					<DetailTabs tab={tab} />
 				</div>
 
