@@ -7,9 +7,10 @@ A full National Pokédex — every species, form, and variety through Gen IX —
 ## Features
 
 - Browse and search the full dex, with type/generation filters and sorting, in a virtualized grid (smooth scrolling even with 1000+ entries)
+- Pre-fetching for evolutions, next and prev, also pre-fetch based on scroll position in the grid view.
+- Caching to be kind to PokeAPI, but also to have a better experience for the user. 
 - Per-Pokémon detail pages: stats, abilities, type matchups, evolution chain, and variety/form switching (e.g. Mega Charizard X vs base Charizard)
 - Keyboard navigation between adjacent Pokémon, with mobile-friendly prev/next controls
-- Scroll position restoration when switching detail tabs
 - Retry/error handling around PokéAPI requests, with a dedicated error state instead of a blank crash
 
 ## Stack
